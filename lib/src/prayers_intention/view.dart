@@ -61,6 +61,7 @@ class PrayersIntentionRequestView extends StatelessWidget {
                   if (!isValidEmail(value ?? "")) {
                     return AppLocalizations.of(context)!.invalidEmail;
                   }
+                  return null;
                 },
               ),
             ),
@@ -76,6 +77,7 @@ class PrayersIntentionRequestView extends StatelessWidget {
                   if (value == null || value == "") {
                     return AppLocalizations.of(context)!.cantBeEmpty;
                   }
+                  return null;
                 },
               ),
             ),
