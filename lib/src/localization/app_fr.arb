@@ -1,0 +1,62 @@
+{
+  "appTitle": "ahl",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "longAppTitle": "Aujourd'hui l'avenir",
+  "heroTitle": "Aimer et servir",
+  "@heroTitle": {
+    "description": "Le text d'invitation qui s'affiche dans le hero header"
+  },
+  "heroExplanation": "L'Amour est la force la plus puissante de l'univers. Elle peut vaincre la haine. ",
+  "@heroExplanation": {
+    "description": "Text d'accroche en dessous du text principale de l'Hero header."
+  },
+  "homeText": "Accueil",
+  "@homeText": {
+    "description": "Le text du boutton page d'acceuil"
+  },
+  "aboutUs": "À propos de nous",
+  "prayers": "Prières",
+  "priesSpace": "Espace de Prière",
+  "ourProjects": "Nos Projets",
+  "news": "Actualités de la communauté",
+  "makeDonation": "Nous soutenir",
+  "articles": "Articles",
+  "contact": "Nous Contacter",
+  "welcomingTitle": "Bienvenue!",
+  "@welcomingTitle": {
+    "description": "The title of the welcoming message."
+  },
+  "welcomingBody": "Bienvenu sur le site des Soeurs Dominicaines Missionnaires de Notre Dame de la Délivrande, Madagascar, Saharoaloha.\n\nEn tant que Sœur Supérieure, je vous accueille chaleureusement pour partager notre histoire, notre mission et notre engagement envers la foi.\n\nUnissez-vous à nous dans la prière, en explorant ce site dédié à cultiver ensemble une vie spirituelle enrichissante.",
+  "sister": "Sœurs",
+  "sisterDenomination": "Sœurs Dominicaines Missionnaires de Notre Dame de la Délivrande",
+  "@sisterDenomination": {
+    "description": "Text qui est utiliser dans le footer comme signiture du site internet"
+  },
+  "@sister": {
+    "description": "Denomination des Sœurs"
+  },
+  "prior": "Prieure de la communauté",
+  "inConstructionPromotionalMessage": "Ce site internet est en construction.",
+  "invitingNewsLetter": "Pour rester informé",
+  "@invitingNewsLetter": {
+    "description": "Sous titre dans le widget d'invitation à la news letter"
+  },
+  "newsLetterWidgetTitle": "Abonnez-vous à la newsletter",
+  "@newsLetterWidgetTitle": {
+    "description": "Title dans le widget d'invitation à la news letter"
+  },
+  "exampleMail": "votrenom@example.com",
+  "register": "S'inscrire",
+  "thanksForRegistering": "Merci pour votre abonnement",
+  "invalidEmail": "Email non valide.",
+  "cantBeEmpty": "Ne peut pas être vide",
+  "unknownError": "Erreur inconnue, Verifier votre connexion internet",
+
+  "shareYourPriers": "Partagez vos Intentions de Prières avec la communauté",
+  "proverb": "\"Priez les uns les autres, afin que vous soyez guéris\"\nSt Jacques 5:16",
+  "priersInvitation":"C’ est une opportuinité unique de partager vos prière et vos pensées spéciales. Notre communauté unie s’ engage à honorer chaque intention avec devotion et prière. Exprimez les souhaits les plus profonds, et laisser notre communion de prière apporter réconfort et soutien.",
+  "nameAndFirstName": "Nom et Prénom",
+  "priers":"Prières"
+}

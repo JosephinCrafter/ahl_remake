@@ -1,0 +1,51 @@
+{
+  "appTitle": "ahl",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "longAppTitle": "Aujourd'hui l'avenir",
+  "heroTitle": "Love and Serve",
+  "@heroTitle": {
+    "description": "The invitation text in the hero header"
+  },
+  "heroExplanation": "Love is the most powerful force in the universe. It can defeat hate.",
+  "@heroExplanation": {
+    "description": "Use this under the Hero header Title"
+  },
+  "homeText": "Home",
+  "@homeText": {
+    "description": "The text on the HomePage Tab in the app bar"
+  },
+  "aboutUs": "About Us",
+  "prayers": "Prayers",
+  "priesSpace": "Prayers space",
+  "ourProjects": "Our Projects",
+  "news": "News",
+  "makeDonation": "Support us",
+  "contact": "Contact us",
+  "welcomingTitle": "Welcome",
+  "@welcomingTitle": {
+    "description": "The title of the welcoming message."
+  },
+  "welcomingBody": "Welcome on the Dominican Missionary Sister of Our Délivrande Lady, Madagascar, Saharoaloha.\nEn tant que Sœur Supérieure, je vous accueille chaleureusement pour partager notre histoire, notre mission et notre engagement envers la foi.\nUnissez-vous à nous dans la prière, en explorant ce site dédié à cultiver ensemble une vie spirituelle enrichissante.",
+  "sister": "Sister",
+  "@sister": {
+    "description": "Denomination fo the sisters"
+  },
+  "sisterDenomination": "Dominicans Missionaries Sisters Of Our Lady of Délivrande",
+  "@sisterDenomination": {
+    "description": "The text that is used as Signature for the website"
+  },
+  "prior": "Prioress of the community",
+  "inConstructionPromotionalMessage": "This Website is under construction.",
+  "invitingNewsLetter": "To stay informed",
+  "@invitingNewsLetter": {
+    "description": "Sous titre dans le widget d'invitation à la news letter"
+  },
+  "newsLetterWidgetTitle": "Register to Ahl newsletter",
+  "@newsLetterWidgetTitle": {
+    "description": "Title dans le widget d'invitation à la news letter"
+  },
+  "exampleMail": "yourname@example.com",
+  "register": "Register"
+}
