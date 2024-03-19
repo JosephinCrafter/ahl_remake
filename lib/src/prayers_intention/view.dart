@@ -95,7 +95,7 @@ class PrayersIntentionRequestView extends StatelessWidget {
                       // do something
                     }
                   },
-                  child: Text("Soumettre mon intention"),
+                  child: const Text("Soumettre mon intention"),
                 ),
               ),
             ),
