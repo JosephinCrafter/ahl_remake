@@ -17,15 +17,21 @@ class SettingsController with ChangeNotifier {
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
 
+  // actual local
+  late List<Locale> _locales;
+
   // Allow Widgets to read the user's preferred ThemeMode.
   ThemeMode get themeMode => _themeMode;
+
+  // Changing language
+  List<Locale> get locales => _locales;
 
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
-
+    _locales = await _settingsService.local();
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
@@ -46,5 +52,23 @@ class SettingsController with ChangeNotifier {
     // Persist the changes to a local database or the internet using the
     // SettingService.
     await _settingsService.updateThemeMode(newThemeMode);
+  }
+
+  /// Update and persist the ThemeMode based on the user's selection.
+  Future<void> updateLocales(List<Locale>? newLocales) async {
+    if (newLocales == null) return;
+
+    // Do not perform any work if new and old ThemeMode are identical
+    if (newLocales == _locales) return;
+
+    // Otherwise, store the new ThemeMode in memory
+    _locales = newLocales;
+
+    // Important! Inform listeners a change has occurred.
+    notifyListeners();
+
+    // Persist the changes to a local database or the internet using the
+    // SettingService.
+    // await _settingsService.updateThemeMode(newThemeMode);
   }
 }

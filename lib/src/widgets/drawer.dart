@@ -26,7 +26,7 @@ class AhlDrawer extends StatelessWidget {
               ),
             ),
             ending: Hero(
-              tag: 'menu_button_tag',
+              tag: 'menu_button_tag1',
               child: IconButton(
                 onPressed: () => Scaffold.of(context).closeEndDrawer(),
                 icon: const Icon(Icons.close),
@@ -58,16 +58,21 @@ class AhlDrawer extends StatelessWidget {
                   children: [
                     TextButton(
                       onPressed: () {
-                        Intl.defaultLocale = 'fr_FR';
-
-                        Navigator.of(context)
-                            .pushReplacementNamed(HomePage.routeName);
+                        LocaleUtils.changeLocale(
+                          context,
+                          const Locale('fr'),
+                        );
                       },
                       child: const Text('Français'),
                     ),
-                    const TextButton(
-                      onPressed: null,
-                      child: Text('English'),
+                    TextButton(
+                      onPressed: () {
+                        LocaleUtils.changeLocale(
+                          context,
+                          const Locale('en'),
+                        );
+                      },
+                      child: const Text('English'),
                     ),
                   ],
                 ),

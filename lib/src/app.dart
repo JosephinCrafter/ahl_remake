@@ -1,16 +1,18 @@
 import 'package:ahl/src/article_view/view/article_view.dart';
 import 'package:ahl/src/home/homepage.dart';
 import 'package:ahl/src/theme/theme.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
 /// The Widget that configures your application.
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({
     super.key,
     required this.settingsController,
@@ -19,6 +21,34 @@ class MyApp extends StatelessWidget {
 
   final SettingsController settingsController;
   final Widget? home;
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+
+  static void setLocal(BuildContext context, Locale newLocale) async {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.changeLanguage(newLocale);
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+  late SettingsController settingsController;
+
+  void changeLanguage(Locale locale) {
+    setState(
+      () {
+        _locale = locale;
+        settingsController.updateLocales([locale]);
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    settingsController = widget.settingsController;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +64,7 @@ class MyApp extends StatelessWidget {
           // MaterialApp to restore the navigation stack when a user leaves and
           // returns to the app after it has been killed while running in the
           // background.
-          restorationScopeId: 'app',
+          restorationScopeId: 'ahl',
 
           // Provide the generated AppLocalizations to the MaterialApp. This
           // allows descendant Widgets to display the correct translations
@@ -46,6 +76,7 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: AppLocalizations.supportedLocales,
+          locale: _locale,
 
           // Use AppLocalizations to configure the correct application title
           // depending on the user's locale.
@@ -67,8 +98,7 @@ class MyApp extends StatelessWidget {
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
           onGenerateRoute: (RouteSettings routeSettings) {
-            return
-            MaterialPageRoute<void>(
+            return MaterialPageRoute<void>(
               settings: routeSettings,
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
@@ -83,7 +113,7 @@ class MyApp extends StatelessWidget {
                       args: routeSettings.arguments,
                     );
                   default:
-                    return home ?? const HomePage();
+                    return widget.home ?? const HomePage();
                 }
               },
             );
