@@ -36,6 +36,8 @@ dependencies:
   markdown_widget: ^2.3.2+3
   provider: ^6.1.1
   flame: ^1.15.0
+  parallax_effect: ^0.0.3
+  #mouse_parallax: ^1.1.0
   #google_fonts: ^6.2.0
 
 dev_dependencies:

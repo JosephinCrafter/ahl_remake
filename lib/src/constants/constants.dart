@@ -9,7 +9,8 @@ class Margins {
   static const double big = 200;
   static const double medium = 100;
   static const double small = 50;
-  static const double mobileMargin = 24;
+  static const double mobileLarge = 37;
+  static const double mobileMedium = 24;
 
   /// 166 : Top margin of the hero header
   static const double heroHeaderExtraTop = 166;
@@ -21,6 +22,8 @@ class ScreenSizes {
 }
 
 class Paddings {
+  Paddings._();
+
   /// 45 px
   static const double huge = 45;
 

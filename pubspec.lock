@@ -725,6 +725,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  parallax_effect:
+    dependency: "direct main"
+    description:
+      name: parallax_effect
+      sha256: c42b0976eb691eb0babaad57c65e05d8c99142b3779bb5c0fd78bcd86344fb7a
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   path:
     dependency: transitive
     description:

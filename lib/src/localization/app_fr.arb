@@ -18,7 +18,6 @@
   },
   "aboutUs": "À propos de nous",
   "prayers": "Prières",
-  "priesSpace": "Espace de Prière",
   "ourProjects": "Nos Projets",
   "news": "Actualités de la communauté",
   "makeDonation": "Nous soutenir",
@@ -58,5 +57,11 @@
   "proverb": "\"Priez les uns les autres, afin que vous soyez guéris\"\nSt Jacques 5:16",
   "priersInvitation":"C’ est une opportuinité unique de partager vos prière et vos pensées spéciales. Notre communauté unie s’ engage à honorer chaque intention avec devotion et prière. Exprimez les souhaits les plus profonds, et laisser notre communion de prière apporter réconfort et soutien.",
   "nameAndFirstName": "Nom et Prénom",
-  "priers":"Prières"
+  "priers":"Prières",
+
+  
+  "priesSpace": "Espace de Prière",
+  "@priesSpace": {
+    "description": "Titre pour espace de prières"
+  }
 }

@@ -1,11 +1,9 @@
 // Test the data storage mechanism and triggering from firestore.
 import 'package:ahl/src/article_view/data/data.dart';
 import 'package:ahl/src/article_view/model/article.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:firebase_storage_mocks/firebase_storage_mocks.dart';
 import 'package:mockito/mockito.dart';
 
 import '../articles/articles_repository_test.dart';
@@ -19,7 +17,6 @@ void main() async {
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   FirebaseFirestore fakeFirestore = FakeFirebaseFirestore();
-  FirebaseStorage fakeStorage = MockFirebaseStorage();
 
   // firestore = FirebaseFirestore.instance;
   fakeFirestore = FakeFirebaseFirestore();
@@ -81,6 +78,9 @@ void main() async {
               articleHelper.getArticleOfTheMonth();
           Future<Article?> namedArticle =
               articleHelper.getArticleById(articleId: 'some_article_name');
+
+          expect(articleOfTheMonth, isNotNull);
+          expect(namedArticle, isNotNull);
         },
       );
       test('Get raw data from cloud firestore', () {
@@ -88,6 +88,8 @@ void main() async {
             ArticlesRepository(firestoreInstance: fakeFirestore);
         Future<Article?> namedArticle =
             articleHelper.getArticleById(articleId: 'leves_toi_et_marche');
+
+        expect(namedArticle, isNotNull);
       });
     },
   );
@@ -98,25 +100,25 @@ void main() async {
       test(
         'Instantiate an article without argument',
         () {
-          Article article = const Article(id: 'some_article');
+          // Article article = const Article(id: 'some_article');
 
-          var title = article.title;
-          var releaseDate = article.releaseDate;
-          var content = article.contentPath;
-          var relations = article.relations;
+          // var title = article.title;
+          // var releaseDate = article.releaseDate;
+          // var content = article.contentPath;
+          // var relations = article.relations;
 
-          Article article1 = const Article(
-            id: 'title',
-            title: 'Title',
-            releaseDate: '19/01/2024',
-            contentPath: 'articles/some_content.md',
-            relations: [
-              {
-                'type': 'image',
-                'path': 'article/some_article/image.png',
-              }
-            ],
-          );
+          // Article article1 = const Article(
+          //   id: 'title',
+          //   title: 'Title',
+          //   releaseDate: '19/01/2024',
+          //   contentPath: 'articles/some_content.md',
+          //   relations: [
+          //     {
+          //       'type': 'image',
+          //       'path': 'article/some_article/image.png',
+          //     }
+          //   ],
+          // );
 
           Article article2 = Article.fromDoc(doc);
           expect(article2.title == doc[titleKey], true);

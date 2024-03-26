@@ -18,7 +18,7 @@
   },
   "aboutUs": "About Us",
   "prayers": "Prayers",
-  "priesSpace": "Prayers space",
+  
   "ourProjects": "Our Projects",
   "news": "News",
   "makeDonation": "Support us",
@@ -47,5 +47,10 @@
     "description": "Title dans le widget d'invitation à la news letter"
   },
   "exampleMail": "yourname@example.com",
-  "register": "Register"
+  "register": "Register",
+
+  "priesSpace": "Prayers Space",
+  "@priesSpace": {
+    "description": "Title for prayers space"
+  }
 }
