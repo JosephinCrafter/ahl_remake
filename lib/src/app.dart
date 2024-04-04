@@ -1,12 +1,13 @@
-import 'package:ahl/src/article_view/view/article_view.dart';
-import 'package:ahl/src/home/homepage.dart';
-import 'package:ahl/src/theme/theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
 
+
+
+import 'article_view/view/article_view.dart';
+import 'firebase_constants.dart';
+import 'home/homepage.dart';
+import 'theme/theme.dart';
 import 'sample_feature/sample_item_details_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
@@ -111,6 +112,9 @@ class _MyAppState extends State<MyApp> {
                   case ArticleView.routeName:
                     return ArticleView(
                       args: routeSettings.arguments,
+                      isHighLight: true,
+                      firestore: firestore,
+                      storage: storage.storage,
                     );
                   default:
                     return widget.home ?? const HomePage();

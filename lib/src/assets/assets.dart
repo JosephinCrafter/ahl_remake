@@ -13,7 +13,7 @@ class AhlAssets {
 
   static String heroBk = "${releasePath}images/hero_bk.png";
   static String heroBkAlt = "${releasePath}images/hero_bk_alt.jpg";
-  static String logoForm = "${releasePath}images/logo_form.png";
+  static String logoForm = "${releasePath}images/logo_form_colored.png";
   static String logoFormTypoHorizontalColored =
       "${releasePath}images/logo_form_typo_horizon_colored.png";
   static String logoFormTypoHorizontalColoredDark =

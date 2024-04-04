@@ -53,7 +53,6 @@ void main() {
       fakeFirestore = FakeFirebaseFirestore();
     }); // Remove setup from fakeFirestore
 
-    ;
     test('Throws a UnableToGetSetup, no setup', () async {
       // use another fakeFirestore instead of the above
       fakeFirestore = FakeFirebaseFirestore();

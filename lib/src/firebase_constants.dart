@@ -1,6 +1,7 @@
 import 'package:ahl/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
 /// Email key in users document in firestore.
@@ -18,6 +19,7 @@ const String newsletterCollection = 'users';
 const String articlesCollection = 'articles';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final Reference _storage = FirebaseStorage.instance.ref();
 
 const String emulatorHost = 'localhost';
 const int firestorePort = 46561;
@@ -35,6 +37,11 @@ Future<FirebaseApp> firebaseApp = Firebase.initializeApp(
 FirebaseFirestore get firestore {
   _initialize();
   return _firestore;
+}
+
+Reference get storage {
+  _initialize();
+  return _storage;
 }
 
 /// Get status if plugins are initialized.

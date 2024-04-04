@@ -3,7 +3,7 @@ part of 'widgets.dart';
 class AhlLogo extends StatelessWidget {
   const AhlLogo({
     super.key,
-    this.size = const Size(48, 48),
+    this.size = const Size(34, 34),
     this.leading,
     this.title,
     this.separation,
@@ -42,7 +42,7 @@ class AhlLogo extends StatelessWidget {
               ),
           separation ??
               const SizedBox(
-                width: 30,
+                width: 15,
               ),
           title ??
               Text(

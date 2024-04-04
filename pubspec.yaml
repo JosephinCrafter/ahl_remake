@@ -12,10 +12,12 @@ environment:
 dependencies:
 #  indicator_button:
 #    git: https://github.com/Josephincrafter/indicator_button.git
+  firebase_article:
+    path: ../firebase_article
   cloud_firestore: ^4.14.0
-  cloud_functions: ^4.6.0
-  firebase_analytics: ^10.8.0
-  firebase_auth: ^4.16.0
+  # cloud_functions: ^4.6.0
+  # firebase_analytics: ^10.8.0
+  # firebase_auth: ^4.16.0
   firebase_core: ^2.24.2
   firebase_storage: ^11.6.0
   flutter:

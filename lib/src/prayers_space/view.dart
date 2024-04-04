@@ -1,8 +1,7 @@
+import 'package:ahl/src/rosary/rosary_prompt.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import 'package:parallax_effect/parallax_effect.dart';
 
 import '../ahl_barrel.dart';
 import '../widgets/widgets.dart';
@@ -15,6 +14,7 @@ class PrayerSpaceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> children = [
+      // bk image
       Container(
         constraints: const BoxConstraints(minHeight: 650),
         decoration: BoxDecoration(
@@ -35,11 +35,16 @@ class PrayerSpaceView extends StatelessWidget {
           ),
         ),
       ),
+
       Column(
         children: [
+          // title
           SectionTitle(
             title: AppLocalizations.of(context)!.priesSpace,
           ),
+          // rosary
+          const RosaryPrompt(),
+          // prayers intention
           const Align(
             alignment: Alignment.bottomCenter,
             child: PrayersIntentionRequestView(),

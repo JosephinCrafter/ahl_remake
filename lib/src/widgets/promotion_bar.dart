@@ -77,7 +77,7 @@ Widget inConstructionPromotionalBar = Builder(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: Paddings.small),
                 child: Icon(
-                  Icons.build_circle_rounded,
+                  Icons.build_rounded,
                   color: Theme.of(context).colorScheme.onTertiaryContainer,
                 ),
               ),

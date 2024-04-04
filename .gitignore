@@ -44,3 +44,6 @@ app.*.map.json
 /android/app/release
 pubspec.lock
 assets/images/prayers_hero_header.png
+
+# FVM Version Cache
+.fvm/

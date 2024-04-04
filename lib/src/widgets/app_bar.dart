@@ -6,8 +6,8 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     Size? preferredSize,
     this.title = const AhlLogo(
-      separation: SizedBox.shrink(),
-    ),
+        // separation: SizedBox.shrink(),
+        ),
     this.backgroundColor,
     this.actions = const [],
     this.ending,
@@ -46,7 +46,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
       _preferredSize,
     );
 
-    /// Padddings
+    /// Paddings
     EdgeInsetsGeometry computedPadding = padding ??
         const EdgeInsets.all(
           Paddings.appBarPadding,
@@ -66,6 +66,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
             color: color,
             padding: computedPadding,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   textBaseline: computedTextBaseLine,
