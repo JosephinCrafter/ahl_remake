@@ -42,7 +42,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
     var color = backgroundColor ?? Theme.of(context).colorScheme.background;
 
     /// constraints
-    BoxConstraints computedConstraint = BoxConstraints.tight(
+    BoxConstraints computedConstraint = BoxConstraints.loose(
       _preferredSize,
     );
 
@@ -65,8 +65,10 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
             constraints: computedConstraint,
             color: color,
             padding: computedPadding,
+            alignment: Alignment.center,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
                   textBaseline: computedTextBaseLine,
@@ -89,7 +91,9 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
             constraints: computedConstraint,
             color: color,
             padding: computedPadding,
+            alignment: Alignment.center,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
                   textBaseline: computedTextBaseLine,
