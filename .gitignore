@@ -47,3 +47,4 @@ assets/images/prayers_hero_header.png
 
 # FVM Version Cache
 .fvm/
+pubspec.lock
