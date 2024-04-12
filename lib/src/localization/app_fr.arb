@@ -53,11 +53,14 @@
   "cantBeEmpty": "Ne peut pas être vide",
   "unknownError": "Erreur inconnue, Verifier votre connexion internet",
 
-  "shareYourPriers": "Partagez vos Intentions de Prières avec la communauté",
+  "shareYourPriers": "Intentions de prière",
   "proverb": "\"Priez les uns les autres, afin que vous soyez guéris\"\nSt Jacques 5:16",
-  "priersInvitation":"C’ est une opportuinité unique de partager vos prière et vos pensées spéciales. Notre communauté unie s’ engage à honorer chaque intention avec devotion et prière. Exprimez les souhaits les plus profonds, et laisser notre communion de prière apporter réconfort et soutien.",
+  "priersInvitation":"Vos intetions seront porté dans nos prières quotidiens dans notre Communauté Catherine de Sienne à Saharoaloha, Madagascar.",
   "nameAndFirstName": "Nom et Prénom",
   "priers":"Prières",
+  "sendPray": "Soumettre mon intention",
+  "optional" : "Facultatif",
+  "yourPrayer" : "Votre intention de prière",
 
   
   "priesSpace": "Espace de Prière",

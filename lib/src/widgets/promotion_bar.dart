@@ -6,8 +6,10 @@ class PromotionBar extends StatefulWidget {
     required this.child,
     this.isShown = true,
     this.backgroundColor,
+    this.leading,
   });
 
+  final Widget? leading;
   final Widget child;
   final Color? backgroundColor;
   final bool isShown;
@@ -36,7 +38,8 @@ class _PromotionBarState extends State<PromotionBar> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                widget.child,
+                widget.leading ?? const SizedBox.shrink(),
+                Expanded(child: widget.child),
                 IconButton(
                   onPressed: close,
                   icon: const Icon(
@@ -68,26 +71,17 @@ Widget inConstructionPromotionalBar = Builder(
   builder: (context) {
     return PromotionBar(
       backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
-      child: RichText(
-        textAlign: TextAlign.center,
-        text: TextSpan(
-          children: [
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: Paddings.small),
-                child: Icon(
-                  Icons.build_rounded,
-                  color: Theme.of(context).colorScheme.onTertiaryContainer,
-                ),
-              ),
-            ),
-            TextSpan(
-              text: AppLocalizations.of(context)!
-                  .inConstructionPromotionalMessage,
-            )
-          ],
+      leading: Padding(
+        padding: const EdgeInsets.all(Paddings.small),
+        child: Icon(
+          Icons.build_rounded,
+          color: Theme.of(context).colorScheme.onTertiaryContainer,
         ),
+      ),
+      child: Text(
+        AppLocalizations.of(context)!.inConstructionPromotionalMessage,
+        overflow: TextOverflow.ellipsis,
+        maxLines: 3,textAlign: TextAlign.center,
       ),
     );
   },

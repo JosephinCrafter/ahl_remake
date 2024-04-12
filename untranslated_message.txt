@@ -1,0 +1,17 @@
+{
+  "en": [
+    "articles",
+    "thanksForRegistering",
+    "invalidEmail",
+    "cantBeEmpty",
+    "unknownError",
+    "shareYourPriers",
+    "proverb",
+    "priersInvitation",
+    "nameAndFirstName",
+    "priers",
+    "sendPray",
+    "optional",
+    "yourPrayer"
+  ]
+}

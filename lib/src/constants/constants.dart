@@ -6,11 +6,23 @@ class BorderSizes {
 }
 
 class Margins {
+  /// 200
   static const double big = 200;
+
+  /// big / 2 = 100
   static const double medium = 100;
+
+  /// big / 4 = 50
   static const double small = 50;
+
+  /// 37
   static const double mobileLarge = 37;
+
+  /// 24
   static const double mobileMedium = 24;
+
+  /// 12
+  static const double mobileSmall = 12;
 
   /// 166 : Top margin of the hero header
   static const double heroHeaderExtraTop = 166;
@@ -58,6 +70,9 @@ class Sizes {
   static const double menuButtonListHeight = 400;
   static const double mobileHeroHeaderImageHeight = 350;
   static const double nddLogoSize = 76;
+
+  //  48 px
+  static const double iconSize = 48;
 }
 
 class IconSizes {
@@ -80,4 +95,11 @@ class HeroHeaderGeometry {
 
   static const double heroHeaderExtrasHeight = 200;
   static const double heroHeaderExtrasWidth = 450;
+}
+
+class Durations {
+  Durations._();
+
+  /// 300 ms
+  static const Duration subtle = Duration(milliseconds: 300);
 }

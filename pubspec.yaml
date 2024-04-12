@@ -39,6 +39,8 @@ dependencies:
   provider: ^6.1.1
   flame: ^1.15.0
   parallax_effect: ^0.0.3
+  animations: ^2.0.8
+  flutter_animate: ^4.5.0
   #mouse_parallax: ^1.1.0
   #google_fonts: ^6.2.0
 

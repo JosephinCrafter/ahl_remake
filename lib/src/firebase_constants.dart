@@ -56,6 +56,7 @@ bool _isInitialized = false;
 void _initialize() {
   if (kDebugMode && !_isInitialized) {
     _firestore.useFirestoreEmulator(emulatorHost, firestorePort);
+    _storage.storage.useStorageEmulator(emulatorHost, storagePort);
   }
   _isInitialized = true;
 }

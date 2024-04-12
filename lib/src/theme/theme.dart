@@ -23,6 +23,7 @@ class AhlTheme {
     ),
     textTheme: textTheme,
     useMaterial3: true,
+    iconTheme: const IconThemeData(size: 24.0),
   );
 
   static const Color primaryColor = Color(0xFF007bff);

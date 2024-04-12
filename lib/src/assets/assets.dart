@@ -20,8 +20,16 @@ class AhlAssets {
       "${releasePath}images/logo_form_typo_horizontal_colored_dark.png";
   static String logoNdd = "${releasePath}images/logo_ndd.png";
   static String priorAvatar = "${releasePath}images/prior_avatar.png";
-  
-  static String prayersHeroHeader = "${releasePath}images/prayers_hero_header.png";
-  
-  static String projectHeroHeader = "${releasePath}images/projects_hero_header.png";
+
+  static String prayersHeroHeader =
+      "${releasePath}images/prayers_hero_header.png";
+
+  static String projectHeroHeader =
+      "${releasePath}images/projects_hero_header.png";
+  static String rosaryHeroHeader =
+      "${releasePath}images/rosary_hero_header.jpg";
+  static String praying =
+      "${releasePath}images/praying.png";
+  static String prayingAlt =
+      "${releasePath}images/praying_alt.png";
 }

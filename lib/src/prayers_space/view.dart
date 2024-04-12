@@ -1,4 +1,5 @@
-import 'package:ahl/src/rosary/rosary_prompt.dart';
+import 'package:ahl/src/rosary/rosary.dart';
+import 'package:ahl/src/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,53 +15,30 @@ class PrayerSpaceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> children = [
-      // bk image
-      Container(
-        constraints: const BoxConstraints(minHeight: 650),
-        decoration: BoxDecoration(
-          backgroundBlendMode: BlendMode.darken,
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(
-              AhlAssets.prayersHeroHeader,
-            ),
-          ),
-          gradient: const LinearGradient(
-            colors: [
-              Color(0x00000000),
-              Color(0xFF2e2e2e),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
+      // title
+      SectionTitle(
+        title: AppLocalizations.of(context)!.priesSpace,
       ),
-
-      Column(
-        children: [
-          // title
-          SectionTitle(
-            title: AppLocalizations.of(context)!.priesSpace,
-          ),
-          // rosary
-          const RosaryPrompt(),
-          // prayers intention
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: PrayersIntentionRequestView(),
-          ),
-        ],
+      // rosary
+      const Padding(
+        padding: EdgeInsets.all(Paddings.big),
+        child: RosaryPrompt(),
+      ),
+      const SizedBox(
+        height: 45,
+      ),
+      // prayers intention
+      const Align(
+        alignment: Alignment.bottomCenter,
+        child: PrayersIntentionRequestView(),
       ),
     ];
 
-    return Stack(
-      // height: 2080,
-      // width: 500,
-      // enableDrag: true,
-      children: List.generate(
-        children.length,
-        (index) => children[index],
+    return SpaceView(
+      headerImage: AssetImage(
+        AhlAssets.prayersHeroHeader,
       ),
+      children: children,
     );
   }
 }

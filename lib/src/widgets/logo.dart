@@ -47,6 +47,7 @@ class AhlLogo extends StatelessWidget {
           title ??
               Text(
                 "Ajourd'hui l'avenir",
+                overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                       fontFamily: 'Butler',
                     ),
