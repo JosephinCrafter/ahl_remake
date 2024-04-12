@@ -132,9 +132,7 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
         children: [
           title,
           Container(
-            margin: (constraints.maxWidth > ScreenSizes.mobile)
-                ? const EdgeInsets.all(Margins.mobileMedium)
-                : const EdgeInsets.all(Margins.mobileSmall),
+            margin: const EdgeInsets.only(top: Paddings.listSeparator),
             padding: (constraints.maxWidth > ScreenSizes.mobile)
                 ? const EdgeInsets.all(Margins.mobileMedium)
                 : const EdgeInsets.all(Margins.mobileSmall),
@@ -202,7 +200,8 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
                   ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF7EFD4),
-                    borderRadius: BorderRadius.circular(BorderSizes.medium),
+                    borderRadius: BorderRadius.circular(
+                        BorderSizes.big - Paddings.listSeparator),
                   ),
                   child: CalendarDatePicker(
                     currentDate: DateTime.now(),
