@@ -100,8 +100,8 @@ class HeroHeaderGeometry {
   static const double heroHeaderExtrasWidth = 450;
 }
 
-class Durations {
-  Durations._();
+class AhlDurations {
+  AhlDurations._();
 
   /// 300 ms
   static const Duration subtle = Duration(milliseconds: 300);

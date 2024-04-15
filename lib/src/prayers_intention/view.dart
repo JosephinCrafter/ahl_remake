@@ -60,7 +60,7 @@ class _PrayersIntentionRequestViewState
 
   @override
   Widget build(BuildContext context) {
-    const duration = Durations.subtle;
+    const duration = AhlDurations.subtle;
     const curvesIn = Curves.easeIn;
     const curvesOut = Curves.easeOut;
 
@@ -166,7 +166,7 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
                       selectedIcon: Icon(Icons.done)
                           .animate()
                           .scale(
-                            duration: Durations.subtle,
+                            duration: AhlDurations.subtle,
                             alignment: Alignment.center,
                             curve: Curves.easeOut,
                             begin: const Offset(0.7, 0.7),

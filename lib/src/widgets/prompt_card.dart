@@ -27,7 +27,7 @@ class _PromptCardState extends State<PromptCard>
   /// global key to ge access the widget
   static final GlobalKey containerKey =
       GlobalKey(debugLabel: "backgroundImage");
-  final duration = Durations.subtle;
+  final duration = AhlDurations.subtle;
 
   /// animation controller
   late AnimationController _controller;
@@ -89,8 +89,8 @@ class _PromptCardState extends State<PromptCard>
         onHover: _onHoverCallBack,
         onTap: () {},
         child: Container(
-          constraints: widget.constraints ??
-             BoxConstraints.loose(const Size( 342, 378)),
+          constraints:
+              widget.constraints ?? BoxConstraints.loose(const Size(342, 378)),
           child: Stack(
             children: [
               // FutureBuilder(
@@ -149,13 +149,15 @@ class _PromptCardState extends State<PromptCard>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       DefaultTextStyle(
-                        overflow: TextOverflow.ellipsis ,
+                        overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headlineSmall!,
-                        child: widget.title,),
+                        child: widget.title,
+                      ),
                       DefaultTextStyle(
-                        overflow: TextOverflow.ellipsis ,
+                        overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.labelLarge!,
-                        child: widget.subtitle ?? const SizedBox.shrink(),),
+                        child: widget.subtitle ?? const SizedBox.shrink(),
+                      ),
                     ],
                   ),
                 ),
