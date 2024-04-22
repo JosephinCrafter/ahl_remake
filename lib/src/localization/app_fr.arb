@@ -66,5 +66,30 @@
   "priesSpace": "Espace de Prière",
   "@priesSpace": {
     "description": "Titre pour espace de prières"
-  }
+  },
+  "whenWePray": "Quand pronnoncer votre prière?",
+  "prayingDate" : " le {date} à {hour}, pendant {prayerType}.",
+  "@prayingDate" : {
+    "description": "The message that shows the date when the prayer will be prayed",
+    "placeholders": {
+      "prayerType": {
+        "type" : "String",
+        "example": "Rosary"
+      },
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMMEEEEd"
+      },"hour": {
+        "type": "DateTime",
+        "format": "jm"
+      }
+    }
+  },
+  "mass" : "la Messe",
+  "rosary": "le Rosaire",
+  "vesper": "le Vêpre",
+
+  "choiceMass" : "Messe",
+  "choiceRosary": "Rosaire",
+  "choiceVesper": "Vêpre"
 }

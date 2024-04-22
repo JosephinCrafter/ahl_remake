@@ -12,6 +12,14 @@
     "priers",
     "sendPray",
     "optional",
-    "yourPrayer"
+    "yourPrayer",
+    "whenWePray",
+    "prayingDate",
+    "mass",
+    "rosary",
+    "vesper",
+    "choiceMass",
+    "choiceRosary",
+    "choiceVesper"
   ]
 }
