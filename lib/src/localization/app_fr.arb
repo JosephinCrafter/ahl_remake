@@ -68,7 +68,8 @@
     "description": "Titre pour espace de prières"
   },
   "whenWePray": "Quand pronnoncer votre prière?",
-  "prayingDate" : " le {date} à {hour}, pendant {prayerType}.",
+  "wePrayOn": "On prie pour vous le:",
+  "prayingDate" : "{date} à {hour}, pendant {prayerType}.",
   "@prayingDate" : {
     "description": "The message that shows the date when the prayer will be prayed",
     "placeholders": {

@@ -101,6 +101,13 @@ class _PrayersIntentionRequestViewState
       child: AnimatedSwitcher(
         switchInCurve: curvesIn,
         switchOutCurve: curvesOut,
+        layoutBuilder: (currentChild, previousChildren) => Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            ...previousChildren,
+            if (currentChild != null) currentChild,
+          ],
+        ),
         transitionBuilder: (child, animation) {
           return (_isGoingForward)
               ? child
@@ -170,6 +177,7 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
     final Widget child = LayoutBuilder(
       builder: (context, constraints) => Column(
         children: [
+          prayerDecorationImage,
           title,
           Container(
             margin: const EdgeInsets.only(top: Paddings.listSeparator),
@@ -251,6 +259,7 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
                         BorderSizes.big - Paddings.listSeparator),
                   ),
                   child: CalendarDatePicker(
+                    initialCalendarMode: DatePickerMode.day,
                     currentDate: DateTime.now(),
                     onDateChanged: (value) {
                       _date = value;
@@ -319,22 +328,19 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _prayer = TextEditingController();
 
+  PrayerRequest? _request;
   @override
   void initState() {
-    _name.addListener(() {
-      print(_name.value.text);
-    });
     super.initState();
+
+    _request = context.read<PrayerRequestBloc>().state.request;
+    _name.text = _request?.name ?? "";
+    _email.text = _request?.email ?? "";
+    _prayer.text = _request?.prayer ?? "";
   }
 
   @override
   Widget build(BuildContext context) {
-    PrayerRequest? request = context.read<PrayerRequestBloc>().state.request;
-
-    _name.text = request?.name ?? "";
-    _email.text = request?.email ?? "";
-    _prayer.text = request?.prayer ?? "";
-
     final Widget child = Form(
       key: _formKey,
       child: Column(
@@ -397,6 +403,7 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                       if (!isValidEmail(value ?? "")) {
                         return AppLocalizations.of(context)!.invalidEmail;
                       }
+
                       return null;
                     },
                   ),
@@ -459,7 +466,7 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
 }
 
 /// Prayer request confirmation page.
-class ReviewPrayerView extends StatelessWidget {
+class ReviewPrayerView extends StatefulWidget {
   const ReviewPrayerView({
     super.key,
     this.name,
@@ -494,6 +501,11 @@ class ReviewPrayerView extends StatelessWidget {
   final VoidCallback? _backCallback;
 
   @override
+  State<ReviewPrayerView> createState() => _ReviewPrayerState();
+}
+
+class _ReviewPrayerState extends State<ReviewPrayerView> {
+  @override
   Widget build(BuildContext context) {
     PrayerRequest request = context.read<PrayerRequestBloc>().state.request!;
 
@@ -507,15 +519,20 @@ class ReviewPrayerView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (request.name != null)
-            Text("${request.name},",
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                "${request.name},",
                 style: const TextStyle(
                   fontFamily: 'Aileron',
                   fontWeight: FontWeight.w600,
                   fontSize: 36,
-                )),
-          const Text("On prie pour vous pendant:"),
+                ),
+              ),
+            ),
+          Text(AppLocalizations.of(context)!.wePrayOn),
           InkWell(
-            onTap: _backCallback,
+            onTap: widget._backCallback,
             child: Text(
               AppLocalizations.of(context)!.prayingDate(
                 request.prayerType.localizedToStringWithArticle(context),
@@ -541,7 +558,10 @@ class ReviewPrayerView extends StatelessWidget {
               ),
             ),
           ),
-          Text("Intention de prière de ${request.name}, \n ${request.email}"),
+          Text(
+            "-${request.email}",
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
           Container(
             padding: const EdgeInsets.symmetric(
               vertical: Paddings.listSeparator,
@@ -550,7 +570,7 @@ class ReviewPrayerView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton.icon(
-                  onPressed: _backCallback,
+                  onPressed: widget._backCallback,
                   label: const Text("Modifier"),
                   icon: const Icon(Icons.arrow_back),
                 ),
@@ -560,7 +580,7 @@ class ReviewPrayerView extends StatelessWidget {
                     foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
                   onPressed: () {
-                    if (_callback != null) _callback!();
+                    if (widget._callback != null) widget._callback!();
                     context.read<PrayerRequestBloc>().add(
                         PrayerRequestCompletedEvent(
                             email: request.email,
