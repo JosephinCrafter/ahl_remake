@@ -18,6 +18,9 @@ const String newsletterCollection = 'users';
 /// The name of the collection containing articles.
 const String articlesCollection = 'articles';
 
+/// PrayerRequest collection name
+const String prayerRequestCollection = 'prayer_requests';
+
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final Reference _storage = FirebaseStorage.instance.ref();
 

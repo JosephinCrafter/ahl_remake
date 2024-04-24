@@ -17,9 +17,6 @@
     "auth": {
       "port": 9099
     },
-    "functions": {
-      "port": 5001
-    },
     "firestore": {
       "port": 46561
     },
@@ -32,16 +29,8 @@
     "ui": {
       "enabled": true
     },
-    "singleProjectMode": true,
-    "database": {
-      "port": 9000
-    },
-    "pubsub": {
-      "port": 8085
-    },
-    "eventarc": {
-      "port": 9299
-    }
+    "singleProjectMode": true
+    
   },
   "storage": {
     "rules": "storage.rules"

@@ -14,13 +14,6 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 class PrayersIntentionRequestView extends StatefulWidget {
   const PrayersIntentionRequestView({super.key});
 
-  /// The callback being called when prayer is submitted.
-  ///
-  /// It should interact with bloc
-  void _submitPrayer() {
-    // sent prayer to prayer service
-  }
-
   @override
   State<PrayersIntentionRequestView> createState() =>
       _PrayersIntentionRequestViewState();
@@ -35,16 +28,10 @@ class _PrayersIntentionRequestViewState
   late DateTime dateTime;
   late String prayer;
   late PrayerType prayerType;
+  late PageController _controller;
 
   @override
   void initState() {
-    name = "Andry";
-    email = "razafindrakotojosephin@gmail.com";
-    dateTime = DateTime.now();
-    prayer =
-        "Je remets entre vos mains Seigneur, les examens de mes étudiantes. Qu'elles soient éclairer par ta lumière.";
-    prayerType = PrayerType.rosary;
-
     views = [
       PrayerCollectView(
         key: const ValueKey(1),
@@ -57,33 +44,47 @@ class _PrayersIntentionRequestViewState
         backCallback: previousView,
       ),
       ReviewPrayerView(
-        name: name,
-        email: email,
-        dateTime: dateTime,
-        prayer: prayer,
-        prayerType: prayerType,
         backCallback: previousView,
-        callback: widget._submitPrayer,
+        callback: _submitPrayer,
       ),
     ];
+
+    _controller = PageController(
+      keepPage: true,
+    );
+
     super.initState();
   }
 
   // // todo: change to 0 after building dateView view
-  int _index = 0;
+  final duration = AhlDurations.subtle;
+  final curvesIn = Curves.easeIn;
+  final curvesOut = Curves.easeOut;
 
-  void nextView() => setState(() {
-        if (_index < views.length) {
-          _index = (_index + 1) % views.length;
-          _isGoingForward = true;
-        }
-      });
+  void _submitPrayer() => setState(
+        () {
+          _controller.animateToPage(
+            0,
+            duration: duration,
+            curve: curvesIn,
+          );
+        },
+      );
+
+  void nextView() => setState(
+        () {
+          _controller.nextPage(
+            duration: duration,
+            curve: curvesIn,
+          );
+        },
+      );
 
   void previousView() => setState(() {
-        if (_index < views.length) {
-          _index = (_index - 1) % views.length;
-          _isGoingForward = false;
-        }
+        _controller.previousPage(
+          duration: duration,
+          curve: curvesIn,
+        );
       });
 
   // test to setup animation
@@ -91,36 +92,51 @@ class _PrayersIntentionRequestViewState
 
   @override
   Widget build(BuildContext context) {
-    const duration = AhlDurations.subtle;
-    const curvesIn = Curves.easeIn;
-    const curvesOut = Curves.easeOut;
-
     return BlocProvider<PrayerRequestBloc>(
-      create: (context) => PrayerRequestBloc(),
-      lazy: true,
-      child: AnimatedSwitcher(
-        switchInCurve: curvesIn,
-        switchOutCurve: curvesOut,
-        layoutBuilder: (currentChild, previousChildren) => Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            ...previousChildren,
-            if (currentChild != null) currentChild,
-          ],
+      create: (context) => PrayerRequestBloc(
+        PrayerRequestRepo(
+          db: firestore,
         ),
-        transitionBuilder: (child, animation) {
-          return (_isGoingForward)
-              ? child
-                  .animate(
-                    autoPlay: false,
-                    target: 1,
-                  )
-                  .slideX(begin: 1, end: 0, duration: duration, curve: curvesIn)
-              : child.animate(autoPlay: false, target: 1).slideX(
-                  begin: -1, end: 0, duration: duration, curve: curvesOut);
-        },
-        duration: duration,
-        child: views[_index],
+      ),
+      lazy: true,
+      // child: AnimatedSwitcher(
+      //   switchInCurve: curvesIn,
+      //   switchOutCurve: curvesOut,
+      //   layoutBuilder: (currentChild, previousChildren) => Stack(
+      //     alignment: Alignment.topCenter,
+      //     children: [
+      //       ...previousChildren,
+      //       if (currentChild != null) currentChild,
+      //     ],
+      //   ),
+      //   transitionBuilder: (child, animation) {
+      //     return (_isGoingForward)
+      //         ? child
+      //             .animate(
+      //               autoPlay: false,
+      //               target: 1,
+      //             )
+      //             .slideX(begin: 1, end: 0, duration: duration, curve: curvesIn)
+      //         : child.animate(autoPlay: false, target: 1).slideX(
+      //             begin: -1, end: 0, duration: duration, curve: curvesOut);
+      //   },
+      //   duration: duration,
+      //   child: views[_index],
+
+      // ),
+      child: LayoutBuilder(
+        builder: (context, constraints) => ConstrainedBox(
+          constraints: BoxConstraints.loose(
+            const Size.fromHeight(1023),
+          ),
+          child: PageView(
+            controller: _controller,
+            allowImplicitScrolling: false,
+            physics: const NeverScrollableScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            children: views,
+          ),
+        ),
       ),
     );
   }
@@ -175,138 +191,143 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
   @override
   Widget build(BuildContext context) {
     final Widget child = LayoutBuilder(
-      builder: (context, constraints) => Column(
-        children: [
-          prayerDecorationImage,
-          title,
-          Container(
-            margin: const EdgeInsets.only(top: Paddings.listSeparator),
-            padding: //(constraints.maxWidth > ScreenSizes.mobile)
-                // ?
-
-                const EdgeInsets.all(Margins.mobileMedium),
-            //: const EdgeInsets.all(Margins.mobileSmall),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
-              borderRadius: BorderRadius.circular(BorderSizes.big),
+      builder: (context, constraints) => ConstrainedBox(
+        constraints: constraints,
+        child: Column(
+          children: [
+            Expanded(
+              child: prayerDecorationImage,
             ),
-            child: Column(
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(
-                    bottom: Paddings.listSeparator,
+            title,
+            Container(
+              margin: const EdgeInsets.only(top: Paddings.listSeparator),
+              padding: //(constraints.maxWidth > ScreenSizes.mobile)
+                  // ?
+
+                  const EdgeInsets.all(Margins.mobileMedium),
+              //: const EdgeInsets.all(Margins.mobileSmall),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.background,
+                borderRadius: BorderRadius.circular(BorderSizes.big),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(
+                      bottom: Paddings.listSeparator,
+                    ),
+                    child: Text(
+                      AppLocalizations.of(context)!.whenWePray,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
                   ),
-                  child: Text(
-                    AppLocalizations.of(context)!.whenWePray,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: Paddings.listSeparator,
-                  ),
-                  child: FittedBox(
-                    fit: BoxFit.contain,
-                    child: SegmentedButton<PrayerType>(
-                      style: const ButtonStyle(
-                        visualDensity: VisualDensity.comfortable,
-                      ),
-                      onSelectionChanged: _onSelectionChange,
-                      showSelectedIcon: true,
-                      selected: selected,
-                      multiSelectionEnabled: false,
-                      selectedIcon: Icon(Icons.done)
-                          .animate()
-                          .scale(
-                            duration: AhlDurations.subtle,
-                            alignment: Alignment.center,
-                            curve: Curves.easeOut,
-                            begin: const Offset(0.7, 0.7),
-                            end: const Offset(1.0, 1.0),
-                          )
-                          .rotate(begin: 1.1, end: 1),
-                      segments: List.generate(
-                        _option.length,
-                        (index) => ButtonSegment(
-                          label: Container(
-                            alignment: Alignment.center,
-                            width: 60,
-                            child: Text(
-                              _option[index].localizedToString(context),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      bottom: Paddings.listSeparator,
+                    ),
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: SegmentedButton<PrayerType>(
+                        style: const ButtonStyle(
+                          visualDensity: VisualDensity.comfortable,
+                        ),
+                        onSelectionChanged: _onSelectionChange,
+                        showSelectedIcon: true,
+                        selected: selected,
+                        multiSelectionEnabled: false,
+                        selectedIcon: Icon(Icons.done)
+                            .animate()
+                            .scale(
+                              duration: AhlDurations.subtle,
+                              alignment: Alignment.center,
+                              curve: Curves.easeOut,
+                              begin: const Offset(0.7, 0.7),
+                              end: const Offset(1.0, 1.0),
+                            )
+                            .rotate(begin: 1.1, end: 1),
+                        segments: List.generate(
+                          _option.length,
+                          (index) => ButtonSegment(
+                            label: Container(
+                              alignment: Alignment.center,
+                              width: 60,
+                              child: Text(
+                                _option[index].localizedToString(context),
+                              ),
                             ),
+                            value: _option[index],
                           ),
-                          value: _option[index],
                         ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(
-                    bottom: Paddings.listSeparator,
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(
+                      bottom: Paddings.listSeparator,
+                    ),
+                    child: Text("Choisir la date:"),
                   ),
-                  child: Text("Choisir la date:"),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(
-                    bottom: Paddings.listSeparator,
+                  Container(
+                    padding: const EdgeInsets.only(
+                      bottom: Paddings.listSeparator,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF7EFD4),
+                      borderRadius: BorderRadius.circular(
+                          BorderSizes.big - Paddings.listSeparator),
+                    ),
+                    child: CalendarDatePicker(
+                      initialCalendarMode: DatePickerMode.day,
+                      currentDate: DateTime.now(),
+                      onDateChanged: (value) {
+                        _date = value;
+                      },
+                      initialDate: _date,
+                      firstDate: firstDate,
+                      lastDate: lastDate,
+                    ),
                   ),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF7EFD4),
-                    borderRadius: BorderRadius.circular(
-                        BorderSizes.big - Paddings.listSeparator),
-                  ),
-                  child: CalendarDatePicker(
-                    initialCalendarMode: DatePickerMode.day,
-                    currentDate: DateTime.now(),
-                    onDateChanged: (value) {
-                      _date = value;
-                    },
-                    initialDate: _date,
-                    firstDate: firstDate,
-                    lastDate: lastDate,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: Paddings.listSeparator,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                    onPressed: widget._backCallback,
-                    icon: const Icon(Icons.arrow_back)),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                  onPressed: () {
-                    context.read<PrayerRequestBloc>().add(
-                          PrayerRequestFilledDateEvent(
-                            date: _date.copyWith(
-                              hour: selected.first.time.hour,
-                              minute: selected.first.time.minute,
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: Paddings.listSeparator,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: widget._backCallback,
+                      icon: const Icon(Icons.arrow_back)),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    onPressed: () {
+                      context.read<PrayerRequestBloc>().add(
+                            PrayerRequestFilledDateEvent(
+                              date: _date.copyWith(
+                                hour: selected.first.time.hour,
+                                minute: selected.first.time.minute,
+                              ),
+                              prayerType: selected.first,
                             ),
-                            prayerType: selected.first,
-                          ),
-                        );
-                    // execute callback or nothing
-                    Function fun = widget._callback ?? () {};
-                    fun();
-                  },
-                  child: const Text("Suivant"),
-                ),
-              ],
+                          );
+                      // execute callback or nothing
+                      Function fun = widget._callback ?? () {};
+                      fun();
+                    },
+                    child: const Text("Suivant"),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
     return FormsLayoutBase(child: child);
@@ -346,7 +367,9 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          prayerDecorationImage,
+          Expanded(
+            child: prayerDecorationImage,
+          ),
           title,
           Container(
             alignment: Alignment.centerLeft,
@@ -440,6 +463,8 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
               ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
+                  // execute callback or nothing
+                  if (widget._callback != null) widget._callback!();
                   context.read<PrayerRequestBloc>().add(
                         PrayerRequestFilledFormEvent(
                           name: _name.value.text,
@@ -447,9 +472,6 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                           prayer: _prayer.value.text,
                         ),
                       );
-                  // execute callback or nothing
-                  Function fun = widget._callback ?? () {};
-                  fun();
                 }
               },
               child: Text(AppLocalizations.of(context)!.sendPray),
@@ -469,30 +491,10 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
 class ReviewPrayerView extends StatefulWidget {
   const ReviewPrayerView({
     super.key,
-    this.name,
-    required this.dateTime,
-    this.prayer,
-    required this.email,
-    required this.prayerType,
     VoidCallback? callback,
     VoidCallback? backCallback,
   })  : _callback = callback,
         _backCallback = backCallback;
-
-  /// Name of the requester.
-  final String? name;
-
-  /// The requested prayer.
-  final String? prayer;
-
-  /// The email of the requester.
-  final String email;
-
-  /// Date when we pray.
-  final DateTime dateTime;
-
-  /// Kind of the prayer when to pronounce the intention.
-  final PrayerType prayerType;
 
   /// callback
   final VoidCallback? _callback;
@@ -507,9 +509,9 @@ class ReviewPrayerView extends StatefulWidget {
 class _ReviewPrayerState extends State<ReviewPrayerView> {
   @override
   Widget build(BuildContext context) {
-    PrayerRequest request = context.read<PrayerRequestBloc>().state.request!;
+    PrayerRequest? request = context.watch<PrayerRequestBloc>().state.request;
 
-    Widget _contentView = Container(
+    Widget contentView = Container(
       padding: const EdgeInsets.all(Margins.mobileMedium),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.background,
@@ -518,11 +520,11 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (request.name != null)
+          if (request?.name != null)
             FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                "${request.name},",
+                "${request?.name},",
                 style: const TextStyle(
                   fontFamily: 'Aileron',
                   fontWeight: FontWeight.w600,
@@ -532,26 +534,31 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
             ),
           Text(AppLocalizations.of(context)!.wePrayOn),
           InkWell(
+            splashFactory: InkRipple.splashFactory,
+            canRequestFocus: true,
+            enableFeedback: true,
             onTap: widget._backCallback,
-            child: Text(
-              AppLocalizations.of(context)!.prayingDate(
-                request.prayerType.localizedToStringWithArticle(context),
-                request.dateTime,
-                request.dateTime,
-              ),
-              style: TextStyle(
-                fontFamily: 'Aileron',
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
-                fontSize: 26,
-              ),
-            ),
+            child: request != null
+                ? Text(
+                    AppLocalizations.of(context)!.prayingDate(
+                      request.prayerType.localizedToStringWithArticle(context),
+                      request.dateTime,
+                      request.dateTime,
+                    ),
+                    style: TextStyle(
+                      fontFamily: 'Aileron',
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 26,
+                    ),
+                  )
+                : const SizedBox.shrink(),
           ),
           Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: Paddings.listSeparator),
             child: Text(
-              "\"${request.prayer}\"",
+              "\"${request?.prayer}\"",
               style: const TextStyle(
                 fontStyle: FontStyle.italic,
                 fontWeight: FontWeight.bold,
@@ -559,7 +566,7 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
             ),
           ),
           Text(
-            "-${request.email}",
+            "-${request?.email}",
             style: Theme.of(context).textTheme.labelSmall,
           ),
           Container(
@@ -579,15 +586,24 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     foregroundColor: Theme.of(context).colorScheme.onPrimary,
                   ),
-                  onPressed: () {
-                    if (widget._callback != null) widget._callback!();
-                    context.read<PrayerRequestBloc>().add(
-                        PrayerRequestCompletedEvent(
-                            email: request.email,
-                            prayer: request.prayer,
-                            date: request.dateTime,
-                            prayerType: request.prayerType));
-                  },
+                  onPressed: (request != null)
+                      ? () {
+                          if (widget._callback != null) widget._callback!();
+
+                          context.read<PrayerRequestBloc>().add(
+                                PrayerRequestCompletedEvent(
+                                  name: request.name,
+                                  email: request.email,
+                                  prayer: request.prayer,
+                                  date: request.dateTime,
+                                  prayerType: request.prayerType,
+                                ),
+                              );
+                          context
+                              .read<PrayerRequestBloc>()
+                              .add(PrayerRequestInitializeEvent());
+                        }
+                      : null,
                   child: const Text("Confirmer"),
                 ),
               ],
@@ -599,8 +615,8 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
 
     Widget child = Column(
       children: [
-        prayerDecorationImage,
-        _contentView,
+        Expanded(child: prayerDecorationImage),
+        contentView,
       ],
     );
 

@@ -4,15 +4,23 @@ class PromptCard extends StatefulWidget {
   const PromptCard({
     super.key,
     this.constraints,
-    required this.backgroundImage,
+    this.backgroundImage,
     required this.title,
     this.subtitle,
     this.bottomHeight,
     this.backgroundColor,
-  });
+    this.image,
+  }) : assert(
+            backgroundImage == null && image != null || backgroundImage != null,
+            """One of backgroundImage or image should be provided.""");
 
   final BoxConstraints? constraints;
-  final ImageProvider backgroundImage;
+  final ImageProvider? backgroundImage;
+
+  /// A widget that is displayed on top of every thing.
+  ///
+  /// If image is provided, then it will replace [backgroundImage].
+  final Widget? image;
   final Widget title;
   final Widget? subtitle;
   final double? bottomHeight;
@@ -24,9 +32,6 @@ class PromptCard extends StatefulWidget {
 
 class _PromptCardState extends State<PromptCard>
     with SingleTickerProviderStateMixin {
-  /// global key to ge access the widget
-  static final GlobalKey containerKey =
-      GlobalKey(debugLabel: "backgroundImage");
   final duration = AhlDurations.subtle;
 
   /// animation controller
@@ -83,6 +88,7 @@ class _PromptCardState extends State<PromptCard>
     // var image = imageRef.getData();
 
     return Card(
+      
       clipBehavior: Clip.antiAlias,
       elevation: _elevation,
       child: InkWell(
@@ -108,15 +114,15 @@ class _PromptCardState extends State<PromptCard>
                   ),
                 ],
                 controller: _controller,
-                child: Container(
-                  key: containerKey,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: widget.backgroundImage,
-                      fit: BoxFit.cover,
+                child: widget.image ??
+                    Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: widget.backgroundImage!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
               ),
 
               //       ;

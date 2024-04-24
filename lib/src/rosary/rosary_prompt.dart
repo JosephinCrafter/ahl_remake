@@ -16,7 +16,7 @@ class RosaryPrompt extends StatelessWidget {
       backgroundImage: AssetImage(
         AhlAssets.rosaryHeroHeader,
       ),
-      title: Text(
+      title: const Text(
         "Chapelet du jour",
       ),
       subtitle: Text(

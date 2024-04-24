@@ -71,6 +71,19 @@ extension PrayerTypeToString on PrayerType {
         );
     }
   }
+
+  String get name {
+    switch (this) {
+      case PrayerType.rosary:
+        return 'Rosary';
+      case PrayerType.mass:
+        return 'Mass';
+      case PrayerType.vesper:
+        return 'Vesper';
+      default:
+        return '$this';
+    }
+  }
 }
 
 class PrayerRequest {
@@ -112,4 +125,24 @@ class PrayerRequest {
     prayerType: $prayerType
   }
 """;
+
+  Map<String, dynamic> toDoc() {
+    return {
+      'name': name,
+      'email': email,
+      'prayer': prayer,
+      'date': dateTime,
+      'prayerType': prayerType.name,
+    };
+  }
+
+  factory PrayerRequest.fromDoc(Map<String, dynamic> doc) {
+    return PrayerRequest(
+      email: doc['email'],
+      dateTime: doc['date'],
+      prayer: doc['prayer'],
+      prayerType: doc['prayerType'],
+      name: doc['name'],
+    );
+  }
 }

@@ -6,6 +6,8 @@ import 'package:ahl/src/prayers_space/view.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
+import '../project_space/view.dart';
+
 /// Home page
 
 class HomePage extends StatelessWidget {
@@ -17,6 +19,7 @@ class HomePage extends StatelessWidget {
     HeroHeaderView(),
     WelcomingView(),
     PrayerSpaceView(),
+    ProjectsSpaceView(),
     NewsLetterPrompt(),
     AhlFooter(),
   ];

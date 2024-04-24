@@ -2,6 +2,9 @@ import 'package:ahl/src/prayers_intention/prayer_request.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+
 /// PrayerRequestState:
 ///
 /// This class is the bloc state.
@@ -44,8 +47,10 @@ import 'package:bloc_test/bloc_test.dart';
 /// - [PrayerRequestFilledFormEvent]
 /// - [PrayerRequestCompletedEvent]
 void main() {
+  FirebaseFirestore firestore = FakeFirebaseFirestore();
+  PrayerRequestRepo repo = PrayerRequestRepo(db: firestore);
   blocTest('a bloc that emit an initial state of PrayerIntentionBloc',
-      build: () => PrayerRequestBloc(),
+      build: () => PrayerRequestBloc(repo),
       // act: (bloc) => bloc.add(PrayerRequestInitializeEvent()),
       expect: () => [
             /// The initial state is clean and have not any value in
@@ -65,7 +70,7 @@ void main() {
 
       blocTest(
         'a bloc that emit a filled state of PrayerIntentionBloc',
-        build: () => PrayerRequestBloc(),
+        build: () => PrayerRequestBloc(repo),
         act: (bloc) => bloc.add(
           PrayerRequestFilledFormEvent(
             email: email,
@@ -80,7 +85,7 @@ void main() {
       );
       blocTest(
         'a bloc that emit a request with all form',
-        build: () => PrayerRequestBloc(),
+        build: () => PrayerRequestBloc(repo),
         act: (bloc) => bloc.add(
           PrayerRequestFilledDateEvent(
             date: date,
@@ -95,7 +100,7 @@ void main() {
 
       blocTest(
         'a bloc that emit a full request',
-        build: () => PrayerRequestBloc(),
+        build: () => PrayerRequestBloc(repo),
         act: (bloc) => bloc.add(
           PrayerRequestCompletedEvent(
             email: email,

@@ -92,5 +92,9 @@
 
   "choiceMass" : "Messe",
   "choiceRosary": "Rosaire",
-  "choiceVesper": "Vêpre"
+  "choiceVesper": "Vêpre",
+
+  "projectsSpace": "Nos projets",
+  "projectsSpaceSubtitle": "Aimons et servons.",
+  "projectsSpaceIntroduction": "Nous sommes engagées dans de nombreux projets qui visent à promouvoir la dignité humaine, la justice sociale, l’éducation et la santé. Nous vous invitons à découvrir sur cette page les initiatives que nous menons."
 }

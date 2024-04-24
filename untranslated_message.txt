@@ -21,6 +21,9 @@
     "vesper",
     "choiceMass",
     "choiceRosary",
-    "choiceVesper"
+    "choiceVesper",
+    "projectsSpace",
+    "projectsSpaceSubtitle",
+    "projectsSpaceIntroduction"
   ]
 }

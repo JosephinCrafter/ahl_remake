@@ -6,6 +6,9 @@ class BorderSizes {
 
   // 26
   static const double medium = 26;
+
+  /// 15
+  static const double small = 15;
 }
 
 class Margins {

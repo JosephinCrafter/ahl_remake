@@ -147,8 +147,8 @@ class AhlTheme {
 
   static const TextStyle label = TextStyle(
     fontFamily: 'Aileron',
-    fontSize: 12,
-    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    fontWeight: FontWeight.normal,
     fontStyle: FontStyle.normal,
     letterSpacing: 0,
     color: onSurface,
@@ -173,7 +173,6 @@ class AhlTheme {
   );
 
   // static TextTheme textTheme = Typography.material2021().copyWith();
-
   static TextTheme get textTheme => Typography.blackMountainView.copyWith(
         displayLarge: displayLarge,
         displayMedium: displayMedium,
@@ -187,6 +186,15 @@ class AhlTheme {
         bodyLarge: bodyLarge,
         bodyMedium: bodyMedium,
         bodySmall: bodySmall,
-        // labelLarge: label,
+        labelLarge: label,
       );
+  static const TextStyle buttonTextStyle = TextStyle(
+    fontFamily: 'alegreya',
+    fontSize: 14,
+  );
+
+  static ButtonThemeData buttonTheme = ButtonThemeData(
+    alignedDropdown: true,
+    textTheme: ButtonTextTheme.normal,
+  );
 }

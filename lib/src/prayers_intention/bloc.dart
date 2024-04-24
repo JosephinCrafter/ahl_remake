@@ -10,7 +10,10 @@ enum PrayerRequestStatus {
 }
 
 class PrayerRequestBloc extends Bloc<PrayerRequestEvent, PrayerRequestState> {
-  PrayerRequestBloc() : super(_initialState) {
+  PrayerRequestBloc(
+    PrayerRequestRepo repository,
+  )   : _repo = repository,
+        super(_initialState) {
     on<PrayerRequestInitializeEvent>(_onInitializedEvent);
     on<PrayerRequestFilledFormEvent>(_onFilledFormEvent);
     on<PrayerRequestFilledDateEvent>(_onFilledDateEvent);
@@ -23,14 +26,17 @@ class PrayerRequestBloc extends Bloc<PrayerRequestEvent, PrayerRequestState> {
   /// short hand variable for initial
   static const PrayerRequestState _initialState = PrayerRequestInitialState();
 
-  void _onInitializedEvent(PrayerRequestEvent event, Emitter emit) {
-    if (kDebugMode) {
-      print("The bloc is initialized.");
-    }
+  /// PrayerRequestrepo
+  PrayerRequestRepo _repo;
 
-    /// Re emit a new state if the state is not initial.
+  void _onInitializedEvent(PrayerRequestEvent event, Emitter emit) {
+    if (state != _initialState) {
+       /// Re emit a new state if the state is not initial.
 
     emit(_initialState);
+    }
+
+   
   }
 
   void _onFilledFormEvent(PrayerRequestFilledFormEvent event, Emitter emit) {
@@ -59,12 +65,15 @@ class PrayerRequestBloc extends Bloc<PrayerRequestEvent, PrayerRequestState> {
   void _onCompletedEvent(PrayerRequestCompletedEvent event, Emitter emit) {
     emit(
       PrayerRequestCompleteState(
+        name: event.name,
         email: event.email,
         prayer: event.prayer,
         date: event.date,
         prayerType: event.prayerType,
       ),
     );
-    print(state);
+
+    /// write request to back
+    _repo.write(state.request!);
   }
 }

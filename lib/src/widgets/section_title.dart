@@ -1,10 +1,12 @@
 part of "widgets.dart";
 
 class SectionTitle extends StatelessWidget {
-  const SectionTitle({super.key, required this.title, this.subtitle});
+  const SectionTitle(
+      {super.key, required this.title, this.subtitle, this.color});
 
   final String title;
   final String? subtitle;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class SectionTitle extends StatelessWidget {
               title.toUpperCase(),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontSize: 36,
-                    color: Colors.white,
+                    color: color ?? Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
             ),
@@ -33,7 +35,7 @@ class SectionTitle extends StatelessWidget {
                   child: Text(
                     subtitle!,
                     style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          color: Colors.white,
+                          color: color ?? Colors.white,
                           fontFamily: "Butler",
                         ),
                   ),
