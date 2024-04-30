@@ -46,8 +46,8 @@ class Article {
 
   /// A string representing the release date of an article.
   ///
-  /// Supported formatting is Fr,fr date format.
-  /// ex: 19/01/2027
+  /// Supported formatting is en,US date format.
+  /// ex: 2027-05-23
   final String? releaseDate;
 
   /// This is the Cloud Storage path that leads to the markdown file of the

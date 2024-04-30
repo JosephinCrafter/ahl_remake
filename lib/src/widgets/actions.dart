@@ -120,7 +120,7 @@ class ActionsLists {
         padding: const EdgeInsets.symmetric(vertical: Paddings.small),
         child: TextButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(ArticleView.routeName);
+            Navigator.of(context).pushNamed(ArticleContentPage.routeName);
           },
           child: Container(
             alignment: Alignment.centerLeft,

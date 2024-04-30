@@ -1,7 +1,9 @@
 import 'package:ahl/src/ahl_barrel.dart';
+import 'package:ahl/src/article_view/view/article_view.dart';
 import 'package:ahl/src/home/hero_header/hero_header.dart';
 import 'package:ahl/src/home/welcoming/welcoming.dart';
 import 'package:ahl/src/newsletter/newsletter.dart';
+import 'package:ahl/src/partners/view.dart';
 import 'package:ahl/src/prayers_space/view.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +20,10 @@ class HomePage extends StatelessWidget {
   static const List<Widget> _children = [
     HeroHeaderView(),
     WelcomingView(),
+    HighlightArticleTile(),
     PrayerSpaceView(),
     ProjectsSpaceView(),
+    PartnersView(),
     NewsLetterPrompt(),
     AhlFooter(),
   ];
@@ -70,7 +74,7 @@ class HomePage extends StatelessWidget {
                       return const SizedBox.shrink();
                     } else {
                       return SizedBox.fromSize(
-                        size: const Size.fromHeight(100),
+                        size: const Size.fromHeight(Margins.small),
                       );
                     }
                   }),

@@ -22,7 +22,7 @@ void main() {
           appBar: AppBar(
             title: const Text("Article View test"),
           ),
-          body: ArticleView(
+          body: ArticleContentPage(
             isHighLight: true,
             firestore: fakeFirestore,
             storage: fakeStorage,
@@ -31,7 +31,8 @@ void main() {
       );
 
       await tester.pumpWidget(app);
-      expect(find.text("This is the highLight article content."), findsOneWidget);
+      expect(
+          find.text("This is the highLight article content."), findsOneWidget);
     },
   );
 }
