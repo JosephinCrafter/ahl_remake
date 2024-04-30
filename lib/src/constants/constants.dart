@@ -13,13 +13,13 @@ class BorderSizes {
 
 class Margins {
   /// 200
-  static const double big = 200;
+  static const double big = 188;
 
   /// big / 2 = 100
-  static const double medium = 100;
+  static const double medium = 94;
 
-  /// big / 4 = 50
-  static const double small = 50;
+  /// 47
+  static const double small = 47;
 
   /// 37
   static const double mobileLarge = 37;
