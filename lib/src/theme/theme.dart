@@ -153,6 +153,7 @@ class AhlTheme {
     letterSpacing: 0,
     color: onSurface,
   );
+  static TextStyle labelMedium = label.copyWith(fontSize: 10);
 
   static const TextStyle name = TextStyle(
     fontFamily: 'Aileron',
@@ -187,6 +188,8 @@ class AhlTheme {
         bodyMedium: bodyMedium,
         bodySmall: bodySmall,
         labelLarge: label,
+        labelMedium: labelMedium,
+        labelSmall: label.copyWith(fontSize: 8),
       );
   static const TextStyle buttonTextStyle = TextStyle(
     fontFamily: 'alegreya',
