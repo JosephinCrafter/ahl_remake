@@ -1,3 +1,5 @@
+import '../../utils/date_time_utils.dart';
+
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,8 +9,9 @@ import 'package:markdown_widget/markdown_widget.dart';
 
 import "package:firebase_article/firebase_article.dart";
 
-class ArticleView extends StatefulWidget {
-  const ArticleView({
+/// Article Page
+class ArticleContentPage extends StatefulWidget {
+  const ArticleContentPage({
     super.key,
     this.args,
     this.articleTitle,
@@ -29,10 +32,10 @@ class ArticleView extends StatefulWidget {
   final FirebaseFirestore firestore;
 
   @override
-  State<ArticleView> createState() => ArticleViewState();
+  State<ArticleContentPage> createState() => ArticleContentPageState();
 }
 
-class ArticleViewState extends State<ArticleView> {
+class ArticleContentPageState extends State<ArticleContentPage> {
   late ArticlesRepository helper;
   late Future<Article?> article;
 
@@ -106,4 +109,53 @@ class ArticleContentView extends StatelessWidget {
   }
 }
 
-//todo: create ArticleTile widget
+/// A tile of article
+class ArticleTile extends StatefulWidget {
+  const ArticleTile({super.key});
+
+  @override
+  State<ArticleTile> createState() => _ArticleTileState();
+}
+
+class _ArticleTileState extends State<ArticleTile> {
+  late Article article;
+
+  @override
+  void initState() {
+    super.initState();
+
+    article = const Article(
+      // todo: change to article form bloc
+      id: 'laure_sabes',
+      title: 'Qui est Laure Sabes?',
+      releaseDate: '2024-04-28',
+      contentPath: '',
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String releaseMonth = DateTimeUtils.localMonth(
+      DateTimeUtils.parseReleaseDate(article.releaseDate ?? '2024-04-28').month,
+      context,
+    );
+    return Container(
+      child: Column(
+        children: [
+          Text('Mois de $releaseMonth'),
+        ],
+      ),
+    );
+  }
+}
+
+class HighlightArticleTile extends StatelessWidget {
+  const HighlightArticleTile({super.key});
+
+// todo: get highlightedArticle
+
+  @override
+  Widget build(BuildContext context) {
+    return ArticleTile();
+  }
+}
