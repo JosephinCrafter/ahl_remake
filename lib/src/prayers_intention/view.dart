@@ -10,7 +10,7 @@ final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 /// This class should be used under the bloc of managing it's state.
 ///
 /// [email],[dateTime],[prayer] and [prayerType] should be not null.
-// todo: Change variable to a PrayerRequests model.
+// // todo: Change variable to a PrayerRequests model.
 class PrayersIntentionRequestView extends StatefulWidget {
   const PrayersIntentionRequestView({super.key});
 
@@ -354,7 +354,17 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
   void initState() {
     super.initState();
 
-    _request = context.read<PrayerRequestBloc>().state.request;
+    try {
+      _request = context.read<PrayerRequestBloc>().state.request;
+    } catch (e) {
+      _request = PrayerRequest(
+        name: "Unknown",
+        email: "",
+        prayer: "(vide)",
+        dateTime: DateTime.now(),
+        prayerType: PrayerType.rosary,
+      );
+    }
     _name.text = _request?.name ?? "";
     _email.text = _request?.email ?? "";
     _prayer.text = _request?.prayer ?? "";
@@ -463,15 +473,17 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
               ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  // execute callback or nothing
-                  if (widget._callback != null) widget._callback!();
-                  context.read<PrayerRequestBloc>().add(
-                        PrayerRequestFilledFormEvent(
-                          name: _name.value.text,
-                          email: _email.value.text,
-                          prayer: _prayer.value.text,
-                        ),
-                      );
+                  TrySnack(() {
+                    // execute callback or nothing
+                    if (widget._callback != null) widget._callback!();
+                    context.read<PrayerRequestBloc>().add(
+                          PrayerRequestFilledFormEvent(
+                            name: _name.value.text,
+                            email: _email.value.text,
+                            prayer: _prayer.value.text,
+                          ),
+                        );
+                  }, context);
                 }
               },
               child: Text(AppLocalizations.of(context)!.sendPray),
@@ -483,6 +495,31 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
 
     return FormsLayoutBase(
       child: child,
+    );
+  }
+}
+
+void TrySnack(
+  Function fun,
+  BuildContext context, {
+  String message = "Erreur Server. Recharger la page!",
+}) {
+  try {
+    fun();
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        action: SnackBarAction(
+          label: 'Close',
+          onPressed: () {},
+        ),
+        content: Text(
+          message,
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
+        ),
+      ),
     );
   }
 }

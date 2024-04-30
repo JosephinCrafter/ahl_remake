@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,15 +20,13 @@ class ProjectsSpaceView extends StatelessWidget {
         subtitle: AppLocalizations.of(context)!.projectsSpaceSubtitle,
       ),
       // introduction
-      Padding(
-        padding: const EdgeInsets.all(Paddings.medium),
-        child: Text(
-          AppLocalizations.of(context)!.projectsSpaceIntroduction,
-        ),
-      ),
-      const SizedBox(
-        height: 45,
-      ),
+      // Padding(
+      //   padding: const EdgeInsets.all(Paddings.medium),
+      //   child: Text(
+      //     AppLocalizations.of(context)!.projectsSpaceIntroduction,
+      //   ),
+      // ),
+
       // prayers intention
       Align(
         alignment: Alignment.bottomCenter,
@@ -51,18 +50,44 @@ class ProjectsSpaceView extends StatelessWidget {
                     ),
                   ),
                 ),
-                label: Text(
+                label: const Text(
                   "Projet en cours",
                 ),
                 title: Text(
                   "$index Cantines",
                 ),
-                description: Text(
-                  "Pour les enfants d'aujourd'hui",
-                ),
+                // description: const Text(
+                //   "Pour les enfants d'aujourd'hui",
+                // ),
               ),
             ),
           ),
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              onPressed: () {
+                // todo: implement project found rising
+              },
+              child: const Text('Soutenir un projet'),
+            ),
+            const SizedBox(width: Paddings.listSeparator),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              ),
+              onPressed: () {
+                // todo: implement all project page
+              },
+              child: Text("Voir tout les projet"),
+            ),
+          ],
         ),
       ),
     ];
@@ -89,11 +114,15 @@ class _ProjectsCarouselState extends State<ProjectsCarousel> {
   late PageController _controller;
   late int _currentIndex;
 
+  bool _isHovered = false;
+
   @override
   void initState() {
     super.initState();
 
-    _controller = PageController();
+    _controller = PageController(
+      keepPage: true,
+    );
     _currentIndex = 0;
   }
 
@@ -109,31 +138,76 @@ class _ProjectsCarouselState extends State<ProjectsCarousel> {
     super.dispose();
   }
 
+  void isHovered(bool isHovered) {
+    setState(
+      () => _isHovered = isHovered,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(maxHeight: 493 + 15 * 2 + 10),
-      child: Column(
+      child: Stack(
         children: [
-          ConstrainedBox(
-            constraints: BoxConstraints.loose(
-              const Size.fromHeight(493),
-            ),
-            child: PageView(
-              controller: _controller,
-              onPageChanged: (value) => updateCurrentIndex(value),
-              allowImplicitScrolling: true,
-              scrollBehavior: MaterialScrollBehavior(),
-              children: widget.children,
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: Paddings.listSeparator),
-            child: CustomPageIndicator(
-              pageCount: widget.children.length,
-              currentIndex: _currentIndex,
-            ),
+          // Align(
+          //   alignment: Alignment.centerLeft,
+          //   child: InkWell(
+
+          //     onTap: () {
+          //       updateCurrentIndex(_currentIndex + 1);
+          //     },
+          //     onHover: (value) => isHovered(value),
+          //     child: Container(
+          //       constraints: BoxConstraints.loose(
+          //           Size.square(Theme.of(context).iconTheme.size!)),
+          //       child: Icon(
+          //         Icons.chevron_left_rounded,
+          //         size: _isHovered
+          //             ? Theme.of(context).iconTheme.size! * 1.4
+          //             : Theme.of(context).iconTheme.size,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // Container(
+          //   constraints: const BoxConstraints.expand(),
+          //   child: Container(
+          //     child: IconButton(
+          //       alignment: Alignment.centerRight,
+          //       icon: InkWell(
+          //         // todo: implement what tapping outside carousel do.
+          //         onTap: () {},
+          //         onHover: (value) => isHovered(value),
+          //         child: const Icon(
+          //           Icons.chevron_right_rounded,
+          //         ),
+          //       ),
+          //       onPressed: () {},
+          //     ),
+          //   ),
+          // ),
+          Column(
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints.loose(
+                  const Size.fromHeight(493),
+                ),
+                child: PageView(
+                  controller: _controller,
+                  onPageChanged: (value) => updateCurrentIndex(value),
+                  children: widget.children,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: Paddings.listSeparator),
+                child: CustomPageIndicator(
+                  pageCount: widget.children.length,
+                  currentIndex: _currentIndex,
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -168,77 +242,115 @@ class ProjectCard extends StatefulWidget {
 }
 
 class _ProjectCardState extends State<ProjectCard> {
+  bool _isHovered = false;
+
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-        builder: (context, constraints) => Container(
-          constraints: widget.constraints ??
-              const BoxConstraints.expand(
-                height: 493,
-                width: 341,
-              ),
-          decoration: widget.outerDecoration ??
-              BoxDecoration(
-                border: Border.all(
-                  width: 3,
-                  color: AhlTheme.blueNight,
-                  style: BorderStyle.solid,
+  void initState() {
+    super.initState();
+  }
+
+  void setHoveringTo(bool isHovered) {
+    setState(
+      () => _isHovered = isHovered,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double borderThickness = _isHovered ? 5 : 3;
+    BorderRadius borderRadius = BorderRadius.circular(BorderSizes.big);
+    return LayoutBuilder(
+      builder: (context, constraints) => Material(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        borderOnForeground: true,
+        borderRadius: borderRadius,
+        child: InkWell(
+          onHover: (value) {
+            setHoveringTo(value);
+            print(_isHovered);
+          },
+          onTap: () {
+            // todo: lead to article view
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            clipBehavior: Clip.hardEdge,
+            constraints: widget.constraints ??
+                const BoxConstraints.expand(
+                  height: 390,
+                  width: 341,
                 ),
-                borderRadius: BorderRadius.circular(BorderSizes.big),
-              ),
-          child: Column(
-            children: [
-              widget.image,
-              widget.content ??
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      constraints: const BoxConstraints.expand(),
-                      padding: const EdgeInsets.all(
-                        Paddings.medium,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          /// Label
-                          DefaultTextStyle(
+            decoration: widget.outerDecoration ??
+                BoxDecoration(
+                  border: Border.all(
+                    strokeAlign: BorderSide.strokeAlignInside,
+                    width: borderThickness,
+                    color:
+                        _isHovered ? AhlTheme.yellowRelax : AhlTheme.blueNight,
+                    style: BorderStyle.solid,
+                  ),
+                  borderRadius: borderRadius,
+                ),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints.expand(),
+              child: Column(
+                children: [
+                  widget.image,
+                  widget.content ??
+                      Container(
+                        // constraints: const BoxConstraints.expand(height: 100),
+                        padding: const EdgeInsets.all(
+                          Paddings.medium,
+                        ),
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /// Label
+                            DefaultTextStyle(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium!
+                                    .copyWith(
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                child: widget.label ?? const SizedBox.shrink()),
+
+                            /// title
+                            DefaultTextStyle(
                               style: Theme.of(context)
                                   .textTheme
-                                  .labelMedium!
+                                  .headlineMedium!
                                   .copyWith(
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                              child: widget.label ?? const SizedBox.shrink()),
+                              child: widget.title ?? const SizedBox.shrink(),
+                            ),
 
-                          /// title
-                          DefaultTextStyle(
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium!
-                                .copyWith(
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                            child: widget.title ?? const SizedBox.shrink(),
-                          ),
-
-                          /// Description
-                          DefaultTextStyle(
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                            child:
-                                widget.description ?? const SizedBox.shrink(),
-                          ),
-                        ],
+                            /// Description
+                            DefaultTextStyle(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                              child:
+                                  widget.description ?? const SizedBox.shrink(),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
-            ],
+                ],
+              ),
+            ),
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 
 class CustomPageIndicator extends StatefulWidget {
