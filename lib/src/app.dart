@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-
-
 import 'article_view/view/article_view.dart';
 import 'firebase_constants.dart';
 import 'home/homepage.dart';
@@ -33,7 +31,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Locale? _locale;
+  Locale? _locale = const Locale('fr','FR');
   late SettingsController settingsController;
 
   void changeLanguage(Locale locale) {
@@ -109,8 +107,8 @@ class _MyAppState extends State<MyApp> {
                     return const SampleItemDetailsView();
                   case HomePage.routeName:
                     return const HomePage();
-                  case ArticleView.routeName:
-                    return ArticleView(
+                  case ArticleContentPage.routeName:
+                    return ArticleContentPage(
                       args: routeSettings.arguments,
                       isHighLight: true,
                       firestore: firestore,
