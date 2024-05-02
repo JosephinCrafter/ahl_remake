@@ -19,6 +19,7 @@ extension DateTimeUtils on DateTime {
       }
     } finally {
       date = date ?? DateTime.now();
+      
     }
     return date;
   }

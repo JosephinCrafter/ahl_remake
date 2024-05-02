@@ -4,7 +4,22 @@ rules_version = '2';
 // allow write: if firestore.get(
 //    /databases/(default)/documents/users/$(request.auth.uid)).data.isAdmin;
 service firebase.storage {
-  match /public/rosary/o {
-    allow read: if true;
+  match /b/{bucket}/o {
+
+    // This rule allows anyone with your Storage bucket reference to view, edit,
+    // and delete all data in your Storage bucket. It is useful for getting
+    // started, but it is configured to expire after 30 days because it
+    // leaves your app open to attackers. At that time, all client
+    // requests to your Storage bucket will be denied.
+    //
+    // Make sure to write security rules for your app before that time, or else
+    // all client requests to your Storage bucket will be denied until you Update
+    // your rules
+    match /statics/{allPaths=**} {
+      allow read;
+    }
+    match /articles/{allPaths=**} {
+      allow read;
+    }
   }
 }

@@ -36,7 +36,7 @@ class ProjectsSpaceView extends StatelessWidget {
             (int index) => Align(
               alignment: Alignment.center,
               // width: 500,
-              child: ProjectCard(
+              child: AhlCard(
                 image: Expanded(
                   flex: 2,
                   child: Container(
@@ -215,8 +215,8 @@ class _ProjectsCarouselState extends State<ProjectsCarousel> {
   }
 }
 
-class ProjectCard extends StatefulWidget {
-  const ProjectCard({
+class AhlCard extends StatefulWidget {
+  const AhlCard({
     super.key,
     this.constraints,
     this.outerDecoration,
@@ -238,10 +238,10 @@ class ProjectCard extends StatefulWidget {
   final Widget? content;
 
   @override
-  State<ProjectCard> createState() => _ProjectCardState();
+  State<AhlCard> createState() => _AhlCardState();
 }
 
-class _ProjectCardState extends State<ProjectCard> {
+class _AhlCardState extends State<AhlCard> {
   bool _isHovered = false;
 
   @override

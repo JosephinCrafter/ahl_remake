@@ -168,20 +168,43 @@ class HeroTextView extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  OutlinedButton(
-                    onPressed: () {},
-                    child: Text(
-                      AppLocalizations.of(context)!.aboutUs,
+                  Expanded(
+                    flex: 2,
+                    child: OutlinedButton(
+                      onPressed: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Paddings.small,
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.aboutUs,
+                          // overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
-                    child: Text(AppLocalizations.of(context)!.priesSpace),
-                  )
+                  const Spacer(flex: 1),
+                  Expanded(
+                      flex: 2,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor:
+                              Theme.of(context).colorScheme.onPrimary,
+                          backgroundColor: Theme.of(context).primaryColor,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Paddings.small,
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.priesSpace,
+                            // overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),),
                 ],
               ),
             )
