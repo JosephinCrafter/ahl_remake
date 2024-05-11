@@ -51,3 +51,4 @@ pubspec.lock
 web/firebase-app.js
 web/firebase-firestore.js
 web/firebase-storage.js
+pubspec.lock
