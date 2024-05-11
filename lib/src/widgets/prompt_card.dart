@@ -88,7 +88,6 @@ class _PromptCardState extends State<PromptCard>
     // var image = imageRef.getData();
 
     return Card(
-      
       clipBehavior: Clip.antiAlias,
       elevation: _elevation,
       child: InkWell(
@@ -96,7 +95,7 @@ class _PromptCardState extends State<PromptCard>
         onTap: () {},
         child: Container(
           constraints:
-              widget.constraints ?? BoxConstraints.loose(const Size(342, 378)),
+              widget.constraints ?? BoxConstraints.loose(const Size(342, 380)),
           child: Stack(
             children: [
               // FutureBuilder(
@@ -147,7 +146,7 @@ class _PromptCardState extends State<PromptCard>
                 child: Container(
                   padding: const EdgeInsets.all(Paddings.medium),
                   constraints:
-                      BoxConstraints.expand(height: widget.bottomHeight ?? 80),
+                      BoxConstraints.expand(height: widget.bottomHeight ?? 90),
                   color: widget.backgroundColor ??
                       Theme.of(context).colorScheme.background,
                   child: Column(

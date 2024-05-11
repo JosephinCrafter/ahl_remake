@@ -1,15 +1,15 @@
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/article_view/view/article_view.dart';
-import 'package:ahl/src/home/hero_header/hero_header.dart';
-import 'package:ahl/src/home/welcoming/welcoming.dart';
+import 'package:ahl/src/pages/homepage/hero_header/hero_header.dart';
+import 'package:ahl/src/pages/homepage/welcoming/welcoming.dart';
 import 'package:ahl/src/newsletter/newsletter.dart';
 import 'package:ahl/src/partners/view.dart';
 import 'package:ahl/src/prayers_space/view.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-import '../project_space/view.dart';
-import '../who_we_are/view.dart';
+import '../../project_space/view.dart';
+import '../../who_we_are/view.dart';
 
 /// Home page
 
@@ -33,9 +33,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
+      key: Key('main_scroll_view'),
       builder: (BuildContext context, BoxConstraints constraints) {
         return Scaffold(
-          endDrawer: constraints.maxWidth <= ScreenSizes.tablet
+          endDrawer: constraints.maxWidth <= ScreenSizes.large
               ? const AhlDrawer()
               : null,
           appBar: const AhlAppBar(),

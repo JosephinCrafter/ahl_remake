@@ -182,7 +182,7 @@ Axis evaluateAxis(
   /// Constraints to evaluate with.
   BoxConstraints constraints, {
   /// The minimum required threshold to maintain the larger than state
-  double threshold = ScreenSizes.mobile,
+  double threshold = ScreenSizes.small,
 }) {
   Axis axis;
 

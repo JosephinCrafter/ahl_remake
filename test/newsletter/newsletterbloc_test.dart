@@ -6,7 +6,7 @@ import 'package:mockito/annotations.dart';
 
 import 'package:ahl/src/newsletter/newsletter.dart';
 
-// let's create of the repo
+// let's create  the repo
 @GenerateNiceMocks([MockSpec<NewsletterSubscriptionRepository>()])
 import 'newsletterbloc_test.mocks.dart';
 

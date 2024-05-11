@@ -26,12 +26,9 @@ class AhlAssets {
 
   static String projectHeroHeader =
       "${releasePath}images/projects_hero_header.png";
-  static String cantineImage =
-      "${releasePath}images/cantine_hero.jpg";
+  static String cantineImage = "${releasePath}images/cantine_hero.png";
   static String rosaryHeroHeader =
       "${releasePath}images/rosary_hero_header.jpg";
-  static String praying =
-      "${releasePath}images/praying.png";
-  static String prayingAlt =
-      "${releasePath}images/praying_alt.png";
+  static String praying = "${releasePath}images/praying.png";
+  static String prayingAlt = "${releasePath}images/praying_alt.png";
 }

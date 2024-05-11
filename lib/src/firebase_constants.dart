@@ -4,6 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
+/// Change this to true if using emulator
+const bool isUsingEmulator = false;
+
 /// Email key in users document in firestore.
 const String emailKey = 'email:';
 
@@ -57,9 +60,15 @@ bool _isInitialized = false;
 ///
 /// Typically, it setup firebase to work on emulator in debug mode.
 void _initialize() {
-  if (kDebugMode && !_isInitialized) {
-    _firestore.useFirestoreEmulator(emulatorHost, firestorePort);
-    _storage.storage.useStorageEmulator(emulatorHost, storagePort);
+  if (!_isInitialized) {
+    if (kDebugMode && isUsingEmulator) {
+      _firestore.useFirestoreEmulator(emulatorHost, firestorePort);
+      _storage.storage.useStorageEmulator(emulatorHost, storagePort);
+    }
+    _storage.storage.app.setAutomaticResourceManagementEnabled(true);
+    _firestore.settings = const Settings(
+      persistenceEnabled: true,
+    );
   }
   _isInitialized = true;
 }

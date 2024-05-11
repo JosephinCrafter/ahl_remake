@@ -34,9 +34,34 @@ class Margins {
   static const double heroHeaderExtraTop = 166;
 }
 
+/// Compute content size based on breakpoints
+class ContentSize {
+
+  /// MaxWidth considering the breakpoints as widthConstraints.
+  static double  maxWidth(double widthConstraints) {
+    return resolveForBreakPoint<double>(
+      widthConstraints,
+      extraHuge: 1128,
+      other: 966,
+    );
+  }
+}
+
 class ScreenSizes {
-  static const double mobile = 600;
-  static const double tablet = 1080;
+  /// Phone size small than 480.
+  static const double small = 480;
+
+  /// Phone size when in landscape mode : 780.
+  static const double medium = 780;
+
+  /// Tablet in portrait mode : 1024
+  static const double large = 1024;
+
+  /// Tablet in landscape mode and laptop or desktop : 1280
+  static const double extraLarge = 1280;
+
+  /// Laptop and desktop more than 1600
+  static const double huge = 1600;
 }
 
 class Paddings {

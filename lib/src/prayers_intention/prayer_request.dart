@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:ahl/src/firebase_constants.dart';
+import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/validation/email_validation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';

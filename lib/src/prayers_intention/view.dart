@@ -126,8 +126,18 @@ class _PrayersIntentionRequestViewState
       // ),
       child: LayoutBuilder(
         builder: (context, constraints) => ConstrainedBox(
-          constraints: BoxConstraints.loose(
-            const Size.fromHeight(1023),
+          constraints: BoxConstraints(
+            // Size.fromHeight(
+            //   min(
+            //     MediaQuery.of(context).size.height * 5 / 6,
+            //     1124,
+            //   ),
+            // ),
+            maxWidth: MediaQuery.sizeOf(context).width,
+            maxHeight:
+                (MediaQuery.of(context).size.width < ScreenSizes.extraLarge)
+                    ? 900
+                    : 450,
           ),
           child: PageView(
             controller: _controller,
@@ -190,138 +200,157 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
 
   @override
   Widget build(BuildContext context) {
+    Axis direction =
+        (MediaQuery.of(context).size.width > ScreenSizes.extraLarge)
+            ? Axis.horizontal
+            : Axis.vertical;
     final Widget child = LayoutBuilder(
       builder: (context, constraints) => ConstrainedBox(
         constraints: constraints,
-        child: Column(
+        child: Flex(
+          direction: direction,
           children: [
             Expanded(
-              child: prayerDecorationImage,
-            ),
-            title,
-            Container(
-              margin: const EdgeInsets.only(top: Paddings.listSeparator),
-              padding: //(constraints.maxWidth > ScreenSizes.mobile)
-                  // ?
-
-                  const EdgeInsets.all(Margins.mobileMedium),
-              //: const EdgeInsets.all(Margins.mobileSmall),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.background,
-                borderRadius: BorderRadius.circular(BorderSizes.big),
-              ),
+              flex: 1,
               child: Column(
                 children: [
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(
-                      bottom: Paddings.listSeparator,
-                    ),
-                    child: Text(
-                      AppLocalizations.of(context)!.whenWePray,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      bottom: Paddings.listSeparator,
-                    ),
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: SegmentedButton<PrayerType>(
-                        style: const ButtonStyle(
-                          visualDensity: VisualDensity.comfortable,
-                        ),
-                        onSelectionChanged: _onSelectionChange,
-                        showSelectedIcon: true,
-                        selected: selected,
-                        multiSelectionEnabled: false,
-                        selectedIcon: Icon(Icons.done)
-                            .animate()
-                            .scale(
-                              duration: AhlDurations.subtle,
-                              alignment: Alignment.center,
-                              curve: Curves.easeOut,
-                              begin: const Offset(0.7, 0.7),
-                              end: const Offset(1.0, 1.0),
-                            )
-                            .rotate(begin: 1.1, end: 1),
-                        segments: List.generate(
-                          _option.length,
-                          (index) => ButtonSegment(
-                            label: Container(
-                              alignment: Alignment.center,
-                              width: 60,
-                              child: Text(
-                                _option[index].localizedToString(context),
-                              ),
-                            ),
-                            value: _option[index],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(
-                      bottom: Paddings.listSeparator,
-                    ),
-                    child: Text("Choisir la date:"),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(
-                      bottom: Paddings.listSeparator,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF7EFD4),
-                      borderRadius: BorderRadius.circular(
-                          BorderSizes.big - Paddings.listSeparator),
-                    ),
-                    child: CalendarDatePicker(
-                      initialCalendarMode: DatePickerMode.day,
-                      currentDate: DateTime.now(),
-                      onDateChanged: (value) {
-                        _date = value;
-                      },
-                      initialDate: _date,
-                      firstDate: firstDate,
-                      lastDate: lastDate,
-                    ),
-                  ),
+                  prayerDecorationImage,
+                  title,
                 ],
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: Paddings.listSeparator,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+            Expanded(
+              flex: (direction == Axis.vertical) ? 3 : 1,
+              child: Column(
                 children: [
-                  IconButton(
-                      onPressed: widget._backCallback,
-                      icon: const Icon(Icons.arrow_back)),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                  Container(
+                    margin: const EdgeInsets.only(top: Paddings.listSeparator),
+                    padding: //(constraints.maxWidth > ScreenSizes.mobile)
+                        // ?
+
+                        const EdgeInsets.all(Margins.mobileMedium),
+                    //: const EdgeInsets.all(Margins.mobileSmall),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.background,
+                      borderRadius: BorderRadius.circular(BorderSizes.big),
                     ),
-                    onPressed: () {
-                      context.read<PrayerRequestBloc>().add(
-                            PrayerRequestFilledDateEvent(
-                              date: _date.copyWith(
-                                hour: selected.first.time.hour,
-                                minute: selected.first.time.minute,
+                    child: Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(
+                            bottom: Paddings.listSeparator,
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.whenWePray,
+                            style: Theme.of(context).textTheme.headlineSmall,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: Paddings.listSeparator,
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: SegmentedButton<PrayerType>(
+                              style: const ButtonStyle(
+                                visualDensity: VisualDensity.comfortable,
                               ),
-                              prayerType: selected.first,
+                              onSelectionChanged: _onSelectionChange,
+                              showSelectedIcon: true,
+                              selected: selected,
+                              multiSelectionEnabled: false,
+                              selectedIcon: Icon(Icons.done)
+                                  .animate()
+                                  .scale(
+                                    duration: AhlDurations.subtle,
+                                    alignment: Alignment.center,
+                                    curve: Curves.easeOut,
+                                    begin: const Offset(0.7, 0.7),
+                                    end: const Offset(1.0, 1.0),
+                                  )
+                                  .rotate(begin: 1.1, end: 1),
+                              segments: List.generate(
+                                _option.length,
+                                (index) => ButtonSegment(
+                                  label: Container(
+                                    alignment: Alignment.center,
+                                    width: 60,
+                                    child: Text(
+                                      _option[index].localizedToString(context),
+                                    ),
+                                  ),
+                                  value: _option[index],
+                                ),
+                              ),
                             ),
-                          );
-                      // execute callback or nothing
-                      Function fun = widget._callback ?? () {};
-                      fun();
-                    },
-                    child: const Text("Suivant"),
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(
+                            bottom: Paddings.listSeparator,
+                          ),
+                          child: Text("Choisir la date:"),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(
+                            bottom: Paddings.listSeparator,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF7EFD4),
+                            borderRadius: BorderRadius.circular(
+                                BorderSizes.big - Paddings.listSeparator),
+                          ),
+                          child: CalendarDatePicker(
+                            initialCalendarMode: DatePickerMode.day,
+                            currentDate: DateTime.now(),
+                            onDateChanged: (value) {
+                              _date = value;
+                            },
+                            initialDate: _date,
+                            firstDate: firstDate,
+                            lastDate: lastDate,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: Paddings.listSeparator,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                            onPressed: widget._backCallback,
+                            icon: const Icon(Icons.arrow_back)),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.primary,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                          ),
+                          onPressed: () {
+                            context.read<PrayerRequestBloc>().add(
+                                  PrayerRequestFilledDateEvent(
+                                    date: _date.copyWith(
+                                      hour: selected.first.time.hour,
+                                      minute: selected.first.time.minute,
+                                    ),
+                                    prayerType: selected.first,
+                                  ),
+                                );
+                            // execute callback or nothing
+                            Function fun = widget._callback ?? () {};
+                            fun();
+                          },
+                          child: const Text("Suivant"),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -372,121 +401,147 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
 
   @override
   Widget build(BuildContext context) {
+    Axis direction =
+        (MediaQuery.of(context).size.width > ScreenSizes.extraLarge)
+            ? Axis.horizontal
+            : Axis.vertical;
     final Widget child = Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Flex(
+        direction: direction,
         children: [
-          Expanded(
-            child: prayerDecorationImage,
-          ),
-          title,
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.only(
-                top: Paddings.big, bottom: Paddings.listSeparator),
-            child: Text(
-              AppLocalizations.of(context)!.proverb,
-              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontStyle: FontStyle.italic,
-                  ),
-            ),
-          ),
-          Text(
-            AppLocalizations.of(context)!.priersInvitation,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: Paddings.big),
-            padding: const EdgeInsets.all(Paddings.medium),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
-              borderRadius: BorderRadius.circular(10),
-            ),
+          Flexible(
+            fit: FlexFit.tight,
             child: Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //name and First name
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: Paddings.listSeparator),
-
-                  /// Name
-                  child: TextFormField(
-                    controller: _name,
-                    decoration: InputDecoration(
-                      helperText: AppLocalizations.of(context)!.optional,
-                      label:
-                          Text(AppLocalizations.of(context)!.nameAndFirstName),
-                    ),
-                  ),
+                prayerDecorationImage,
+                title,
+                Container(
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.only(
+                      top: Paddings.big, bottom: Paddings.listSeparator),
+                  child: Text(AppLocalizations.of(context)!.proverb,
+                      style: Theme.of(context).textTheme.labelMedium),
                 ),
-
-                /// Email
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: Paddings.listSeparator),
-                  child: TextFormField(
-                    controller: _email,
-                    decoration: const InputDecoration(
-                      label: Text("Email*"),
-                    ),
-                    validator: (value) {
-                      if (!isValidEmail(value ?? "")) {
-                        return AppLocalizations.of(context)!.invalidEmail;
-                      }
-
-                      return null;
-                    },
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    AppLocalizations.of(context)!.priersInvitation,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                ),
-
-                /// Prayer
-                TextFormField(
-                  controller: _prayer,
-                  maxLines: 3,
-                  decoration: InputDecoration(
-                    // constraints: const BoxConstraints(minHeight: 250),
-                    label: Text("${AppLocalizations.of(context)!.priers}*"),
-                    hintText: AppLocalizations.of(context)!.yourPrayer,
-                  ),
-                  validator: (value) {
-                    if (value == null || value == "") {
-                      return AppLocalizations.of(context)!.cantBeEmpty;
-                    }
-                    return null;
-                  },
                 ),
               ],
             ),
           ),
+          Flexible(
+            child: Column(
+              children: [
+                Flexible(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: Paddings.big),
+                    padding: const EdgeInsets.all(Paddings.medium),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.background,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        //name and First name
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: Paddings.listSeparator),
 
-          /// Buttons
-          Container(
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.only(bottom: Paddings.listSeparator),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              ),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  TrySnack(() {
-                    // execute callback or nothing
-                    if (widget._callback != null) widget._callback!();
-                    context.read<PrayerRequestBloc>().add(
-                          PrayerRequestFilledFormEvent(
-                            name: _name.value.text,
-                            email: _email.value.text,
-                            prayer: _prayer.value.text,
+                          /// Name
+                          child: TextFormField(
+                            controller: _name,
+                            decoration: InputDecoration(
+                              helperText:
+                                  AppLocalizations.of(context)!.optional,
+                              label: Text(AppLocalizations.of(context)!
+                                  .nameAndFirstName),
+                            ),
                           ),
-                        );
-                  }, context);
-                }
-              },
-              child: Text(AppLocalizations.of(context)!.sendPray),
+                        ),
+
+                        /// Email
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: Paddings.listSeparator),
+                          child: TextFormField(
+                            controller: _email,
+                            decoration: const InputDecoration(
+                              label: Text("Email*"),
+                            ),
+                            validator: (value) {
+                              if (!isValidEmail(value ?? "")) {
+                                return AppLocalizations.of(context)!
+                                    .invalidEmail;
+                              }
+
+                              return null;
+                            },
+                          ),
+                        ),
+
+                        /// Prayer
+                        Flexible(
+                          child: TextFormField(
+                            minLines: 5,
+                            maxLines: 10,
+                            controller: _prayer,
+                            // maxLines: 3,
+                            decoration: InputDecoration(
+                              // constraints: const BoxConstraints(minHeight: 250),
+                              label: Text(
+                                  "${AppLocalizations.of(context)!.priers}*"),
+                              hintText:
+                                  AppLocalizations.of(context)!.yourPrayer,
+                            ),
+                            validator: (value) {
+                              if (value == null || value == "") {
+                                return AppLocalizations.of(context)!
+                                    .cantBeEmpty;
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                /// Buttons
+                Container(
+                  alignment: Alignment.centerRight,
+                  // padding: const EdgeInsets.only(bottom: Paddings.listSeparator),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        TrySnack(() {
+                          // execute callback or nothing
+                          if (widget._callback != null) widget._callback!();
+                          context.read<PrayerRequestBloc>().add(
+                                PrayerRequestFilledFormEvent(
+                                  name: _name.value.text,
+                                  email: _email.value.text,
+                                  prayer: _prayer.value.text,
+                                ),
+                              );
+                        }, context);
+                      }
+                    },
+                    child: Text(AppLocalizations.of(context)!.sendPray),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -495,31 +550,6 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
 
     return FormsLayoutBase(
       child: child,
-    );
-  }
-}
-
-void TrySnack(
-  Function fun,
-  BuildContext context, {
-  String message = "Erreur Server. Recharger la page!",
-}) {
-  try {
-    fun();
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        action: SnackBarAction(
-          label: 'Close',
-          onPressed: () {},
-        ),
-        content: Text(
-          message,
-          style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                color: Theme.of(context).colorScheme.error,
-              ),
-        ),
-      ),
     );
   }
 }
@@ -652,7 +682,7 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
 
     Widget child = Column(
       children: [
-        Expanded(child: prayerDecorationImage),
+        prayerDecorationImage,
         contentView,
       ],
     );
@@ -665,20 +695,49 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
 final Widget title = Builder(
   builder: (context) => Text(
     AppLocalizations.of(context)!.shareYourPriers,
-    style: Theme.of(context).textTheme.displaySmall,
+    style: resolveHeadlineTextThemeForBreakPoints(
+      MediaQuery.of(context).size.width,
+      context,
+    ),
   ),
 );
 
-Widget prayerDecorationImage = Container(
-  constraints: const BoxConstraints(
-    //   // maxWidth: 215,
-    maxHeight: 250,
-  ),
-  decoration: BoxDecoration(
-    image: DecorationImage(
-      image: AssetImage(
-        AhlAssets.praying,
+Widget prayerDecorationImage = Expanded(
+  child: Container(
+    // width: 215,
+    // height: 141,
+    decoration: BoxDecoration(
+      image: DecorationImage(
+        fit: BoxFit.contain,
+        image: AssetImage(
+          AhlAssets.praying,
+        ),
       ),
     ),
   ),
 );
+
+void TrySnack(
+  Function fun,
+  BuildContext context, {
+  String message = "Erreur Server. Recharger la page!",
+}) {
+  try {
+    fun();
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        action: SnackBarAction(
+          label: 'Close',
+          onPressed: () {},
+        ),
+        content: Text(
+          message,
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
+        ),
+      ),
+    );
+  }
+}

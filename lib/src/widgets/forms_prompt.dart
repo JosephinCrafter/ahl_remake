@@ -14,40 +14,74 @@ class FormsLayoutBase extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constraints) {
-      final Widget container = Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondaryContainer,
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.sizeOf(context).width,
+        // maxHeight: min(
+        //   MediaQuery.of(context).size.height * 2 / 3,
+        //   1124,
+        // ),
+      ),
+
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+      ),
+      padding: EdgeInsets.symmetric(
+        vertical: Paddings.medium,
+        horizontal: (MediaQuery.of(context).size.width > ScreenSizes.extraLarge)
+            ? Paddings.big
+            : Paddings.medium,
+      ),
+      alignment: Alignment.center,
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: ContentSize.maxWidth(MediaQuery.of(context).size.width),
+            // maxHeight: min(
+            //   MediaQuery.of(context).size.height * 2 / 3,
+            //   1124,
+            // ),
+          ),
+          child: child,
         ),
-        constraints: BoxConstraints.loose(
-          const Size.fromWidth(1129),
-        ),
-        padding: EdgeInsets.symmetric(
-          vertical: Paddings.huge,
-          horizontal: (constraints.maxWidth > ScreenSizes.mobile)
-              ? Paddings.big
-              : Paddings.medium,
-        ),
-        child: child,
-      );
-      switch (constraints.maxWidth) {
-        case > 1000:
-          return Align(
-            alignment: Alignment.center,
-            child: Container(
-              // constraints: BoxConstraints.loose(
-              //   const Size(1129, 784),
-              // ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(38),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: container,
-            ),
-          );
-        default:
-          return container;
-      }
-    });
+      ),
+
+      // switch (constraints.maxWidth) {
+      //   case > ScreenSizes.extraLarge:
+      //     return Align(
+      //       alignment: Alignment.center,
+      //       child: Container(
+      //         constraints: BoxConstraints.loose(
+      //           Size(
+      //             ContentSize.maxWidth(MediaQuery.of(context).size.width),
+      //             min(
+      //               MediaQuery.of(context).size.height - 200,
+      //               1124,
+      //             ),
+      //           ),
+      //         ),
+      //         decoration: BoxDecoration(
+      //           borderRadius: BorderRadius.circular(38),
+      //         ),
+      //         clipBehavior: Clip.antiAlias,
+      //         child: container,
+      //       ),
+      //     );
+      //   default:
+      //     return Container(
+      //       constraints: BoxConstraints.loose(
+      //         Size(
+      //           ContentSize.maxWidth(MediaQuery.of(context).size.width),
+      //           min(
+      //             MediaQuery.of(context).size.height - 200,
+      //             1124,
+      //           ),
+      //         ),
+      //       ),
+      //       child: container,
+      //     );
+      // }
+    );
   }
 }

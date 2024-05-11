@@ -22,11 +22,10 @@ class AhlLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle(
-      style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+      style: Theme.of(context).textTheme.titleLarge!.copyWith(
             fontFamily: 'Butler',
-            fontSize: 20,
-            color: foregroundColor ??
-                Theme.of(context).textTheme.headlineLarge!.color,
+            fontSize: 22,
+            color: foregroundColor,
           ),
       child: Row(
         textBaseline: TextBaseline.alphabetic,

@@ -1,7 +1,8 @@
+import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../ahl_barrel.dart';
+import '../../../ahl_barrel.dart';
 
 class HeroHeaderView extends StatelessWidget {
   const HeroHeaderView({super.key});
@@ -10,7 +11,7 @@ class HeroHeaderView extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth <= ScreenSizes.tablet) {
+        if (constraints.maxWidth <= ScreenSizes.large) {
           // HeroHeader fo mobile
 
           return const MobileHeroHeader();
@@ -131,46 +132,57 @@ class HeroTextView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: alignment ?? Alignment.center,
-      margin: EdgeInsets.only(
-        top: needMargin ? margin ?? Margins.heroHeaderExtraTop : 0,
-      ),
-      child: Container(
-        constraints: const BoxConstraints(
-            maxWidth: HeroHeaderGeometry.heroHeaderExtrasWidth),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Text(
-                AppLocalizations.of(context)!.heroTitle,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                      fontFamily: 'Butler',
-                      fontWeight: FontWeight.bold,
-                    ),
+    return LayoutBuilder(builder: (context, constraints) {
+      TextStyle? explanationTheme = resolveForBreakPoint<TextStyle?>(
+        MediaQuery.of(context
+        ).size.width,
+        small: Theme.of(context).textTheme.bodyMedium,
+        medium: Theme.of(context).textTheme.bodyMedium,
+        other: Theme.of(context).textTheme.bodyLarge,
+      );
+
+      TextStyle? titleTheme = resolveForBreakPoint<TextStyle?>(
+        MediaQuery.of(context
+        ).size.width,
+        small: Theme.of(context).textTheme.displaySmall,
+        medium: Theme.of(context).textTheme.displayMedium,
+        other: Theme.of(context).textTheme.displayLarge,
+      );
+      return Container(
+        alignment: alignment ?? Alignment.center,
+        margin: EdgeInsets.only(
+          top: needMargin ? margin ?? Margins.heroHeaderExtraTop : 0,
+        ),
+        child: Container(
+          constraints: const BoxConstraints(
+              maxWidth: HeroHeaderGeometry.heroHeaderExtrasWidth),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Text(
+                  AppLocalizations.of(context)!.heroTitle,
+                  textAlign: TextAlign.center,
+                  style: titleTheme,
+                ),
               ),
-            ),
-            Text(
-              AppLocalizations.of(context)!.heroExplanation,
-              textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .copyWith(fontFamily: 'Aileron'),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 50),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: OutlinedButton(
+              Text(
+                AppLocalizations.of(context)!.heroExplanation,
+                textAlign: TextAlign.center,
+                style: explanationTheme,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 50),
+                child: Wrap(
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // direction: ,
+                  spacing: 20,
+                  runSpacing: 20,
+                  children: [
+                    OutlinedButton(
                       onPressed: () {},
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -183,34 +195,31 @@ class HeroTextView extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
-                  const Spacer(flex: 1),
-                  Expanded(
-                      flex: 2,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor:
-                              Theme.of(context).colorScheme.onPrimary,
-                          backgroundColor: Theme.of(context).primaryColor,
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Paddings.small,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: Paddings.small,
-                          ),
-                          child: Text(
-                            AppLocalizations.of(context)!.priesSpace,
-                            // overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.center,
-                          ),
+                        child: Text(
+                          AppLocalizations.of(context)!.priesSpace,
+                          // overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
                         ),
-                      ),),
-                ],
-              ),
-            )
-          ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

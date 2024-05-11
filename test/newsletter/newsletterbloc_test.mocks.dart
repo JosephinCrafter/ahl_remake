@@ -46,14 +46,13 @@ class MockNewsletterSubscriptionRepository extends _i1.Mock
       ) as Map<String, dynamic>);
 
   @override
-  _i3.Future<void> initialize() => (super.noSuchMethod(
+  void initialize() => super.noSuchMethod(
         Invocation.method(
           #initialize,
           [],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValueForMissingStub: null,
+      );
 
   @override
   _i3.Future<void> subscribe({required String? email}) => (super.noSuchMethod(

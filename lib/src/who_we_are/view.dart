@@ -37,7 +37,9 @@ class WhoWeAreTile extends StatelessWidget {
   static const String titleIndex = 'who_we_are_title';
 
   Future<Uint8List?> getImage() async {
-    return await storage.child(imagePath).getData();
+    var data = await storage.child(imagePath).getData();
+    print(data);
+    return data;
   }
 
   Future<String> getTitle() async {
@@ -88,6 +90,7 @@ class WhoWeAreTile extends StatelessWidget {
                   child: const CircularProgressIndicator(),
                 );
               } else {
+                print('${snapshot.error}');
                 return Container(
                   color: Theme.of(context).colorScheme.errorContainer,
                   child: Text(
