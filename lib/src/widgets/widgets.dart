@@ -12,6 +12,7 @@ import '../article_view/view/article_view.dart';
 import '../pages/homepage/homepage.dart';
 import '../theme/theme.dart' as theme;
 import '../theme/theme.dart';
+import '../utils/breakpoint_resolver.dart';
 
 part 'app_bar.dart';
 part 'logo.dart';

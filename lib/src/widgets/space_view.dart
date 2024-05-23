@@ -35,33 +35,37 @@ class SpaceView extends StatelessWidget {
       ),
 
       // gradient
-       DecoratedBox(
+      Container(
+        alignment: Alignment.center,
         decoration: BoxDecoration(
-          gradient:useGradient ? LinearGradient(
-              colors: [
-                Colors.transparent,
-                AhlTheme.darkNight.withAlpha(0xFF),
-                AhlTheme.blueNight,
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              stops: const [
-                0, // this is the ratio of the header image
-                650 / 1681 * 2 / 3,
-                1,
-              ]): null,
+          gradient: useGradient
+              ? LinearGradient(
+                  colors: [
+                    Colors.transparent,
+                    AhlTheme.darkNight.withAlpha(0xFF),
+                    AhlTheme.blueNight,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: const [
+                    0, // this is the ratio of the header image
+                    650 / 1681 * 2 / 3,
+                    1,
+                  ],
+                )
+              : null,
         ),
 
         // contents
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: this.children,
         ),
       ),
     ];
 
     return Stack(
-      // height: 2080,
-      // width: 500,
       // enableDrag: true,
       children: List.generate(
         children.length,

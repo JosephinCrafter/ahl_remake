@@ -25,6 +25,7 @@
     "projectsSpace",
     "projectsSpaceSubtitle",
     "projectsSpaceIntroduction",
+    "ourPartners",
     "january",
     "february",
     "march",
@@ -36,6 +37,7 @@
     "september",
     "october",
     "november",
-    "december"
+    "december",
+    "whoWeAre"
   ]
 }

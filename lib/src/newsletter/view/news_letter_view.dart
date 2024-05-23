@@ -162,9 +162,7 @@ class NewsletterTextPrompt extends StatelessWidget {
           ),
           Text(
             AppLocalizations.of(context)!.newsLetterWidgetTitle,
-            style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(context).textTheme.headlineMedium,
           )
         ],
       );

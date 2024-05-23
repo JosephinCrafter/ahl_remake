@@ -1,3 +1,6 @@
+import "package:ahl/src/ahl_barrel.dart";
+import "package:ahl/src/utils/breakpoint_resolver.dart";
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter/material.dart";
 
 class PartnersView extends StatefulWidget {
@@ -22,16 +25,24 @@ class _PartnersViewState extends State<PartnersView> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              "Nos Partenaires",
-              style: Theme.of(context).textTheme.displaySmall,
+            Padding(
+              padding: const EdgeInsets.all(Paddings.medium),
+              child: Text(
+                AppLocalizations.of(context)!.ourPartners,
+                style: resolveHeadlineTextThemeForBreakPoints(
+                  MediaQuery.of(context).size.width,
+                  context,
+                ),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   constraints: BoxConstraints.tight(const Size.square(100)),
-                  child: const Placeholder(), // implement partner logo
+                  //todo: implement partner logo
+                  // child: Image.network(),
+                  child: const Placeholder(),
                 ),
               ],
             )

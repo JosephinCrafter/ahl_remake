@@ -1,8 +1,11 @@
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/firebase_constants.dart';
+import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../project_space/view.dart';
 
@@ -18,8 +21,11 @@ class WhoWeAreSpace extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: Margins.mobileLarge),
             child: Text(
-              "Qui sommes nous?",
-              style: Theme.of(context).textTheme.displayMedium,
+              AppLocalizations.of(context)!.whoWeAre,
+              style: resolveHeadlineTextThemeForBreakPoints(
+                MediaQuery.of(context).size.width,
+                context,
+              ),
             ),
           ),
           const WhoWeAreTile(),
@@ -106,14 +112,12 @@ class WhoWeAreTile extends StatelessWidget {
         ),
         title: FutureBuilder(
           future: getTitle(),
-          builder: (context, snapshot) => (snapshot.hasData)
-              ? Text(
-                  snapshot.data!,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
-                  style: Theme.of(context).textTheme.displaySmall,
-                )
-              : const Text("..."),
+          builder: (context, snapshot) => Text(
+            snapshot.data ?? "...",
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
         ),
       ),
     );

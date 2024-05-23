@@ -5,7 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
 /// Change this to true if using emulator
-const bool isUsingEmulator = false;
+const bool isUsingEmulator = true;
 
 /// Email key in users document in firestore.
 const String emailKey = 'email:';

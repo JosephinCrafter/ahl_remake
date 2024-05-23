@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:developer' as developer;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../ahl_barrel.dart';
@@ -12,6 +12,35 @@ class ProjectsSpaceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //todo: change projectCards to result from backend
+    final List<Widget> projectCards = List.generate(
+      3,
+      (int index) => AhlCard(
+        image: Expanded(
+          flex: 2,
+          child: Container(
+            margin: const EdgeInsets.all(Paddings.medium),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(AhlAssets.cantineImage),
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(BorderSizes.small),
+            ),
+          ),
+        ),
+        label: const Text(
+          "Projet en cours",
+        ),
+        title: Text(
+          "$index Cantines",
+        ),
+        // description: const Text(
+        //   "Pour les enfants d'aujourd'hui",
+        // ),
+      ),
+    );
+
     final List<Widget> children = [
       // title
       SectionTitle(
@@ -28,47 +57,31 @@ class ProjectsSpaceView extends StatelessWidget {
       // ),
 
       // prayers intention
-      Align(
-        alignment: Alignment.bottomCenter,
-        child: ProjectsCarousel(
-          children: List.generate(
-            5,
-            (int index) => Align(
-              alignment: Alignment.center,
-              // width: 500,
-              child: AhlCard(
-                image: Expanded(
-                  flex: 2,
-                  child: Container(
-                    margin: const EdgeInsets.all(Paddings.medium),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(AhlAssets.cantineImage),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.circular(BorderSizes.small),
-                    ),
-                  ),
-                ),
-                label: const Text(
-                  "Projet en cours",
-                ),
-                title: Text(
-                  "$index Cantines",
-                ),
-                // description: const Text(
-                //   "Pour les enfants d'aujourd'hui",
-                // ),
-              ),
-            ),
-          ),
-        ),
+      Wrap(
+        // ProjectsCarousel(
+        direction: Axis.horizontal,
+        alignment: WrapAlignment.center,
+        children: projectCards,
+        //  List.from(
+        //   projectCards.map<Widget>(
+        //     (e) => Flexible(child: e),
+        //     // Align(
+        //     //     alignment: Alignment.center,
+        //     //     // width: 500,
+        //     //     child: e),
+        //   ),
+        // ),
       ),
+
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          direction: Axis.horizontal,
+          spacing: 20,
+          runSpacing: 20,
+          // mainAxisSize: MainAxisSize.max,
+          // mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextButton(
               onPressed: () {
@@ -92,9 +105,14 @@ class ProjectsSpaceView extends StatelessWidget {
       ),
     ];
 
-    return SpaceView(
+    return
+        // Container(
+        //   constraints: const BoxConstraints(maxHeight: 650 + 370 *2),
+        //   child:
+        SpaceView(
       useGradient: false,
       children: children,
+      // ),
     );
   }
 }
@@ -111,8 +129,10 @@ class ProjectsCarousel extends StatefulWidget {
 }
 
 class _ProjectsCarouselState extends State<ProjectsCarousel> {
-  late PageController _controller;
+  late PageController _pageController;
+  late ScrollController _listController;
   late int _currentIndex;
+  int _opacity = 0x25;
 
   bool _isHovered = false;
 
@@ -120,21 +140,45 @@ class _ProjectsCarouselState extends State<ProjectsCarousel> {
   void initState() {
     super.initState();
 
-    _controller = PageController(
+    _pageController = PageController(
       keepPage: true,
     );
+
+    _listController = ScrollController();
     _currentIndex = 0;
   }
 
   void updateCurrentIndex(int value) {
-    setState(
-      () => _currentIndex = value,
-    );
+    int oldIndex = _currentIndex;
+    print('{list} Current old: $oldIndex');
+    setState(() {
+      _currentIndex = value % widget.children.length;
+
+      developer.log('Screen size: ${MediaQuery.of(context).size.width}');
+    });
+    if (MediaQuery.of(context).size.width <= ScreenSizes.small) {
+      print('{page}Current Index: $_currentIndex');
+
+      _pageController.animateToPage(
+        _currentIndex,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOutBack,
+      );
+    } else {
+      print('{list} Current Index: $_currentIndex');
+
+      _listController.animateTo(
+        350.0 * (_currentIndex - oldIndex),
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOutBack,
+      );
+    }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _pageController.dispose();
+    _listController.dispose();
     super.dispose();
   }
 
@@ -187,16 +231,28 @@ class _ProjectsCarouselState extends State<ProjectsCarousel> {
           //     ),
           //   ),
           // ),
+
           Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              ConstrainedBox(
-                constraints: BoxConstraints.loose(
-                  const Size.fromHeight(493),
-                ),
-                child: PageView(
-                  controller: _controller,
-                  onPageChanged: (value) => updateCurrentIndex(value),
-                  children: widget.children,
+              Flexible(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints.loose(
+                    const Size.fromHeight(493),
+                  ),
+                  child: (MediaQuery.of(context).size.width <=
+                          ScreenSizes.small)
+                      ? PageView(
+                          controller: _pageController,
+                          onPageChanged: (value) => updateCurrentIndex(value),
+                          children: widget.children,
+                        )
+                      : ListView(
+                          controller: _listController,
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: false,
+                          children: widget.children,
+                        ),
                 ),
               ),
               Padding(
@@ -206,8 +262,48 @@ class _ProjectsCarouselState extends State<ProjectsCarousel> {
                   pageCount: widget.children.length,
                   currentIndex: _currentIndex,
                 ),
-              ),
+              )
             ],
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: InkWell(
+              onTap: () {
+                updateCurrentIndex(_currentIndex - 1);
+              },
+              onHover: isHovered,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                color:
+                    Theme.of(context).colorScheme.secondaryContainer.withAlpha(
+                          _isHovered ? 0xAA : 0x25,
+                        ),
+                child: const Icon(
+                  Icons.keyboard_arrow_left,
+                  size: 48,
+                ),
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: InkWell(
+              onTap: () {
+                updateCurrentIndex(_currentIndex + 1);
+              },
+              onHover: isHovered,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                color:
+                    Theme.of(context).colorScheme.secondaryContainer.withAlpha(
+                          _isHovered ? 0xAA : 0x25,
+                        ),
+                child: const Icon(
+                  Icons.keyboard_arrow_right,
+                  size: 48,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -260,90 +356,98 @@ class _AhlCardState extends State<AhlCard> {
     double borderThickness = _isHovered ? 5 : 3;
     BorderRadius borderRadius = BorderRadius.circular(BorderSizes.big);
     return LayoutBuilder(
-      builder: (context, constraints) => Material(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        borderOnForeground: true,
-        borderRadius: borderRadius,
-        child: InkWell(
-          onHover: (value) {
-            setHoveringTo(value);
-            print(_isHovered);
-          },
-          onTap: () {
-            // todo: lead to article view
-          },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            clipBehavior: Clip.hardEdge,
-            constraints: widget.constraints ??
-                const BoxConstraints.expand(
-                  height: 390,
-                  width: 341,
-                ),
-            decoration: widget.outerDecoration ??
-                BoxDecoration(
-                  border: Border.all(
-                    strokeAlign: BorderSide.strokeAlignInside,
-                    width: borderThickness,
-                    color:
-                        _isHovered ? AhlTheme.yellowRelax : AhlTheme.blueNight,
-                    style: BorderStyle.solid,
+      builder: (context, constraints) => Container(
+        constraints: const BoxConstraints(
+          maxWidth: 345,
+          maxHeight: 370,
+        ),
+        padding: const EdgeInsets.all(Paddings.medium),
+        child: Material(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          borderOnForeground: true,
+          borderRadius: borderRadius,
+          child: InkWell(
+            onHover: (value) {
+              setHoveringTo(value);
+            },
+            onTap: () {
+              // todo: lead to article view
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              clipBehavior: Clip.hardEdge,
+              constraints: widget.constraints ??
+                  const BoxConstraints.expand(
+                    height: 390,
+                    width: 341,
                   ),
-                  borderRadius: borderRadius,
-                ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints.expand(),
-              child: Column(
-                children: [
-                  widget.image,
-                  widget.content ??
-                      Container(
-                        // constraints: const BoxConstraints.expand(height: 100),
-                        padding: const EdgeInsets.all(
-                          Paddings.medium,
-                        ),
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            /// Label
-                            DefaultTextStyle(
+              decoration: widget.outerDecoration ??
+                  BoxDecoration(
+                    border: Border.all(
+                      strokeAlign: BorderSide.strokeAlignInside,
+                      width: borderThickness,
+                      color: _isHovered
+                          ? AhlTheme.yellowRelax
+                          : AhlTheme.blueNight,
+                      style: BorderStyle.solid,
+                    ),
+                    borderRadius: borderRadius,
+                  ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints.expand(),
+                child: Column(
+                  children: [
+                    widget.image,
+                    widget.content ??
+                        Container(
+                          // constraints: const BoxConstraints.expand(height: 100),
+                          padding: const EdgeInsets.all(
+                            Paddings.medium,
+                          ),
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              /// Label
+                              DefaultTextStyle(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium!
+                                      .copyWith(
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                  child:
+                                      widget.label ?? const SizedBox.shrink()),
+
+                              /// title
+                              DefaultTextStyle(
                                 style: Theme.of(context)
                                     .textTheme
-                                    .labelMedium!
+                                    .headlineMedium!
                                     .copyWith(
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                child: widget.label ?? const SizedBox.shrink()),
+                                child: widget.title ?? const SizedBox.shrink(),
+                              ),
 
-                            /// title
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium!
-                                  .copyWith(
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                              child: widget.title ?? const SizedBox.shrink(),
-                            ),
-
-                            /// Description
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                              child:
-                                  widget.description ?? const SizedBox.shrink(),
-                            ),
-                          ],
+                              /// Description
+                              DefaultTextStyle(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                child: widget.description ??
+                                    const SizedBox.shrink(),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

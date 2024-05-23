@@ -11,7 +11,7 @@ class SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2 * Paddings.huge),
+      padding: const EdgeInsets.symmetric(vertical: Paddings.huge),
       child: Column(
         children: [
           Container(
@@ -20,11 +20,13 @@ class SectionTitle extends StatelessWidget {
             ),
             child: Text(
               title.toUpperCase(),
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    fontSize: 36,
-                    color: color ?? Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: resolveHeadlineTextThemeForBreakPoints(
+                MediaQuery.of(context).size.width,
+                context,
+              )!
+                  .copyWith(
+                color: color ?? Colors.white,
+              ),
             ),
           ),
           subtitle != null
@@ -34,10 +36,11 @@ class SectionTitle extends StatelessWidget {
                   ),
                   child: Text(
                     subtitle!,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          color: color ?? Colors.white,
-                          fontFamily: "Butler",
-                        ),
+                    style: resolveBodyTextThemeForBreakPoints(
+                      MediaQuery.of(context).size.width,
+                      context,
+                    )!
+                        .copyWith(color: color ?? Colors.white),
                   ),
                 )
               : const SizedBox.shrink(),
