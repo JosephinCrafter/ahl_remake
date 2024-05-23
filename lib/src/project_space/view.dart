@@ -44,7 +44,7 @@ class ProjectsSpaceView extends StatelessWidget {
     final List<Widget> children = [
       // title
       SectionTitle(
-        color: AhlTheme.blackCharcoal,
+        titleColor: AhlTheme.blackCharcoal,
         title: AppLocalizations.of(context)!.projectsSpace,
         subtitle: AppLocalizations.of(context)!.projectsSpaceSubtitle,
       ),
@@ -481,7 +481,7 @@ class _CustomPageIndicatorState extends State<CustomPageIndicator> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOutBack,
-      margin: const EdgeInsets.symmetric(horizontal: Margins.mobileSmall),
+      margin: const EdgeInsets.symmetric(horizontal: Margins.small),
       decoration: BoxDecoration(
         color: index == widget.currentIndex
             ? Theme.of(context).colorScheme.secondary

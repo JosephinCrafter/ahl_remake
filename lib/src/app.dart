@@ -122,13 +122,13 @@ class _MyAppState extends State<MyApp> {
                         return const SampleItemDetailsView();
                       case HomePage.routeName:
                         return const HomePage();
-                      case ArticleContentPage.routeName:
-                        return ArticleContentPage(
-                          args: routeSettings.arguments,
-                          isHighLight: true,
-                          firestore: firestore,
-                          storage: storage.storage,
-                        );
+                      // case ArticleContentPage.routeName:
+                      //   return ArticleContentPage(
+                      //     args: routeSettings.arguments,
+                      //     isHighLight: true,
+                      //     firestore: firestore,
+                      //     storage: storage.storage,
+                      //   );
                       default:
                         return widget.home ?? const HomePage();
                     }

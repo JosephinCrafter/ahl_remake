@@ -78,7 +78,7 @@ class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
         children: [
           const HeroImageView(),
           Container(
-            margin: const EdgeInsets.only(left: Margins.small),
+            margin: const EdgeInsets.only(left: Margins.extraLarge),
             alignment: Alignment.centerLeft,
             child: const HeroTextView(
               alignment: Alignment.centerLeft,
@@ -134,16 +134,14 @@ class HeroTextView extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       TextStyle? explanationTheme = resolveForBreakPoint<TextStyle?>(
-        MediaQuery.of(context
-        ).size.width,
+        MediaQuery.of(context).size.width,
         small: Theme.of(context).textTheme.bodyMedium,
         medium: Theme.of(context).textTheme.bodyMedium,
         other: Theme.of(context).textTheme.bodyLarge,
       );
 
       TextStyle? titleTheme = resolveForBreakPoint<TextStyle?>(
-        MediaQuery.of(context
-        ).size.width,
+        MediaQuery.of(context).size.width,
         small: Theme.of(context).textTheme.displaySmall,
         medium: Theme.of(context).textTheme.displayMedium,
         other: Theme.of(context).textTheme.displayLarge,

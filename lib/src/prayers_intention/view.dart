@@ -228,7 +228,7 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
                     padding: //(constraints.maxWidth > ScreenSizes.mobile)
                         // ?
 
-                        const EdgeInsets.all(Margins.mobileMedium),
+                        const EdgeInsets.all(Margins.medium),
                     //: const EdgeInsets.all(Margins.mobileSmall),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.background,
@@ -579,7 +579,7 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
     PrayerRequest? request = context.watch<PrayerRequestBloc>().state.request;
 
     Widget contentView = Container(
-      padding: const EdgeInsets.all(Margins.mobileMedium),
+      padding: const EdgeInsets.all(Margins.medium),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.background,
         borderRadius: BorderRadius.circular(38),

@@ -39,39 +39,20 @@ String monthTextResolve(BuildContext context, String monthName) {
 class ArticleContentPage extends StatefulWidget {
   const ArticleContentPage({
     super.key,
-    this.args,
-    this.articleTitle,
-    this.isHighLight = false,
-    required this.firestore,
-    required this.storage,
-  }) : assert(
-          isHighLight == true && articleTitle == null ||
-              isHighLight == false && articleTitle != null,
-          'isHightLight can\'t be true and articleTitle is given at the same time',
-        );
+    this.article,
+  });
 
   static const String routeName = '/articles';
-  final dynamic args;
-  final String? articleTitle;
-  final bool isHighLight;
-  final FirebaseStorage storage;
-  final FirebaseFirestore firestore;
+  final Article? article;
 
   @override
   State<ArticleContentPage> createState() => ArticleContentPageState();
 }
 
 class ArticleContentPageState extends State<ArticleContentPage> {
-  late ArticlesRepository helper;
-  late Future<Article?> article;
-
   @override
   void initState() {
     super.initState();
-    helper = ArticlesRepository(firestoreInstance: widget.firestore);
-    article = widget.articleTitle != null
-        ? helper.getArticleByName(articleTitle: widget.articleTitle!)
-        : helper.getHighlighted();
   }
 
   @override
@@ -83,8 +64,7 @@ class ArticleContentPageState extends State<ArticleContentPage> {
             : null,
         appBar: const AhlAppBar(),
         body: ArticleContentView(
-          article: article,
-          ref: widget.storage.ref(),
+          article: widget.article,
         ),
       ),
     );
@@ -95,42 +75,84 @@ class ArticleContentView extends StatelessWidget {
   const ArticleContentView({
     super.key,
     required this.article,
-    required this.ref,
   });
 
-  final Reference ref;
+  final Article? article;
 
-  final Future<Article?> article;
+  Future<String> get content async {
+    String content = '';
+    await storage
+        .child('articles/${article?.id}/${article?.contentPath}')
+        .getData()
+        .then(
+          (Uint8List? value) => content = String.fromCharCodes(
+            value!.toList(),
+          ),
+        );
+    return content;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        const Spacer(flex: 1),
-        Expanded(
-          flex: 5,
-          child: FutureBuilder(
-            future: article,
-            builder: (context, snapshot) {
-              switch (snapshot.hasData) {
-                case true:
-                  return MarkdownWidget(
-                    data: ref
-                        .child(snapshot.data!.contentPath!)
-                        .getData()
-                        .toString(),
-                  );
+    double screenWidth = MediaQuery.of(context).size.width;
 
-                default:
-                  return const CircularProgressIndicator();
-              }
-            },
-          ),
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: resolveForBreakPoint(
+          screenWidth,
+          other: Margins.small,
+          extraHuge: Margins.extraHuge,
+          huge: Margins.huge,
+          extraLarge: Margins.extraLarge,
+          large: Margins.large,
         ),
-        const Spacer(
-          flex: 1,
-        )
-      ],
+      ),
+      constraints: BoxConstraints(
+        maxWidth: ContentSize.maxWidth(
+          screenWidth,
+        ),
+      ),
+      child: FutureBuilder(
+        future: content,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                return MarkdownWidget(
+                  data: snapshot.data ?? 'Error loading article.',
+                );
+              } else {
+                return Align(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.warning_rounded,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                      Text('Error loading article content: ${snapshot.error}')
+                    ],
+                  ),
+                );
+              }
+
+            default:
+              return const Align(
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(),
+              );
+
+            // default:
+            //   return Align(
+            //     alignment: Alignment.center,
+            //     child: Icon(
+            //       Icons.warning_rounded,
+            //       color: Theme.of(context).colorScheme.error,
+            //     ),
+            //   );
+          }
+        },
+      ),
     );
   }
 }
@@ -190,7 +212,14 @@ class _ArticleTileState extends State<ArticleTile> {
   }
 
   void goToReadingPage() {
-    // todo: go to reading page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return ArticleContentPage(article: _article);
+        },
+      ),
+    );
   }
 
   @override
@@ -448,7 +477,7 @@ class _ArticleTileState extends State<ArticleTile> {
                                         Theme.of(context).colorScheme.primary,
                                   ),
                                   onPressed: () {
-                                    // todo: implement All article view
+                                    goToReadingPage();
                                   },
                                   child: Text('Lire'),
                                 ),
@@ -517,6 +546,19 @@ class _HighlightArticleTileView extends State<HighlightArticleTileView> {
     super.initState();
   }
 
+  void goToReadingPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return ArticleContentPage(
+            article: context.read<ArticleBloc>().state.highlightArticle,
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ArticleBloc, ArticleState>(
@@ -525,7 +567,7 @@ class _HighlightArticleTileView extends State<HighlightArticleTileView> {
           case ArticleStatus.failed:
             return Container(
               margin: const EdgeInsets.symmetric(
-                horizontal: Margins.mobileMedium,
+                horizontal: Margins.medium,
               ),
               alignment: Alignment.center,
               child: Text('${state.error}'),
@@ -539,7 +581,7 @@ class _HighlightArticleTileView extends State<HighlightArticleTileView> {
             );
             return Container(
               margin: const EdgeInsets.symmetric(
-                horizontal: Margins.mobileMedium,
+                horizontal: Margins.medium,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -555,12 +597,12 @@ class _HighlightArticleTileView extends State<HighlightArticleTileView> {
                   ),
                   ArticleTile(article: state.articles![0]!),
                   Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: Margins.mobileMedium),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: Margins.medium),
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        // todo: go to all articles
+                        // todo: go to articles page
                       },
                       child: const Text("Tous les articles"),
                     ),
@@ -572,7 +614,7 @@ class _HighlightArticleTileView extends State<HighlightArticleTileView> {
             return Container(
               height: 310,
               margin: const EdgeInsets.symmetric(
-                horizontal: Margins.mobileMedium,
+                horizontal: Margins.medium,
               ),
               alignment: Alignment.center,
               child: const CircularProgressIndicator(),

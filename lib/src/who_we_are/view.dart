@@ -1,6 +1,7 @@
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/firebase_constants.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
+import 'package:ahl/src/widgets/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +20,12 @@ class WhoWeAreSpace extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: Margins.mobileLarge),
-            child: Text(
-              AppLocalizations.of(context)!.whoWeAre,
-              style: resolveHeadlineTextThemeForBreakPoints(
+            padding: const EdgeInsets.symmetric(vertical: Margins.large),
+            child: SectionTitle(
+              caretColor: Theme.of(context).primaryColor,
+              isUpperCase: false,
+              title: AppLocalizations.of(context)!.whoWeAre,
+              titleStyle: resolveHeadlineTextThemeForBreakPoints(
                 MediaQuery.of(context).size.width,
                 context,
               ),
@@ -70,7 +73,7 @@ class WhoWeAreTile extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Container(
-                  margin: const EdgeInsets.all(Margins.mobileSmall),
+                  margin: const EdgeInsets.all(Margins.small),
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       fit: BoxFit.cover,
@@ -86,7 +89,7 @@ class WhoWeAreTile extends StatelessWidget {
               } else if (snapshot.connectionState == ConnectionState.waiting) {
                 return Container(
                   alignment: Alignment.center,
-                  margin: const EdgeInsets.all(Margins.mobileSmall),
+                  margin: const EdgeInsets.all(Margins.small),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondaryContainer,
                     borderRadius: BorderRadius.circular(

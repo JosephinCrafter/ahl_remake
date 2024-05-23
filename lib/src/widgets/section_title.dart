@@ -1,12 +1,22 @@
 part of "widgets.dart";
 
 class SectionTitle extends StatelessWidget {
-  const SectionTitle(
-      {super.key, required this.title, this.subtitle, this.color});
+  const SectionTitle({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.titleColor,
+    this.isUpperCase = true,
+    this.titleStyle,
+    this.caretColor,
+  });
 
   final String title;
+  final TextStyle? titleStyle;
   final String? subtitle;
-  final Color? color;
+  final Color? titleColor;
+  final Color? caretColor;
+  final bool isUpperCase;
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +29,15 @@ class SectionTitle extends StatelessWidget {
               vertical: Paddings.listSeparator,
             ),
             child: Text(
-              title.toUpperCase(),
-              style: resolveHeadlineTextThemeForBreakPoints(
-                MediaQuery.of(context).size.width,
-                context,
-              )!
-                  .copyWith(
-                color: color ?? Colors.white,
-              ),
+              (isUpperCase) ? title.toUpperCase() : title,
+              style: titleStyle ??
+                  resolveHeadlineTextThemeForBreakPoints(
+                    MediaQuery.of(context).size.width,
+                    context,
+                  )!
+                      .copyWith(
+                    color: titleColor ?? Colors.white,
+                  ),
             ),
           ),
           subtitle != null
@@ -40,7 +51,7 @@ class SectionTitle extends StatelessWidget {
                       MediaQuery.of(context).size.width,
                       context,
                     )!
-                        .copyWith(color: color ?? Colors.white),
+                        .copyWith(color: titleColor ?? Colors.white),
                   ),
                 )
               : const SizedBox.shrink(),
@@ -50,7 +61,7 @@ class SectionTitle extends StatelessWidget {
             ),
             width: 60,
             height: 18,
-            color: Theme.of(context).colorScheme.secondary,
+            color: caretColor ?? Theme.of(context).colorScheme.secondary,
           ),
         ],
       ),

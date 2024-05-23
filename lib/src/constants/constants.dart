@@ -12,23 +12,23 @@ class BorderSizes {
 }
 
 class Margins {
+  /// 236
+  static const double extraHuge = 236;
+
   /// 200
-  static const double big = 188;
+  static const double huge = 200;
 
-  /// big / 2 = 100
-  static const double medium = 94;
-
-  /// 47
-  static const double small = 47;
+  /// 50
+  static const double extraLarge = 50;
 
   /// 37
-  static const double mobileLarge = 37;
+  static const double large = 32;
 
   /// 24
-  static const double mobileMedium = 24;
+  static const double medium = 24;
 
-  /// 12
-  static const double mobileSmall = 12;
+  /// 16
+  static const double small = 16;
 
   /// 166 : Top margin of the hero header
   static const double heroHeaderExtraTop = 166;
@@ -36,9 +36,8 @@ class Margins {
 
 /// Compute content size based on breakpoints
 class ContentSize {
-
   /// MaxWidth considering the breakpoints as widthConstraints.
-  static double  maxWidth(double widthConstraints) {
+  static double maxWidth(double widthConstraints) {
     return resolveForBreakPoint<double>(
       widthConstraints,
       extraHuge: 1128,

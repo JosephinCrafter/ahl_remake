@@ -77,7 +77,7 @@ class HomePage extends StatelessWidget {
                       return const SizedBox.shrink();
                     } else {
                       return SizedBox.fromSize(
-                        size: const Size.fromHeight(Margins.small),
+                        size: const Size.fromHeight(Margins.extraLarge),
                       );
                     }
                   }),
