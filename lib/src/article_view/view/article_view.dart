@@ -22,6 +22,7 @@ import 'package:http/http.dart' as http;
 import "package:firebase_article/firebase_article.dart";
 
 import 'dart:developer' as developer;
+import 'dart:convert';
 
 String monthTextResolve(BuildContext context, String monthName) {
   List vowels = ['a', 'e', 'i', 'o', 'u', 'y'];
@@ -80,16 +81,12 @@ class ArticleContentView extends StatelessWidget {
   final Article? article;
 
   Future<String> get content async {
-    String content = '';
-    await storage
+    final bytes = await storage
         .child('articles/${article?.id}/${article?.contentPath}')
-        .getData()
-        .then(
-          (Uint8List? value) => content = String.fromCharCodes(
-            value!.toList(),
-          ),
-        );
-    return content;
+        .getData();
+
+    String decodedString = utf8.decode(bytes!.toList());
+    return decodedString;
   }
 
   @override
@@ -561,7 +558,7 @@ class _HighlightArticleTileView extends State<HighlightArticleTileView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ArticleBloc, ArticleState>(
+    return BlocBuilder<ArticleBloc, ArticleState<Article>>(
       builder: (context, state) {
         switch (state.status) {
           case ArticleStatus.failed:

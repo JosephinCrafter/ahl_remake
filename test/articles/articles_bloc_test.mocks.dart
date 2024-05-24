@@ -34,8 +34,8 @@ class _FakeFirebaseFirestore_0 extends _i1.SmartFake
         );
 }
 
-class _FakeDocumentSnapshot_1<T extends Object?> extends _i1.SmartFake
-    implements _i2.DocumentSnapshot<T> {
+class _FakeDocumentSnapshot_1<T1 extends Object?> extends _i1.SmartFake
+    implements _i2.DocumentSnapshot<T1> {
   _FakeDocumentSnapshot_1(
     Object parent,
     Invocation parentInvocation,
@@ -48,8 +48,8 @@ class _FakeDocumentSnapshot_1<T extends Object?> extends _i1.SmartFake
 /// A class which mocks [ArticlesRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockArticlesRepository extends _i1.Mock
-    implements _i3.ArticlesRepository {
+class MockArticlesRepository<T extends _i3.Article> extends _i1.Mock
+    implements _i3.ArticlesRepository<T> {
   @override
   _i2.FirebaseFirestore get firestoreInstance => (super.noSuchMethod(
         Invocation.getter(#firestoreInstance),
@@ -94,36 +94,36 @@ class MockArticlesRepository extends _i1.Mock
       ) as _i5.Future<Map<String, dynamic>?>);
 
   @override
-  _i5.Future<_i3.Article?> getArticleByName({required String? articleTitle}) =>
+  _i5.Future<T?> getArticleByName({required String? articleTitle}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getArticleByName,
           [],
           {#articleTitle: articleTitle},
         ),
-        returnValue: _i5.Future<_i3.Article?>.value(),
-        returnValueForMissingStub: _i5.Future<_i3.Article?>.value(),
-      ) as _i5.Future<_i3.Article?>);
+        returnValue: _i5.Future<T?>.value(),
+        returnValueForMissingStub: _i5.Future<T?>.value(),
+      ) as _i5.Future<T?>);
 
   @override
-  _i5.Future<_i3.Article?> getArticleOfTheMonth() => (super.noSuchMethod(
+  _i5.Future<T?> getArticleOfTheMonth() => (super.noSuchMethod(
         Invocation.method(
           #getArticleOfTheMonth,
           [],
         ),
-        returnValue: _i5.Future<_i3.Article?>.value(),
-        returnValueForMissingStub: _i5.Future<_i3.Article?>.value(),
-      ) as _i5.Future<_i3.Article?>);
+        returnValue: _i5.Future<T?>.value(),
+        returnValueForMissingStub: _i5.Future<T?>.value(),
+      ) as _i5.Future<T?>);
 
   @override
-  _i5.Future<_i3.Article?> getHighlighted() => (super.noSuchMethod(
+  _i5.Future<T?> getHighlighted() => (super.noSuchMethod(
         Invocation.method(
           #getHighlighted,
           [],
         ),
-        returnValue: _i5.Future<_i3.Article?>.value(),
-        returnValueForMissingStub: _i5.Future<_i3.Article?>.value(),
-      ) as _i5.Future<_i3.Article?>);
+        returnValue: _i5.Future<T?>.value(),
+        returnValueForMissingStub: _i5.Future<T?>.value(),
+      ) as _i5.Future<T?>);
 
   @override
   _i5.Future<_i2.DocumentSnapshot<Map<String, dynamic>>> getRawDoc(
@@ -154,12 +154,33 @@ class MockArticlesRepository extends _i1.Mock
       ) as _i5.Future<_i2.DocumentSnapshot<Map<String, dynamic>>>);
 
   @override
-  _i3.Article? buildArticleFromDoc(Map<String, dynamic>? map) =>
+  _i5.Future<List<T>?> getArticlesSubListByLength(int? length) =>
       (super.noSuchMethod(
+        Invocation.method(
+          #getArticlesSubListByLength,
+          [length],
+        ),
+        returnValue: _i5.Future<List<T>?>.value(),
+        returnValueForMissingStub: _i5.Future<List<T>?>.value(),
+      ) as _i5.Future<List<T>?>);
+
+  @override
+  _i5.Future<List<T>?> getArticlesSubListByIds(List<String>? ids) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getArticlesSubListByIds,
+          [ids],
+        ),
+        returnValue: _i5.Future<List<T>?>.value(),
+        returnValueForMissingStub: _i5.Future<List<T>?>.value(),
+      ) as _i5.Future<List<T>?>);
+
+  @override
+  T? buildArticleFromDoc(Map<String, dynamic>? map) => (super.noSuchMethod(
         Invocation.method(
           #buildArticleFromDoc,
           [map],
         ),
         returnValueForMissingStub: null,
-      ) as _i3.Article?);
+      ) as T?);
 }

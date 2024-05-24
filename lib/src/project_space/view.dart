@@ -1,14 +1,33 @@
+import 'package:ahl/src/article_view/event/event.dart';
+import 'package:ahl/src/project_space/bloc.dart';
+import 'package:ahl/src/project_space/model.dart';
+import 'package:ahl/src/utils/storage_utils.dart';
+import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../ahl_barrel.dart';
+import '../article_view/bloc/bloc.dart';
+import '../article_view/state/state.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';
 
-class ProjectsSpaceView extends StatelessWidget {
+class ProjectsSpaceView extends StatefulWidget {
   const ProjectsSpaceView({super.key});
+
+  @override
+  State<ProjectsSpaceView> createState() => _ProjectsSpaceViewState();
+}
+
+class _ProjectsSpaceViewState extends State<ProjectsSpaceView> {
+  @override
+  void initState() {
+    context.read<ProjectBloc>().add(const GetArticleListEvent(foldLength: 3));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,15 +124,140 @@ class ProjectsSpaceView extends StatelessWidget {
       ),
     ];
 
-    return
-        // Container(
-        //   constraints: const BoxConstraints(maxHeight: 650 + 370 *2),
-        //   child:
-        SpaceView(
-      useGradient: false,
-      children: children,
-      // ),
-    );
+    return BlocBuilder<ProjectBloc, ArticleState<Article>>(
+        bloc: context.read<ProjectBloc>(),
+        builder: (context, state) {
+          print('state is type ${state.runtimeType}');
+          // get projects from backends
+          final projects = state.articles;
+
+          // transform project list into widgets
+          final List<Widget> projectCards = (projects != null)
+              ? projects.map<Widget>(
+                  (element) {
+                    if (element != null) {
+                      return FutureBuilder(
+                        future: ArticleStorageUtils(
+                                article: element, collection: 'projects')
+                            .getCoverImage(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return AhlCard(
+                              image: Expanded(
+                                flex: 2,
+                                child: Container(
+                                  margin: const EdgeInsets.all(Paddings.medium),
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: MemoryImage(
+                                        snapshot.data!,
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                        BorderSizes.small),
+                                  ),
+                                ),
+                              ),
+                              label: Text(
+                                "${element?.relations?[0]['status']}",
+                              ),
+                              title: Text(
+                                "${element?.title}",
+                              ),
+                              // description: const Text(
+                              //   "Pour les enfants d'aujourd'hui",
+                              // ),
+                            );
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Align(
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
+                            return const Align(
+                              alignment: Alignment.center,
+                              child: Icon(Icons.warning_rounded),
+                            );
+                          }
+                        },
+                      );
+                    } else {
+                      return const SizedBox.shrink();
+                    }
+                  },
+                ).toList()
+              : [];
+
+          return SpaceView(
+            useGradient: false,
+            children: [
+              // title
+              SectionTitle(
+                titleColor: AhlTheme.blackCharcoal,
+                title: AppLocalizations.of(context)!.projectsSpace,
+                subtitle: AppLocalizations.of(context)!.projectsSpaceSubtitle,
+              ),
+              // introduction
+              // Padding(
+              //   padding: const EdgeInsets.all(Paddings.medium),
+              //   child: Text(
+              //     AppLocalizations.of(context)!.projectsSpaceIntroduction,
+              //   ),
+              // ),
+
+              // prayers intention
+              Wrap(
+                // ProjectsCarousel(
+                direction: Axis.horizontal,
+                alignment: WrapAlignment.center,
+                children: projectCards,
+                //  List.from(
+                //   projectCards.map<Widget>(
+                //     (e) => Flexible(child: e),
+                //     // Align(
+                //     //     alignment: Alignment.center,
+                //     //     // width: 500,
+                //     //     child: e),
+                //   ),
+                // ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  direction: Axis.horizontal,
+                  spacing: 20,
+                  runSpacing: 20,
+                  // mainAxisSize: MainAxisSize.max,
+                  // mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        // todo: implement project found rising
+                      },
+                      child: const Text('Soutenir un projet'),
+                    ),
+                    const SizedBox(width: Paddings.listSeparator),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor:
+                            Theme.of(context).colorScheme.onPrimary,
+                      ),
+                      onPressed: () {
+                        // todo: implement all project page
+                      },
+                      child: Text("Voir tout les projet"),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        });
   }
 }
 

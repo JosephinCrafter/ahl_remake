@@ -47,7 +47,6 @@ class WhoWeAreTile extends StatelessWidget {
 
   Future<Uint8List?> getImage() async {
     var data = await storage.child(imagePath).getData();
-    print(data);
     return data;
   }
 
@@ -56,9 +55,6 @@ class WhoWeAreTile extends StatelessWidget {
         await firestore.doc(titlePath).get();
 
     final String url = result.get(titleIndex) as String;
-    if (kDebugMode) {
-      print('image Url : $url');
-    }
     return url;
   }
 

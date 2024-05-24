@@ -1,4 +1,5 @@
 import 'package:ahl/src/article_view/bloc/bloc.dart';
+import 'package:ahl/src/project_space/bloc.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'article_view/view/article_view.dart';
 import 'firebase_constants.dart';
 import 'pages/homepage/homepage.dart';
+import 'project_space/model.dart';
 import 'theme/theme.dart';
 import 'sample_feature/sample_item_details_view.dart';
 import 'settings/settings_controller.dart';
@@ -63,7 +65,12 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(
           create: (context) => ArticleBloc(
-            repo: ArticlesRepository(firestoreInstance: firestore),
+            repo: ArticlesRepository<Article>(firestoreInstance: firestore),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ProjectBloc(
+            firebaseFirestore: firestore,
           ),
         ),
       ],

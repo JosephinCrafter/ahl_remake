@@ -13,7 +13,7 @@ enum ArticleStatus {
   /// when a request failed
 }
 
-class ArticleState extends Equatable {
+class ArticleState<T extends Article> extends Equatable {
   const ArticleState({
     this.status = ArticleStatus.initial,
     this.articles,
@@ -22,17 +22,17 @@ class ArticleState extends Equatable {
   });
 
   final ArticleStatus status;
-  final List<Article?>? articles;
+  final List<T?>? articles;
   final Object? error;
-  final Article? highlightArticle;
+  final T? highlightArticle;
 
-  ArticleState copyWith({
+  ArticleState<T> copyWith({
     ArticleStatus? status,
-    List<Article>? articles,
+    List<T>? articles,
     Object? error,
-    Article? highlightArticle,
+    T? highlightArticle,
   }) =>
-      ArticleState(
+      ArticleState<T>(
         status: status ?? this.status,
         articles: articles ?? this.articles,
         error: error ?? this.error,

@@ -21,5 +21,11 @@ service firebase.storage {
     match /articles/{allPaths=**} {
       allow read;
     }
+    match /projects/{allPaths=**} {
+      allow read;
+    }
+    match /prayers/{allPaths=**} {
+      allow read;
+    }
   }
 }

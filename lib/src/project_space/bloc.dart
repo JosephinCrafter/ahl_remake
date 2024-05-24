@@ -1,20 +1,28 @@
+import 'package:firebase_article/firebase_article.dart';
+import 'package:ahl/src/project_space/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_article/firebase_article.dart' as fire_art;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'dart:developer' as developer;
 
-import '../state/state.dart';
-import '../event/event.dart';
+import '../article_view/event/event.dart';
+import '../article_view/state/state.dart';
 
-class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
-  ArticleBloc({required fire_art.ArticlesRepository<fire_art.Article> repo})
-      : _repo = repo,
-        super(const ArticleState(
-          articles: null,
-          status: ArticleStatus.initial,
-          error: null,
-        )) {
+class ProjectBloc extends Bloc<ArticleEvent, ArticleState<Article>> {
+  ProjectBloc({
+    required FirebaseFirestore firebaseFirestore,
+    String collection = 'projects',
+  })  : _repo = ArticlesRepository<Article>(
+          firestoreInstance: firebaseFirestore,
+          collection: collection,
+        ),
+        super(
+          const ArticleState<Article>(
+            articles: null,
+            status: ArticleStatus.initial,
+            error: null,
+          ),
+        ) {
     on<GetArticleByIdEvent>(_onGetArticleById);
     on<GetHighlightArticleEvent>(_onGetHighlightedArticle);
     on<GetArticleListEvent>(_onGetArticleListEvent);
@@ -22,40 +30,26 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
     add(InitializeArticleBlocEvent());
   }
 
-  ArticleBloc.inCollection(
-      {required String collection, required FirebaseFirestore firestore})
-      : _repo = fire_art.ArticlesRepository<fire_art.Article>(
-            firestoreInstance: firestore, collection: collection),
-        super(const ArticleState(
-          articles: null,
-          status: ArticleStatus.initial,
-          error: null,
-        )) {
-    on<GetArticleByIdEvent>(_onGetArticleById);
-    on<GetHighlightArticleEvent>(_onGetHighlightedArticle);
-    on<GetArticleListEvent>(_onGetArticleListEvent);
-    on<InitializeArticleBlocEvent>(_onInitializeArticleBlocEvent);
-    add(InitializeArticleBlocEvent());
-  }
-
-  fire_art.ArticlesRepository<fire_art.Article> _repo;
+  ArticlesRepository<Article> _repo;
 
   void _onInitializeArticleBlocEvent(
     InitializeArticleBlocEvent event,
     Emitter emit,
   ) {
-    emit(state.copyWith(
-      status: ArticleStatus.initial,
-      articles: null,
-      error: null,
-    ));
+    emit(
+      state.copyWith(
+        status: ArticleStatus.initial,
+        articles: null,
+        error: null,
+      ),
+    );
   }
 
   void _onGetArticleById(GetArticleByIdEvent event, Emitter emit) async {
     Object? error;
-    fire_art.Article? result;
+    Article? result;
     try {
-      result = await _repo.getArticleByName(articleTitle: event.id);
+      result = await _repo.getArticleByName(articleTitle: event.id) as Article;
     } catch (e) {
       error = e;
     }
@@ -81,10 +75,11 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
   void _onGetHighlightedArticle(
       GetHighlightArticleEvent event, Emitter emit) async {
     Object? error;
-    fire_art.Article? result;
+    Article? result;
 
     try {
       result = await _repo.getHighlighted();
+
       if (result != null) {
         emit(
           state.copyWith(
@@ -94,7 +89,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
             highlightArticle: result,
           ),
         );
-        developer.log('[ArticleBloc]: state: $state');
+        developer.log('[ProjectBloc]: state: $state');
       }
     } catch (e) {
       error = 'Error getting highlight article : $e';
@@ -111,15 +106,14 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
 
   void _onGetArticleListEvent(GetArticleListEvent event, Emitter emit) async {
     try {
-      List<fire_art.Article>? articles;
+      List<Article>? articles;
       if (event.ids != null) {
-        articles = await _repo.getArticlesSubListByIds(event.ids!)
-            as List<fire_art.Article>;
+        articles =
+            await _repo.getArticlesSubListByIds(event.ids!) as List<Article>;
       }
       if (event.foldLength != null) {
-        articles?.addAll(
-            await _repo.getArticlesSubListByLength(event.foldLength!)
-                as List<fire_art.Article>);
+        articles = await _repo.getArticlesSubListByLength(event.foldLength!)
+            as List<Article>;
       }
 
       emit(
@@ -127,7 +121,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
             articles: articles, status: ArticleStatus.succeed, error: null),
       );
     } catch (e) {
-      developer.log('[Article Bloc] Error getting article list: $e');
+      developer.log('[ProjectBloc] Error getting article list: $e');
     }
   }
 }

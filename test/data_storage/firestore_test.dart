@@ -1,6 +1,6 @@
 // Test the data storage mechanism and triggering from firestore.
 import 'package:ahl/src/article_view/data/data.dart';
-import 'package:ahl/src/article_view/model/article.dart';
+import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -77,7 +77,7 @@ void main() async {
           Future<Article?> articleOfTheMonth =
               articleHelper.getArticleOfTheMonth();
           Future<Article?> namedArticle =
-              articleHelper.getArticleById(articleId: 'some_article_name');
+              articleHelper.getArticleByName(articleTitle: 'some_article_name');
 
           expect(articleOfTheMonth, isNotNull);
           expect(namedArticle, isNotNull);
@@ -87,7 +87,7 @@ void main() async {
         ArticlesRepository articleHelper =
             ArticlesRepository(firestoreInstance: fakeFirestore);
         Future<Article?> namedArticle =
-            articleHelper.getArticleById(articleId: 'leves_toi_et_marche');
+            articleHelper.getArticleByName(articleTitle: 'leves_toi_et_marche');
 
         expect(namedArticle, isNotNull);
       });

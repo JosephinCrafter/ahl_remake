@@ -1,5 +1,6 @@
 {
   "en": [
+    "heroHeaderSubtitle",
     "articles",
     "thanksForRegistering",
     "invalidEmail",

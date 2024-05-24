@@ -16,12 +16,12 @@
 // should return Future objects.
 
 import 'package:ahl/src/article_view/data/data.dart';
-import 'package:ahl/src/article_view/model/article.dart';
 import 'package:ahl/src/firebase_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:firebase_article/firebase_article.dart';
 
 /// A matcher of a null article.
 const Article noArticle = Article(
@@ -89,7 +89,7 @@ void setupRepo(FirebaseFirestore fakeFirestore,
     {String highLight = 'some_article'}) {
   var setupDoc = 'setup';
   var setup = {
-    SetUp.highLightKey: highLight,
+    RepoSetUp.highLight: highLight,
   };
   fakeFirestore.collection(articlesCollection).doc(setupDoc).set(setup);
 }
