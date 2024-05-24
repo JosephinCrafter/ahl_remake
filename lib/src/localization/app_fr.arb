@@ -8,7 +8,8 @@
   "@heroTitle": {
     "description": "Le text d'invitation qui s'affiche dans le hero header"
   },
-  "heroExplanation": "L'Amour est la force la plus puissante de l'univers. Elle peut vaincre la haine. ",
+  "heroHeaderSubtitle": "Avec les Sœurs Dominicaines Missionnaires de Notre Dame de la Délivrande à Saharoaloha Antsirabe.",
+  "heroExplanation": "Solidarité et Prière pour Madagascar.\n Découvrez nos missions auprès des enfants, rejoignez nos prières quotidiennes et partagez la vie de notre communauté.",
   "@heroExplanation": {
     "description": "Text d'accroche en dessous du text principale de l'Hero header."
   },

@@ -146,6 +146,12 @@ class HeroTextView extends StatelessWidget {
         medium: Theme.of(context).textTheme.displayMedium,
         other: Theme.of(context).textTheme.displayLarge,
       );
+      TextStyle? subtitleTheme = resolveForBreakPoint<TextStyle?>(
+        MediaQuery.of(context).size.width,
+        small: Theme.of(context).textTheme.titleSmall,
+        medium: Theme.of(context).textTheme.titleMedium,
+        other: Theme.of(context).textTheme.titleLarge,
+      );
       return Container(
         alignment: alignment ?? Alignment.center,
         margin: EdgeInsets.only(
@@ -160,11 +166,19 @@ class HeroTextView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 20),
+                padding: const EdgeInsets.only(bottom: 0),
                 child: Text(
                   AppLocalizations.of(context)!.heroTitle,
                   textAlign: TextAlign.center,
                   style: titleTheme,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: Paddings.huge),
+                child: Text(
+                  AppLocalizations.of(context)!.heroHeaderSubtitle,
+                  textAlign: TextAlign.center,
+                  style: subtitleTheme,
                 ),
               ),
               Text(
