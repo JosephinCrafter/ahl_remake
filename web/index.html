@@ -1,10 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!-- Load the loading spin before flutter load.-->
-    <link rel="stylesheet" href="loader.css" />
 
-    <!--
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-PRC72JP9');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Load the loading spin before flutter load.-->
+  <link rel="stylesheet" href="loader.css" />
+
+  <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
 
@@ -17,63 +28,66 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-    <base href="$FLUTTER_BASE_HREF" />
+  <base href="$FLUTTER_BASE_HREF" />
 
-    <meta charset="UTF-8" />
-    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
-    <meta name="description" content="A new Flutter project." />
+  <meta charset="UTF-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+  <meta name="description" content="A new Flutter project." />
 
-    <!-- iOS meta tags & icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="ahl" />
-    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="ahl" />
+  <link rel="apple-touch-icon" href="icons/Icon-192.png" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
 
-    <title>ahl</title>
-    <link rel="manifest" href="manifest.json" />
+  <title>ahl</title>
+  <link rel="manifest" href="manifest.json" />
 
-    <script>
-      // The value below is injected by flutter build, do not touch.
-      const serviceWorkerVersion = null;
-    </script>
-    <!-- This script adds the flutter initialization JS code -->
-    <script src="flutter.js" defer></script>
-  </head>
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    const serviceWorkerVersion = null;
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+</head>
 
-  <body>
-    <!-- Display text before the loader -->
-    <div id="loader">
-      <img id="loader-title" src="logo_form_typo_black.png" alt="Ahl Logo">
-      <div class="lds-dual-ring"><!-- Insert the loading shape -->
-        <div class="lds-heart" >
-          <div></div>
-        </div></div>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PRC72JP9" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <!-- Display text before the loader -->
+  <div id="loader">
+    <img id="loader-title" src="logo_form_typo_black.png" alt="Ahl Logo">
+    <div class="lds-dual-ring"><!-- Insert the loading shape -->
+      <div class="lds-heart">
+        <div></div>
+      </div>
     </div>
+  </div>
 
-    
-    <script
-      src="main.dart.js"
-      type="application/javascript"
-      onendload="document.getElementById('loader').remove();"
-    ></script>
 
-    <script>
-      window.addEventListener("load", function (ev) {
-        // Download main.dart.js
-        _flutter.loader.loadEntrypoint({
-          serviceWorker: {
-            serviceWorkerVersion: serviceWorkerVersion,
-          },
-          onEntrypointLoaded: function (engineInitializer) {
-            engineInitializer.initializeEngine().then(function (appRunner) {
-              appRunner.runApp();
-            });
-          },
-        });
+  <script src="main.dart.js" type="application/javascript"
+    onendload="document.getElementById('loader').remove();"></script>
+
+  <script>
+    window.addEventListener("load", function (ev) {
+      // Download main.dart.js
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function (engineInitializer) {
+          engineInitializer.initializeEngine().then(function (appRunner) {
+            appRunner.runApp();
+          });
+        },
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
+
 </html>
