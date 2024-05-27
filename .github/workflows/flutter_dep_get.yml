@@ -1,6 +1,6 @@
 # An action to update flutter dep
 
-name: Clean and redownload flutter dep
+name: Deploy on merge with cache clearing
 'on':
   push:
     branches:
