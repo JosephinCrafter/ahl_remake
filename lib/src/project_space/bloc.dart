@@ -49,7 +49,7 @@ class ProjectBloc extends Bloc<ArticleEvent, ArticleState<Article>> {
     Object? error;
     Article? result;
     try {
-      result = await _repo.getArticleByName(articleTitle: event.id) as Article;
+      result = await _repo.getArticleById(articleId: event.id) as Article;
     } catch (e) {
       error = e;
     }
@@ -108,10 +108,13 @@ class ProjectBloc extends Bloc<ArticleEvent, ArticleState<Article>> {
     try {
       List<Article>? articles;
       if (event.ids != null) {
+        developer.log('[ProjectBlocEvent] : ${event.ids}');
         articles =
             await _repo.getArticlesSubListByIds(event.ids!) as List<Article>;
       }
       if (event.foldLength != null) {
+        
+        developer.log('[ProjectBlocEvent] : ${event.foldLength}');
         articles = await _repo.getArticlesSubListByLength(event.foldLength!)
             as List<Article>;
       }

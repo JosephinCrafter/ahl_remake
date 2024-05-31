@@ -75,9 +75,9 @@ void main() async {
         'test on class method. This test should fail.',
         () {
           Future<Article?> articleOfTheMonth =
-              articleHelper.getArticleOfTheMonth();
+              articleHelper.getHighlighted();
           Future<Article?> namedArticle =
-              articleHelper.getArticleByName(articleTitle: 'some_article_name');
+              articleHelper.getArticleById(articleId: 'some_article_name');
 
           expect(articleOfTheMonth, isNotNull);
           expect(namedArticle, isNotNull);
@@ -87,7 +87,7 @@ void main() async {
         ArticlesRepository articleHelper =
             ArticlesRepository(firestoreInstance: fakeFirestore);
         Future<Article?> namedArticle =
-            articleHelper.getArticleByName(articleTitle: 'leves_toi_et_marche');
+            articleHelper.getArticleById(articleId: 'leves_toi_et_marche');
 
         expect(namedArticle, isNotNull);
       });

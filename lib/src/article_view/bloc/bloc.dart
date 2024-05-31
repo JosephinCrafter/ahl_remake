@@ -55,7 +55,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
     Object? error;
     fire_art.Article? result;
     try {
-      result = await _repo.getArticleByName(articleTitle: event.id);
+      result = await _repo.getArticleById(articleId: event.id);
     } catch (e) {
       error = e;
     }

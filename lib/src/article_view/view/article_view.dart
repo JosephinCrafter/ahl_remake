@@ -1,28 +1,36 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+
+import 'dart:convert';
+import 'dart:developer' as developer;
+
+import 'package:flutter_animate/flutter_animate.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:markdown_widget/markdown_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import "package:firebase_article/firebase_article.dart";
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:ahl/src/article_view/bloc/bloc.dart';
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/state/state.dart';
-import 'package:ahl/src/firebase_constants.dart';
+import 'package:ahl/src/firebase_constants.dart' as firebase;
 import 'package:ahl/src/theme/theme.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../utils/date_time_utils.dart';
-
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/widgets/widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
-import 'package:markdown_widget/markdown_widget.dart';
 
-import 'package:http/http.dart' as http;
+import '../../utils/storage_utils.dart';
 
-import "package:firebase_article/firebase_article.dart";
+part 'article_content_view.dart';
+part 'highlight_article_tile.dart';
 
-import 'dart:developer' as developer;
-import 'dart:convert';
+// import 'package:markdown_widget/markdown_widget.dart';
 
 String monthTextResolve(BuildContext context, String monthName) {
   List vowels = ['a', 'e', 'i', 'o', 'u', 'y'];
@@ -33,124 +41,6 @@ String monthTextResolve(BuildContext context, String monthName) {
     return "Mois d'$monthName";
   } else {
     return 'Mois de $monthName';
-  }
-}
-
-/// Article Page
-class ArticleContentPage extends StatefulWidget {
-  const ArticleContentPage({
-    super.key,
-    this.article,
-  });
-
-  static const String routeName = '/articles';
-  final Article? article;
-
-  @override
-  State<ArticleContentPage> createState() => ArticleContentPageState();
-}
-
-class ArticleContentPageState extends State<ArticleContentPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => Scaffold(
-        endDrawer: constraints.maxWidth <= ScreenSizes.large
-            ? const AhlDrawer()
-            : null,
-        appBar: const AhlAppBar(),
-        body: ArticleContentView(
-          article: widget.article,
-        ),
-      ),
-    );
-  }
-}
-
-class ArticleContentView extends StatelessWidget {
-  const ArticleContentView({
-    super.key,
-    required this.article,
-  });
-
-  final Article? article;
-
-  Future<String> get content async {
-    final bytes = await storage
-        .child('articles/${article?.id}/${article?.contentPath}')
-        .getData();
-
-    String decodedString = utf8.decode(bytes!.toList());
-    return decodedString;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: resolveForBreakPoint(
-          screenWidth,
-          other: Margins.small,
-          extraHuge: Margins.extraHuge,
-          huge: Margins.huge,
-          extraLarge: Margins.extraLarge,
-          large: Margins.large,
-        ),
-      ),
-      constraints: BoxConstraints(
-        maxWidth: ContentSize.maxWidth(
-          screenWidth,
-        ),
-      ),
-      child: FutureBuilder(
-        future: content,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              if (snapshot.hasData) {
-                return MarkdownWidget(
-                  data: snapshot.data ?? 'Error loading article.',
-                );
-              } else {
-                return Align(
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.warning_rounded,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                      Text('Error loading article content: ${snapshot.error}')
-                    ],
-                  ),
-                );
-              }
-
-            default:
-              return const Align(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
-              );
-
-            // default:
-            //   return Align(
-            //     alignment: Alignment.center,
-            //     child: Icon(
-            //       Icons.warning_rounded,
-            //       color: Theme.of(context).colorScheme.error,
-            //     ),
-            //   );
-          }
-        },
-      ),
-    );
   }
 }
 
@@ -168,46 +58,20 @@ class ArticleTile extends StatefulWidget {
 }
 
 class _ArticleTileState extends State<ArticleTile> {
+  // article of the tile
   late Article _article;
+
+  late ArticleStorageUtils articleStorageUtils;
 
   @override
   void initState() {
-    super.initState();
-
     _article = widget.article;
+
+    articleStorageUtils =
+      ArticleStorageUtils(article: _article, collection: 'articles');
+    super.initState();
   }
-
-  Future<String?> getHeroHeaderImageUrl() async {
-    final heroHeaderImageRef = storage.child(
-      "articles/${_article.id}/${_article.relations?[0][RepoSetUp.coverImageKey]}",
-      // "articles/qui_est_laure_sabes/hero_header_image.jpg",
-    );
-    final String url = await heroHeaderImageRef.getDownloadURL();
-
-    return url;
-  }
-
-  Future<Uint8List?> getHeroHeaderImage() async {
-    final heroHeaderImageRef = storage.child(
-      "articles/${_article.id}/${_article.relations?[0][RepoSetUp.coverImageKey]}",
-      // "articles/qui_est_laure_sabes/hero_header_image.jpg",
-    );
-    final Uint8List? data = await heroHeaderImageRef.getData();
-    return data;
-  }
-
-  Future<http.Response?> getContent() async {
-    final contentRef = storage.child(
-      "articles/${_article.id}/${_article.contentPath}",
-      // "articles/qui_est_laure_sabes/hero_header_image.jpg",
-    );
-    final String url = await contentRef.getDownloadURL();
-
-    final response = await http.get(Uri.parse(url));
-
-    return response;
-  }
-
+ 
   void goToReadingPage() {
     Navigator.push(
       context,
@@ -274,7 +138,7 @@ class _ArticleTileState extends State<ArticleTile> {
                                     null)
                                 ? FutureBuilder(
                                     future:
-                                        getHeroHeaderImageUrl(), //getHeroHeaderImage(),
+                                        articleStorageUtils.getCoverImage(), //getHeroHeaderImage(),
                                     builder: (context, snapshot) {
                                       switch (snapshot.connectionState) {
                                         case ConnectionState.done:
@@ -288,7 +152,7 @@ class _ArticleTileState extends State<ArticleTile> {
                                               decoration: BoxDecoration(
                                                 image: DecorationImage(
                                                   fit: BoxFit.cover,
-                                                  image: NetworkImage(
+                                                  image: MemoryImage(
                                                       snapshot.data!),
                                                 ),
                                               ),
@@ -491,133 +355,6 @@ class _ArticleTileState extends State<ArticleTile> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class HighlightArticleTile extends StatelessWidget {
-  const HighlightArticleTile({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) {
-        return BlocProvider(
-          create: (BuildContext context) => ArticleBloc(
-            repo: ArticlesRepository(
-              firestoreInstance: firestore,
-              collection: 'articles',
-            ),
-          )..add(
-              const GetHighlightArticleEvent(),
-            ),
-          child: Align(
-            alignment: Alignment.center,
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: ContentSize.maxWidth(
-                  MediaQuery.of(context).size.width,
-                ),
-              ),
-              child: const HighlightArticleTileView(),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class HighlightArticleTileView extends StatefulWidget {
-  const HighlightArticleTileView({
-    super.key,
-  });
-
-  @override
-  State<HighlightArticleTileView> createState() => _HighlightArticleTileView();
-}
-
-class _HighlightArticleTileView extends State<HighlightArticleTileView> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void goToReadingPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return ArticleContentPage(
-            article: context.read<ArticleBloc>().state.highlightArticle,
-          );
-        },
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<ArticleBloc, ArticleState<Article>>(
-      builder: (context, state) {
-        switch (state.status) {
-          case ArticleStatus.failed:
-            return Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: Margins.medium,
-              ),
-              alignment: Alignment.center,
-              child: Text('${state.error}'),
-            );
-          case ArticleStatus.succeed:
-            String releaseMonth = DateTimeUtils.localMonth(
-              DateTimeUtils.parseReleaseDate(
-                      state.articles![0]!.releaseDate ?? '2024-04-28')
-                  .month,
-              context,
-            );
-            return Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: Margins.medium,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    monthTextResolve(
-                      context,
-                      releaseMonth,
-                    ).toUpperCase(),
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                  ),
-                  ArticleTile(article: state.articles![0]!),
-                  Container(
-                    margin:
-                        const EdgeInsets.symmetric(vertical: Margins.medium),
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        // todo: go to articles page
-                      },
-                      child: const Text("Tous les articles"),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          default:
-            return Container(
-              height: 310,
-              margin: const EdgeInsets.symmetric(
-                horizontal: Margins.medium,
-              ),
-              alignment: Alignment.center,
-              child: const CircularProgressIndicator(),
-            );
-        }
-      },
     );
   }
 }

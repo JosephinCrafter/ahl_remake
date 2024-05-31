@@ -51,6 +51,23 @@ class _FakeDocumentSnapshot_1<T1 extends Object?> extends _i1.SmartFake
 class MockArticlesRepository<T extends _i3.Article> extends _i1.Mock
     implements _i3.ArticlesRepository<T> {
   @override
+  Map<String, T?> get memoryCachedArticles => (super.noSuchMethod(
+        Invocation.getter(#memoryCachedArticles),
+        returnValue: <String, T?>{},
+        returnValueForMissingStub: <String, T?>{},
+      ) as Map<String, T?>);
+
+  @override
+  set memoryCachedArticles(Map<String, T?>? _memoryCachedArticles) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #memoryCachedArticles,
+          _memoryCachedArticles,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   _i2.FirebaseFirestore get firestoreInstance => (super.noSuchMethod(
         Invocation.getter(#firestoreInstance),
         returnValue: _FakeFirebaseFirestore_0(
@@ -94,12 +111,24 @@ class MockArticlesRepository<T extends _i3.Article> extends _i1.Mock
       ) as _i5.Future<Map<String, dynamic>?>);
 
   @override
-  _i5.Future<T?> getArticleByName({required String? articleTitle}) =>
+  _i5.Future<T?> getArticleByName({required String? articleName}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getArticleByName,
           [],
-          {#articleTitle: articleTitle},
+          {#articleName: articleName},
+        ),
+        returnValue: _i5.Future<T?>.value(),
+        returnValueForMissingStub: _i5.Future<T?>.value(),
+      ) as _i5.Future<T?>);
+
+  @override
+  _i5.Future<T?> getArticleById({required String? articleId}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getArticleById,
+          [],
+          {#articleId: articleId},
         ),
         returnValue: _i5.Future<T?>.value(),
         returnValueForMissingStub: _i5.Future<T?>.value(),
@@ -154,15 +183,15 @@ class MockArticlesRepository<T extends _i3.Article> extends _i1.Mock
       ) as _i5.Future<_i2.DocumentSnapshot<Map<String, dynamic>>>);
 
   @override
-  _i5.Future<List<T>?> getArticlesSubListByLength(int? length) =>
+  _i5.Future<List<T?>?> getArticlesSubListByLength(int? length) =>
       (super.noSuchMethod(
         Invocation.method(
           #getArticlesSubListByLength,
           [length],
         ),
-        returnValue: _i5.Future<List<T>?>.value(),
-        returnValueForMissingStub: _i5.Future<List<T>?>.value(),
-      ) as _i5.Future<List<T>?>);
+        returnValue: _i5.Future<List<T?>?>.value(),
+        returnValueForMissingStub: _i5.Future<List<T?>?>.value(),
+      ) as _i5.Future<List<T?>?>);
 
   @override
   _i5.Future<List<T>?> getArticlesSubListByIds(List<String>? ids) =>

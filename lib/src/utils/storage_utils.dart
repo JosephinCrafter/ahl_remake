@@ -1,55 +1,214 @@
+import 'dart:convert';
 import 'dart:developer';
-import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:firebase_article/firebase_article.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:session_storage/session_storage.dart';
 
 import '../firebase_constants.dart';
 
 final class ArticleStorageUtils {
+  // Image of the cover image
+  Uint8List? coverImage;
+
+  // content response
+  http.Response? contentResponse;
+
+  // Cover image url
+  String? coverImageUrl;
+
   ArticleStorageUtils({
     required Article article,
     required this.collection,
-  }) : _article = article;
+    Reference? storageRef,
+  })  : _article = article,
+        _coverImageUrlKey = '${article.id}_coverImageUrl',
+        _coverImageDataKey = '${article.id}_coverImageData',
+        _contentDataKey = '${article.id}_contentData',
+        _storage = storageRef ?? storage;
 
+  /// The article on which this utils perform
   final Article _article;
+
+  /// Collection name where to look for items.
   final String collection;
 
-  Future<String?> getHeroHeaderImageUrl() async {
-    final heroHeaderImageRef = storage.child(
+  /// Key to trigger cover image data
+  final String _coverImageDataKey;
+
+  // key to trigger cover image url from cache.
+  final String _coverImageUrlKey;
+
+  // key to trigger cover image url from cache.
+  final String _contentDataKey;
+
+  // Firebase storage instance
+  final Reference _storage;
+
+  final SessionStorage cache = SessionStorage();
+
+  /// Ask storage Reference the coverImage url.
+  Future<String?> getCoverImageUrl() async {
+    // Cache check
+
+    String? coverImageUrl = cache[_coverImageUrlKey];
+    if (coverImageUrl != null) {
+      return coverImageUrl;
+    }
+
+    // perform true operation on database
+    final heroHeaderImageRef = _storage.child(
       "$collection/${_article.id}/${_article.relations?[0][RepoSetUp.coverImageKey]}",
       // "articles/qui_est_laure_sabes/hero_header_image.jpg",
     );
-    final String url = await heroHeaderImageRef.getDownloadURL();
+    try {
+      final String url = await heroHeaderImageRef.getDownloadURL();
 
-    return url;
+      // storing to cache
+      coverImageUrl = url;
+      cache[_coverImageUrlKey] = coverImageUrl;
+    } catch (e) {
+      log('[storage] Error getting coverImage: e');
+      coverImageUrl = null;
+    }
+
+    return coverImageUrl;
   }
 
   Future<Uint8List?> getCoverImage() async {
     Uint8List? data;
+    String? dataString = cache[_coverImageDataKey];
+    //cache check
     try {
-      final heroHeaderImageRef = storage.child(
+      data = (dataString != null) ? decodeFromString(dataString) : null;
+      if (data != null) {
+        return data;
+      }
+    } catch (e) {
+      log('[Sha redPreferences] Error getting data: $e');
+    }
+
+    // perform truth reading
+    try {
+      final heroHeaderImageRef = _storage.child(
         "$collection/${_article.id}/${_article.relations?[0][RepoSetUp.coverImageKey]}",
         // "articles/qui_est_laure_sabes/hero_header_image.jpg",
       );
       data = await heroHeaderImageRef.getData();
+      log('Image got: ${heroHeaderImageRef.name} ');
+
+      // write data to cache
+      cache[_coverImageDataKey] = encodeToString(data!);
     } catch (e) {
       log('Error loading image: $e');
       data = Uint8List(0);
     }
+
     return data;
   }
 
+  /// Get the content of the article.
   Future<http.Response?> getContent() async {
+    // cache
+    String? contentString = cache[_contentDataKey];
+    http.Response? response =
+        (contentString != null) ? decodeStringToResponse(contentString) : null;
+    if (response != null) {
+      return response;
+    }
+
+    //perform true operation
     final contentRef = storage.child(
       "$collection/${_article.id}/${_article.contentPath}",
       // "articles/qui_est_laure_sabes/hero_header_image.jpg",
     );
     final String url = await contentRef.getDownloadURL();
 
-    final response = await http.get(Uri.parse(url));
+    response = await http.get(Uri.parse(url));
+    cache[_contentDataKey] = encodeResponseToString(response);
 
     return response;
   }
+}
+
+// Function to encode Response to string
+String encodeResponseToString(http.Response response) {
+  // Read the response body as a stream of bytes
+  final bytes = response.bodyBytes;
+  // Encode the bytes to a base64 string
+  final encodedBody = base64Encode(bytes);
+
+  // Extract other important fields from the response
+  final headers = response.headers;
+  final statusCode = response.statusCode;
+  final reasonPhrase = response.reasonPhrase;
+
+  // Combine all data into a JSON object
+  final data = {
+    'headers': headers.toString(),
+    'statusCode': statusCode,
+    'reasonPhrase': reasonPhrase,
+    'url': response.request?.url.toString(),
+    'body': encodedBody,
+    'baseRequest': {
+      'method': response.request?.method,
+      'contentLength': response.request?.contentLength,
+      'url': response.request?.url.toString(),
+      'finalized': response.request?.finalized,
+      'headers': response.request?.headers,
+      'followRedirects': response.request?.followRedirects,
+      'hashCode': response.request?.hashCode,
+      'maxRedirects': response.request?.maxRedirects,
+      'persistentConnection': response.request?.persistentConnection,
+      'runtimeType': response.request?.runtimeType,
+    }
+  };
+
+  // Convert the data map to a JSON string
+  return jsonEncode(data);
+}
+
+http.Response decodeStringToResponse(String encodedString) {
+  // Decode the JSON string into a map
+  final decodedData = jsonDecode(encodedString) as Map<String, dynamic>;
+
+  // Extract data from the map
+  final headers = Map<String, String>.from(decodedData['headers']);
+  final statusCode = decodedData['statusCode'] as int;
+  final reasonPhrase = decodedData['reasonPhrase'] as String;
+  final url = Uri.parse(decodedData['url'] as String);
+  final bodyBytes = base64Decode(decodedData['body'] as String);
+
+  // Extract request data (if available)
+  http.Request? request;
+  if (decodedData.containsKey('baseRequest')) {
+    final requestData = decodedData['baseRequest'] as Map<String, dynamic>;
+    request = http.Request(
+      requestData['method'] as String,
+      url,
+      // headers: Map<String, String>.from(requestData['headers']),
+      // bodyBytes: requestData['contentLength'] != null ? Uint8List.fromList(requestData['body'] as List) : null,
+    );
+  }
+
+  // Rebuild the Response object with the decoded data
+  return http.Response.bytes(
+    bodyBytes,
+    statusCode,
+    reasonPhrase: reasonPhrase,
+    headers: headers,
+    request: request,
+  );
+}
+
+String encodeToString(Uint8List data) {
+  // Use the built-in converter to transform the list into a base64 encoded string
+  return base64Encode(data);
+}
+
+Uint8List decodeFromString(String encodedString) {
+  // Use the built-in converter to decode the base64 string back into a Uint8List
+  return base64Decode(encodedString);
 }

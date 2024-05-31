@@ -1,4 +1,3 @@
-import 'package:ahl/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class ArticlesPage extends StatefulWidget {
@@ -14,10 +13,10 @@ class _ArticlesPageState extends State<ArticlesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AhlAppBar(),
+      appBar: AppBar(),
       body: Center(
         child: Text(
-          'Article Space',
+          'Project Space',
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ),

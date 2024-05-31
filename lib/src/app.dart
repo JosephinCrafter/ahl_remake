@@ -7,10 +7,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'article_view/view/article_view.dart';
 import 'firebase_constants.dart';
+import 'pages/articles/article_page.dart';
 import 'pages/homepage/homepage.dart';
-import 'project_space/model.dart';
 import 'theme/theme.dart';
 import 'sample_feature/sample_item_details_view.dart';
 import 'settings/settings_controller.dart';
@@ -129,13 +128,9 @@ class _MyAppState extends State<MyApp> {
                         return const SampleItemDetailsView();
                       case HomePage.routeName:
                         return const HomePage();
-                      // case ArticleContentPage.routeName:
-                      //   return ArticleContentPage(
-                      //     args: routeSettings.arguments,
-                      //     isHighLight: true,
-                      //     firestore: firestore,
-                      //     storage: storage.storage,
-                      //   );
+                      case ArticlesPage.routeName:
+                        return const ArticlesPage(
+                        );
                       default:
                         return widget.home ?? const HomePage();
                     }

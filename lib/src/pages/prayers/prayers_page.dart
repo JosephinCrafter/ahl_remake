@@ -17,7 +17,7 @@ class _ArticlesPageState extends State<ArticlesPage> {
       appBar: const AhlAppBar(),
       body: Center(
         child: Text(
-          'Article Space',
+          'Prayer Space',
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ),

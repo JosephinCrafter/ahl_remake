@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+          "gtm.start": new Date().getTime(),
+          event: "gtm.js",
+        });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-PRC72JP9");
+    </script>
+    <!-- End Google Tag Manager -->
+    <!-- Load the loading spin before flutter load.-->
+    <link rel="stylesheet" href="loader.css" />
 
-<head>
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-PRC72JP9');</script>
-  <!-- End Google Tag Manager -->
-  <!-- Load the loading spin before flutter load.-->
-  <link rel="stylesheet" href="loader.css" />
-
-  <!--
+    <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
 
@@ -28,62 +34,80 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-  <base href="$FLUTTER_BASE_HREF" />
+    <base href="$FLUTTER_BASE_HREF" />
 
-  <meta charset="UTF-8" />
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
-  <meta name="description" content="Solidarité et Prière pour Madagascar.\n Découvrez nos missions auprès des enfants, rejoignez nos prières quotidiennes et partagez la vie de notre communauté." />
-  <meta name="keywords" content="Solidarité Madagascar,Sœurs Dominicaines, sœurs Missionnaires de Notre Dame de la Delivrande, Saharoaloha, Cantine Saharoaloha,  Prière Madagascar, Enfants Madagascar, Missions Madagascar, Communauté Madagascar, Aide humanitaire, Développement,  Education,  Santé,  Parrainage,  Orphelinat, Foi chrétienne, Prières quotidiennes, Vie spirituelle"> 
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-  
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  <meta name="apple-mobile-web-app-title" content="ahl" />
-  <link rel="apple-touch-icon" href="icons/Icon-192.png" />
+    <meta charset="UTF-8" />
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+    <meta
+      name="description"
+      content="Solidarité et Prière pour Madagascar.\n Découvrez nos missions auprès des enfants, rejoignez nos prières quotidiennes et partagez la vie de notre communauté."
+    />
+    <meta
+      name="keywords"
+      content="Solidarité Madagascar,Sœurs Dominicaines, sœurs Missionnaires de Notre Dame de la Delivrande, Saharoaloha, Cantine Saharoaloha,  Prière Madagascar, Enfants Madagascar, Missions Madagascar, Communauté Madagascar, Aide humanitaire, Développement,  Education,  Santé,  Parrainage,  Orphelinat, Foi chrétienne, Prières quotidiennes, Vie spirituelle"
+    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png" />
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Aujourd'hui l'avenir" />
+    <link rel="apple-touch-icon" href="icons/Icon-192.png" />
 
-  <title>Aujourd'hui l'avenir | Aimer et servire avec les Soeurs Dominicaines Missionnaires de Notre Dame de la Délivrande</title>
-  <link rel="manifest" href="manifest.json" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png" />
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = null;
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
-</head>
+    <title>
+      Aujourd'hui l'avenir | Aimer et servire avec les Soeurs Dominicaines
+      Missionnaires de Notre Dame de la Délivrande
+    </title>
+    <link rel="manifest" href="manifest.json" />
 
-<body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PRC72JP9" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-  <!-- Display text before the loader -->
-  <div id="loader">
-    <img id="loader-title" src="logo_form_typo_black.png" alt="Ahl Logo">
-    <div class="lds-dual-ring"><!-- Insert the loading shape -->
-      <div class="lds-heart">
-        <div></div>
+    <script>
+      // The value below is injected by flutter build, do not touch.
+      const serviceWorkerVersion = null;
+    </script>
+    <!-- This script adds the flutter initialization JS code -->
+    <script src="flutter.js" defer></script>
+  </head>
+
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-PRC72JP9"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <!-- Display text before the loader -->
+    <div id="loader">
+      <img id="loader-title" src="logo_form_typo_black.png" alt="Ahl Logo" />
+      <div class="lds-dual-ring">
+        <!-- Insert the loading shape -->
+        <div class="lds-heart">
+          <div></div>
+        </div>
       </div>
     </div>
-  </div>
 
+    <script src="flutter_bootstrap.js" async></script>
 
-  <script src="main.dart.js" type="application/javascript"
+    <!-- old flutter loader-->
+    <!-- <script src="main.dart.js" type="application/javascript"
     onendload="document.getElementById('loader').remove();"></script>
-
   <script>
     window.addEventListener("load", function (ev) {
+      const serviceWorkerVersion = "{{flutter_service_worker_version}}";
       // Download main.dart.js
       _flutter.loader.load({
         serviceWorker: {
-          serviceWorkerVersion: flutter_service_worker_version,
+          serviceWorkerVersion: serviceWorkerVersion,
         },
         onEntrypointLoaded: function (engineInitializer) {
           engineInitializer.initializeEngine().then(function (appRunner) {
@@ -92,7 +116,6 @@
         },
       });
     });
-  </script>
-</body>
-
+  </script> -->
+  </body>
 </html>

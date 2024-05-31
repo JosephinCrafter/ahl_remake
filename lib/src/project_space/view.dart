@@ -31,103 +31,11 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView> {
 
   @override
   Widget build(BuildContext context) {
-    //todo: change projectCards to result from backend
-    final List<Widget> projectCards = List.generate(
-      3,
-      (int index) => AhlCard(
-        image: Expanded(
-          flex: 2,
-          child: Container(
-            margin: const EdgeInsets.all(Paddings.medium),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AhlAssets.cantineImage),
-                fit: BoxFit.cover,
-              ),
-              borderRadius: BorderRadius.circular(BorderSizes.small),
-            ),
-          ),
-        ),
-        label: const Text(
-          "Projet en cours",
-        ),
-        title: Text(
-          "$index Cantines",
-        ),
-        // description: const Text(
-        //   "Pour les enfants d'aujourd'hui",
-        // ),
-      ),
-    );
-
-    final List<Widget> children = [
-      // title
-      SectionTitle(
-        titleColor: AhlTheme.blackCharcoal,
-        title: AppLocalizations.of(context)!.projectsSpace,
-        subtitle: AppLocalizations.of(context)!.projectsSpaceSubtitle,
-      ),
-      // introduction
-      // Padding(
-      //   padding: const EdgeInsets.all(Paddings.medium),
-      //   child: Text(
-      //     AppLocalizations.of(context)!.projectsSpaceIntroduction,
-      //   ),
-      // ),
-
-      // prayers intention
-      Wrap(
-        // ProjectsCarousel(
-        direction: Axis.horizontal,
-        alignment: WrapAlignment.center,
-        children: projectCards,
-        //  List.from(
-        //   projectCards.map<Widget>(
-        //     (e) => Flexible(child: e),
-        //     // Align(
-        //     //     alignment: Alignment.center,
-        //     //     // width: 500,
-        //     //     child: e),
-        //   ),
-        // ),
-      ),
-
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          direction: Axis.horizontal,
-          spacing: 20,
-          runSpacing: 20,
-          // mainAxisSize: MainAxisSize.max,
-          // mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton(
-              onPressed: () {
-                // todo: implement project found rising
-              },
-              child: const Text('Soutenir un projet'),
-            ),
-            const SizedBox(width: Paddings.listSeparator),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              ),
-              onPressed: () {
-                // todo: implement all project page
-              },
-              child: Text("Voir tout les projet"),
-            ),
-          ],
-        ),
-      ),
-    ];
 
     return BlocBuilder<ProjectBloc, ArticleState<Article>>(
         bloc: context.read<ProjectBloc>(),
         builder: (context, state) {
-          print('state is type ${state.runtimeType}');
+          developer.log('state is type ${state.runtimeType}');
           // get projects from backends
           final projects = state.articles;
 
