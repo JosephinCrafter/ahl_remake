@@ -1,5 +1,4 @@
 import 'package:firebase_article/firebase_article.dart';
-import 'package:ahl/src/project_space/model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,7 +29,7 @@ class ProjectBloc extends Bloc<ArticleEvent, ArticleState<Article>> {
     add(InitializeArticleBlocEvent());
   }
 
-  ArticlesRepository<Article> _repo;
+  final ArticlesRepository<Article> _repo;
 
   void _onInitializeArticleBlocEvent(
     InitializeArticleBlocEvent event,

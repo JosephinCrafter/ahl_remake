@@ -1,16 +1,14 @@
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/project_space/bloc.dart';
-import 'package:ahl/src/project_space/model.dart';
 import 'package:ahl/src/utils/storage_utils.dart';
 import 'package:firebase_article/firebase_article.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:session_storage/session_storage.dart';
 
 import '../ahl_barrel.dart';
-import '../article_view/bloc/bloc.dart';
 import '../article_view/state/state.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';
@@ -22,150 +20,219 @@ class ProjectsSpaceView extends StatefulWidget {
   State<ProjectsSpaceView> createState() => _ProjectsSpaceViewState();
 }
 
-class _ProjectsSpaceViewState extends State<ProjectsSpaceView> {
+class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
+    with AutomaticKeepAliveClientMixin {
+  List<ArticleStorageUtils>? storageUtils;
+
+  ArticleState<Article>? state;
+
+  List<Article?>? projects;
+
   @override
   void initState() {
-    context.read<ProjectBloc>().add(const GetArticleListEvent(foldLength: 3));
     super.initState();
+    final ProjectBloc bloc = context.read<ProjectBloc>();
+
+    // Listen for state changes
+    bloc.stream.listen((incomingState) {
+      updateState(
+        incomingState,
+      );
+    });
+
+    // Fetch the initial project list
+    bloc.add(const GetArticleListEvent(foldLength: 3));
+
+    // Initialize state
+    state = bloc.state;
+  }
+
+  void updateState(ArticleState<Article> incomingState) {
+    setState(
+      () {
+        state = incomingState;
+        projects = state?.articles;
+        storageUtils = projects
+            ?.map<ArticleStorageUtils>(
+              (element) => ArticleStorageUtils(
+                article: element!,
+                collection: 'projects',
+              ),
+            )
+            .toList();
+      },
+    );
+
+    developer.log('state in projects has changed: $incomingState');
   }
 
   @override
+  bool get wantKeepAlive =>
+      storageUtils != null &&
+      storageUtils!.every(
+        (storageUtil) =>
+            storageUtil.cache[storageUtil.coverImageDataKey] != null,
+      );
+
+  @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     return BlocBuilder<ProjectBloc, ArticleState<Article>>(
-        bloc: context.read<ProjectBloc>(),
-        builder: (context, state) {
-          developer.log('state is type ${state.runtimeType}');
-          // get projects from backends
-          final projects = state.articles;
+      bloc: context.watch<ProjectBloc>(),
+      builder: (context, state) {
+        developer.log('state is type ${state.runtimeType}');
 
-          // transform project list into widgets
-          final List<Widget> projectCards = (projects != null)
-              ? projects.map<Widget>(
-                  (element) {
-                    if (element != null) {
-                      return FutureBuilder(
-                        future: ArticleStorageUtils(
-                                article: element, collection: 'projects')
-                            .getCoverImage(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return AhlCard(
-                              image: Expanded(
-                                flex: 2,
-                                child: Container(
-                                  margin: const EdgeInsets.all(Paddings.medium),
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: MemoryImage(
-                                        snapshot.data!,
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
-                                    borderRadius: BorderRadius.circular(
-                                        BorderSizes.small),
-                                  ),
-                                ),
+        // Transform project list into widgets
+        final projectCards = buildProjectCards(state.articles);
+
+        return SpaceView(
+          useGradient: false,
+          children: [
+            // Title
+            SectionTitle(
+              titleColor: AhlTheme.blackCharcoal,
+              title: AppLocalizations.of(context)!.projectsSpace,
+              subtitle: AppLocalizations.of(context)!.projectsSpaceSubtitle,
+            ),
+            // Introduction
+            Container(
+              constraints: BoxConstraints(
+                maxWidth:
+                    ContentSize.maxWidth(MediaQuery.of(context).size.width),
+              ),
+              padding: const EdgeInsets.all(Paddings.medium),
+              child: Text(
+                AppLocalizations.of(context)!.projectsSpaceIntroduction,
+              ),
+            ),
+            // Projects Carousel
+            Wrap(
+              alignment: WrapAlignment.center,
+              direction: Axis.horizontal,
+              runSpacing: Paddings.listSeparator,
+              spacing: Paddings.listSeparator,
+              children: projectCards,
+            ),
+            // Buttons
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                direction: Axis.horizontal,
+                spacing: 20,
+                runSpacing: 20,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      // Implement project found rising
+                    },
+                    child: const Text('Soutenir un projet'),
+                  ),
+                  const SizedBox(width: Paddings.listSeparator),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    onPressed: () {
+                      // Implement all project page
+                    },
+                    child: const Text("Voir tout les projet"),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  List<Widget> buildProjectCards(List<Article?>? projects) {
+    if (wantKeepAlive == false) {
+      return (projects != null)
+          ? projects.map<Widget>((project) {
+              if (project != null) {
+                final storageUtil = storageUtils?[projects.indexOf(project)];
+                return FutureBuilder(
+                  future: storageUtil?.getCoverImage(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return AhlCard(
+                        image: Expanded(
+                          flex: 2,
+                          child: Container(
+                            margin: const EdgeInsets.all(Paddings.medium),
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: MemoryImage(snapshot.data!),
+                                fit: BoxFit.cover,
                               ),
-                              label: Text(
-                                "${element?.relations?[0]['status']}",
-                              ),
-                              title: Text(
-                                "${element?.title}",
-                              ),
-                              // description: const Text(
-                              //   "Pour les enfants d'aujourd'hui",
-                              // ),
-                            );
-                          } else if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Align(
-                              alignment: Alignment.center,
-                              child: CircularProgressIndicator(),
-                            );
-                          } else {
-                            return const Align(
-                              alignment: Alignment.center,
-                              child: Icon(Icons.warning_rounded),
-                            );
-                          }
-                        },
+                              borderRadius:
+                                  BorderRadius.circular(BorderSizes.small),
+                            ),
+                          ),
+                        ),
+                        label: Text(
+                          "${project.relations?[0]['status']}",
+                        ),
+                        title: Text(
+                          "${project.title}",
+                        ),
+                      );
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const Align(
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(),
                       );
                     } else {
-                      return const SizedBox.shrink();
+                      developer.log(
+                          '[ProjectSpace] Error getting cover image: ${snapshot.error}');
+                      return const Align(
+                        alignment: Alignment.center,
+                        child: Icon(Icons.warning_rounded),
+                      );
                     }
                   },
-                ).toList()
-              : [];
-
-          return SpaceView(
-            useGradient: false,
-            children: [
-              // title
-              SectionTitle(
-                titleColor: AhlTheme.blackCharcoal,
-                title: AppLocalizations.of(context)!.projectsSpace,
-                subtitle: AppLocalizations.of(context)!.projectsSpaceSubtitle,
-              ),
-              // introduction
-              // Padding(
-              //   padding: const EdgeInsets.all(Paddings.medium),
-              //   child: Text(
-              //     AppLocalizations.of(context)!.projectsSpaceIntroduction,
-              //   ),
-              // ),
-
-              // prayers intention
-              Wrap(
-                // ProjectsCarousel(
-                direction: Axis.horizontal,
-                alignment: WrapAlignment.center,
-                children: projectCards,
-                //  List.from(
-                //   projectCards.map<Widget>(
-                //     (e) => Flexible(child: e),
-                //     // Align(
-                //     //     alignment: Alignment.center,
-                //     //     // width: 500,
-                //     //     child: e),
-                //   ),
-                // ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  direction: Axis.horizontal,
-                  spacing: 20,
-                  runSpacing: 20,
-                  // mainAxisSize: MainAxisSize.max,
-                  // mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        // todo: implement project found rising
-                      },
-                      child: const Text('Soutenir un projet'),
-                    ),
-                    const SizedBox(width: Paddings.listSeparator),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            }).toList()
+          : [];
+    } else {
+      return projects!.map<Widget>(
+        (project) {
+          final storageUtil = storageUtils?[projects.indexOf(project)];
+          return AhlCard(
+            image: Expanded(
+              flex: 2,
+              child: Container(
+                margin: const EdgeInsets.all(Paddings.medium),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: MemoryImage(
+                      decodeUint8ListFromString(
+                        storageUtil!.cache[storageUtil.coverImageDataKey]!,
                       ),
-                      onPressed: () {
-                        // todo: implement all project page
-                      },
-                      child: Text("Voir tout les projet"),
                     ),
-                  ],
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(BorderSizes.small),
                 ),
               ),
-            ],
+            ),
+            label: Text(
+              "${project?.relations?[0]['status']}",
+            ),
+            title: Text(
+              "${project?.title}",
+            ),
           );
-        });
+        },
+      ).toList();
+    }
   }
 }
 
@@ -184,7 +251,7 @@ class _ProjectsCarouselState extends State<ProjectsCarousel> {
   late PageController _pageController;
   late ScrollController _listController;
   late int _currentIndex;
-  int _opacity = 0x25;
+  final int _opacity = 0x25;
 
   bool _isHovered = false;
 
@@ -246,44 +313,6 @@ class _ProjectsCarouselState extends State<ProjectsCarousel> {
       constraints: const BoxConstraints(maxHeight: 493 + 15 * 2 + 10),
       child: Stack(
         children: [
-          // Align(
-          //   alignment: Alignment.centerLeft,
-          //   child: InkWell(
-
-          //     onTap: () {
-          //       updateCurrentIndex(_currentIndex + 1);
-          //     },
-          //     onHover: (value) => isHovered(value),
-          //     child: Container(
-          //       constraints: BoxConstraints.loose(
-          //           Size.square(Theme.of(context).iconTheme.size!)),
-          //       child: Icon(
-          //         Icons.chevron_left_rounded,
-          //         size: _isHovered
-          //             ? Theme.of(context).iconTheme.size! * 1.4
-          //             : Theme.of(context).iconTheme.size,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Container(
-          //   constraints: const BoxConstraints.expand(),
-          //   child: Container(
-          //     child: IconButton(
-          //       alignment: Alignment.centerRight,
-          //       icon: InkWell(
-          //         // todo: implement what tapping outside carousel do.
-          //         onTap: () {},
-          //         onHover: (value) => isHovered(value),
-          //         child: const Icon(
-          //           Icons.chevron_right_rounded,
-          //         ),
-          //       ),
-          //       onPressed: () {},
-          //     ),
-          //   ),
-          // ),
-
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -423,7 +452,7 @@ class _AhlCardState extends State<AhlCard> {
               setHoveringTo(value);
             },
             onTap: () {
-              // todo: lead to article view
+              // Implement navigation to article view
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
