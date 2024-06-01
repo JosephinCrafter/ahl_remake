@@ -3,10 +3,7 @@ import "package:fake_cloud_firestore/fake_cloud_firestore.dart";
 import "package:firebase_article/firebase_article.dart" as fa;
 import "package:firebase_storage/firebase_storage.dart";
 import "package:firebase_storage_mocks/firebase_storage_mocks.dart";
-import "package:flutter/material.dart";
-import "package:flutter_test/flutter_test.dart";
 
-import "package:ahl/src/article_view/view/article_view.dart";
 
 FirebaseFirestore fakeFirestore = FakeFirebaseFirestore();
 FirebaseStorage fakeStorage = MockFirebaseStorage();

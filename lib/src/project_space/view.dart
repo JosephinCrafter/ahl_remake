@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/project_space/bloc.dart';
 import 'package:ahl/src/utils/storage_utils.dart';
@@ -148,6 +150,30 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
     );
   }
 
+  Widget buildCard(BuildContext context, Uint8List imageData, Article project) {
+    return AhlCard(
+      image: Expanded(
+        flex: 2,
+        child: Container(
+          margin: const EdgeInsets.all(Paddings.medium),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: MemoryImage(imageData),
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.circular(BorderSizes.small),
+          ),
+        ),
+      ),
+      label: Text(
+        "${project.relations?[0]['status']}",
+      ),
+      title: Text(
+        "${project.title}",
+      ),
+    );
+  }
+
   List<Widget> buildProjectCards(List<Article?>? projects) {
     if (wantKeepAlive == false) {
       return (projects != null)
@@ -158,27 +184,10 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
                   future: storageUtil?.getCoverImage(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return AhlCard(
-                        image: Expanded(
-                          flex: 2,
-                          child: Container(
-                            margin: const EdgeInsets.all(Paddings.medium),
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: MemoryImage(snapshot.data!),
-                                fit: BoxFit.cover,
-                              ),
-                              borderRadius:
-                                  BorderRadius.circular(BorderSizes.small),
-                            ),
-                          ),
-                        ),
-                        label: Text(
-                          "${project.relations?[0]['status']}",
-                        ),
-                        title: Text(
-                          "${project.title}",
-                        ),
+                      return buildCard(
+                        context,
+                        snapshot.data!,
+                        project,
                       );
                     } else if (snapshot.connectionState ==
                         ConnectionState.waiting) {
@@ -205,31 +214,12 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
       return projects!.map<Widget>(
         (project) {
           final storageUtil = storageUtils?[projects.indexOf(project)];
-          return AhlCard(
-            image: Expanded(
-              flex: 2,
-              child: Container(
-                margin: const EdgeInsets.all(Paddings.medium),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: MemoryImage(
-                      decodeUint8ListFromString(
-                        storageUtil!.cache[storageUtil.coverImageDataKey]!,
-                      ),
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.circular(BorderSizes.small),
-                ),
+          return buildCard(
+              context,
+              decodeUint8ListFromString(
+                storageUtil!.cache[storageUtil.coverImageDataKey]!,
               ),
-            ),
-            label: Text(
-              "${project?.relations?[0]['status']}",
-            ),
-            title: Text(
-              "${project?.title}",
-            ),
-          );
+              project!);
         },
       ).toList();
     }

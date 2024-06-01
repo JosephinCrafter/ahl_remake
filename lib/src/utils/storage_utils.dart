@@ -24,9 +24,9 @@ final class ArticleStorageUtils {
     required this.collection,
     Reference? storageRef,
   })  : _article = article,
-        _coverImageUrlKey = '${article.id}_coverImageUrl',
-        _coverImageDataKey = '${article.id}_coverImageData',
-        _contentDataKey = '${article.id}_contentData',
+        coverImageUrlKey = '${article.id}_coverImageUrl',
+        coverImageDataKey = '${article.id}_coverImageData',
+        contentDataKey = '${article.id}_contentData',
         _storage = storageRef ?? storage;
 
   /// The article on which this utils perform
@@ -36,13 +36,13 @@ final class ArticleStorageUtils {
   final String collection;
 
   /// Key to trigger cover image data
-  final String _coverImageDataKey;
+  final String coverImageDataKey;
 
   // key to trigger cover image url from cache.
-  final String _coverImageUrlKey;
+  final String coverImageUrlKey;
 
   // key to trigger cover image url from cache.
-  final String _contentDataKey;
+  final String contentDataKey;
 
   // Firebase storage instance
   final Reference _storage;
@@ -53,7 +53,7 @@ final class ArticleStorageUtils {
   Future<String?> getCoverImageUrl() async {
     // Cache check
 
-    String? coverImageUrl = cache[_coverImageUrlKey];
+    String? coverImageUrl = cache[coverImageUrlKey];
     if (coverImageUrl != null) {
       return coverImageUrl;
     }
@@ -68,7 +68,7 @@ final class ArticleStorageUtils {
 
       // storing to cache
       coverImageUrl = url;
-      cache[_coverImageUrlKey] = coverImageUrl;
+      cache[coverImageUrlKey] = coverImageUrl;
     } catch (e) {
       log('[storage] Error getting coverImage: e');
       coverImageUrl = null;
@@ -79,15 +79,15 @@ final class ArticleStorageUtils {
 
   Future<Uint8List?> getCoverImage() async {
     Uint8List? data;
-    String? dataString = cache[_coverImageDataKey];
+    String? dataString = cache[coverImageDataKey];
     //cache check
     try {
-      data = (dataString != null) ? decodeFromString(dataString) : null;
+      data = (dataString != null) ? decodeUint8ListFromString(dataString) : null;
       if (data != null) {
         return data;
       }
     } catch (e) {
-      log('[Sha redPreferences] Error getting data: $e');
+      log('[cache] Error getting data: $e');
     }
 
     // perform truth reading
@@ -100,7 +100,7 @@ final class ArticleStorageUtils {
       log('Image got: ${heroHeaderImageRef.name} ');
 
       // write data to cache
-      cache[_coverImageDataKey] = encodeToString(data!);
+      cache[coverImageDataKey] = encodeUint8ListToString(data!);
     } catch (e) {
       log('Error loading image: $e');
       data = Uint8List(0);
@@ -112,7 +112,7 @@ final class ArticleStorageUtils {
   /// Get the content of the article.
   Future<http.Response?> getContent() async {
     // cache
-    String? contentString = cache[_contentDataKey];
+    String? contentString = cache[contentDataKey];
     http.Response? response =
         (contentString != null) ? decodeStringToResponse(contentString) : null;
     if (response != null) {
@@ -127,7 +127,7 @@ final class ArticleStorageUtils {
     final String url = await contentRef.getDownloadURL();
 
     response = await http.get(Uri.parse(url));
-    cache[_contentDataKey] = encodeResponseToString(response);
+    cache[contentDataKey] = encodeResponseToString(response);
 
     return response;
   }
@@ -203,12 +203,12 @@ http.Response decodeStringToResponse(String encodedString) {
   );
 }
 
-String encodeToString(Uint8List data) {
+String encodeUint8ListToString(Uint8List data) {
   // Use the built-in converter to transform the list into a base64 encoded string
   return base64Encode(data);
 }
 
-Uint8List decodeFromString(String encodedString) {
+ Uint8List decodeUint8ListFromString(String encodedString) {
   // Use the built-in converter to decode the base64 string back into a Uint8List
   return base64Decode(encodedString);
 }

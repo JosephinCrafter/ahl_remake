@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      key: Key('main_scroll_view'),
+      key: const Key('main_scroll_view'),
       builder: (BuildContext context, BoxConstraints constraints) {
         return Scaffold(
           endDrawer: constraints.maxWidth <= ScreenSizes.large

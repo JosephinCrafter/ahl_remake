@@ -1,5 +1,4 @@
 // Test the data storage mechanism and triggering from firestore.
-import 'package:ahl/src/article_view/data/data.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

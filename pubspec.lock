@@ -308,9 +308,11 @@ packages:
   firebase_article:
     dependency: "direct main"
     description:
-      path: "../firebase_article"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "5c4da1946d0eb0d673c39aa1016eb46c79934d11"
+      url: "https://github.com/Josephincrafter/firebase_article.git"
+    source: git
     version: "0.1.1"
   firebase_core:
     dependency: "direct main"

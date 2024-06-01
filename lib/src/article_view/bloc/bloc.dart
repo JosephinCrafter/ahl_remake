@@ -38,7 +38,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
     add(InitializeArticleBlocEvent());
   }
 
-  fire_art.ArticlesRepository<fire_art.Article> _repo;
+  final fire_art.ArticlesRepository<fire_art.Article> _repo;
 
   void _onInitializeArticleBlocEvent(
     InitializeArticleBlocEvent event,

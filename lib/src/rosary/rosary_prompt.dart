@@ -19,7 +19,7 @@ class RosaryPrompt extends StatelessWidget {
       title: const Text(
         "Chapelet du jour",
       ),
-      subtitle: Text(
+      subtitle: const Text(
         "Mediter la vie de Jesus avec Marie",
       ),
     );

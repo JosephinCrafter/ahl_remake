@@ -1,7 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
 
 import 'dart:convert';
 import 'dart:developer' as developer;
@@ -10,8 +7,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:markdown_widget/markdown_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import "package:firebase_article/firebase_article.dart";
 import 'package:url_launcher/url_launcher.dart';
 
@@ -340,7 +335,7 @@ class _ArticleTileState extends State<ArticleTile> {
                                   onPressed: () {
                                     goToReadingPage();
                                   },
-                                  child: Text('Lire'),
+                                  child: const Text('Lire'),
                                 ),
                               ),
                             ],

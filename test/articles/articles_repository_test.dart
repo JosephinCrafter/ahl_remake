@@ -15,7 +15,6 @@
 // Because, this class interact directly to the backend api. It's function
 // should return Future objects.
 
-import 'package:ahl/src/article_view/data/data.dart';
 import 'package:ahl/src/firebase_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';

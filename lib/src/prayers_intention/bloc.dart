@@ -27,7 +27,7 @@ class PrayerRequestBloc extends Bloc<PrayerRequestEvent, PrayerRequestState> {
   static const PrayerRequestState _initialState = PrayerRequestInitialState();
 
   /// PrayerRequestrepo
-  PrayerRequestRepo _repo;
+  final PrayerRequestRepo _repo;
 
   void _onInitializedEvent(PrayerRequestEvent event, Emitter emit) {
     if (state != _initialState) {

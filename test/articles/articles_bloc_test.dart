@@ -3,16 +3,10 @@ import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/state/state.dart';
 import 'package:ahl/src/firebase_constants.dart';
 import 'package:firebase_article/firebase_article.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bloc_test/bloc_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
 
-@GenerateNiceMocks([MockSpec<ArticlesRepository>()])
-import 'articles_bloc_test.mocks.dart';
 
 void main() {
 
@@ -48,7 +42,7 @@ void main() {
       blocTest<ArticleBloc, ArticleState>(
         'getting highlighted article',
         build: () => ArticleBloc(repo: mockRepo),
-        act: (ArticleBloc bloc) => bloc..add(GetHighlightArticleEvent()),
+        act: (ArticleBloc bloc) => bloc..add(const GetHighlightArticleEvent()),
         expect: () => [
           const ArticleState(
             status: ArticleStatus.initial,

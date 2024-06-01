@@ -1,6 +1,6 @@
 part of 'prayer_request.dart';
 
-final option = const [
+const option = [
   "Messe",
   "Chapelet",
   "Vêpre",

@@ -88,7 +88,7 @@ class _PrayersIntentionRequestViewState
       });
 
   // test to setup animation
-  bool _isGoingForward = true;
+  final bool _isGoingForward = true;
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +231,7 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
                         const EdgeInsets.all(Margins.medium),
                     //: const EdgeInsets.all(Margins.mobileSmall),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(BorderSizes.big),
                     ),
                     child: Column(
@@ -260,7 +260,7 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
                               showSelectedIcon: true,
                               selected: selected,
                               multiSelectionEnabled: false,
-                              selectedIcon: Icon(Icons.done)
+                              selectedIcon: const Icon(Icons.done)
                                   .animate()
                                   .scale(
                                     duration: AhlDurations.subtle,
@@ -291,7 +291,7 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
                           padding: const EdgeInsets.only(
                             bottom: Paddings.listSeparator,
                           ),
-                          child: Text("Choisir la date:"),
+                          child: const Text("Choisir la date:"),
                         ),
                         Container(
                           padding: const EdgeInsets.only(
@@ -443,7 +443,7 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                     margin: const EdgeInsets.symmetric(vertical: Paddings.big),
                     padding: const EdgeInsets.all(Paddings.medium),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Column(
@@ -581,7 +581,7 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
     Widget contentView = Container(
       padding: const EdgeInsets.all(Margins.medium),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(38),
       ),
       child: Column(

@@ -148,7 +148,7 @@ class _PromptCardState extends State<PromptCard>
                   constraints:
                       BoxConstraints.expand(height: widget.bottomHeight ?? 90),
                   color: widget.backgroundColor ??
-                      Theme.of(context).colorScheme.background,
+                      Theme.of(context).colorScheme.surface,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,

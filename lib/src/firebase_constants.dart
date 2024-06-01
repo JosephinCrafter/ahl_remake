@@ -86,9 +86,7 @@ Future<void> _initialize() async {
         await firebaseApp;
       }
 
-      _firestore
-          .enablePersistence(const PersistenceSettings(synchronizeTabs: true));
-// persistence data settings
+      // persistence data settings
       _firestore.settings = const Settings(
         persistenceEnabled: true,
       );
