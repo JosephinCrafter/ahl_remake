@@ -12,6 +12,7 @@ import 'package:session_storage/session_storage.dart';
 
 import '../ahl_barrel.dart';
 import '../article_view/state/state.dart';
+import '../pages/articles/article_page.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';
 
@@ -74,7 +75,8 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
       storageUtils!.every(
         (storageUtil) =>
             storageUtil.cache[storageUtil.coverImageDataKey] != null,
-      );
+      ) &&
+      state?.status == ArticleStatus.succeed;
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +139,7 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     ),
                     onPressed: () {
-                      // Implement all project page
+                      Navigator.of(context).pushNamed(ArticlesPage.routeName);
                     },
                     child: const Text("Voir tout les projet"),
                   ),

@@ -109,22 +109,15 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
               ),
             ),
           );
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            alignment: Alignment.center,
-            child: const CircularProgressIndicator(),
-          );
         } else {
           return Container(
+            height: 310,
+            margin: const EdgeInsets.symmetric(
+              horizontal: Margins.medium,
+            ),
             alignment: Alignment.center,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.warning_rounded,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-                Text('${snapshot.error}')
-              ],
+            child: const CircularProgressIndicator(
+              color: Colors.red,
             ),
           );
         }
@@ -145,6 +138,7 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
     );
   }
 
+  //
   bool keepAlive = false;
   @override
   bool get wantKeepAlive {

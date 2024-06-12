@@ -1,7 +1,10 @@
 import "package:ahl/src/ahl_barrel.dart";
 import "package:ahl/src/utils/breakpoint_resolver.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter/material.dart";
+
+import 'package:http/http.dart' as http;
 
 class PartnersView extends StatefulWidget {
   const PartnersView({super.key});
@@ -10,7 +13,13 @@ class PartnersView extends StatefulWidget {
   State<PartnersView> createState() => _PartnersViewState();
 }
 
-class _PartnersViewState extends State<PartnersView> {
+class _PartnersViewState extends State<PartnersView>
+    with AutomaticKeepAliveClientMixin {
+  Uint8List? imageData;
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,9 +49,8 @@ class _PartnersViewState extends State<PartnersView> {
               children: [
                 Container(
                   constraints: BoxConstraints.tight(const Size.square(100)),
-                  //todo: implement partner logo
-                  // child: Image.network(),
-                  child: const Placeholder(),
+                  child: Image.network(
+                      "https://firebasestorage.googleapis.com/v0/b/aujourdhuilavenir.appspot.com/o/partners%2Fmadia_logo.png?alt=media&token=b6c38793-6cc5-45fc-8d8d-cd6a36a80091"),
                 ),
               ],
             )

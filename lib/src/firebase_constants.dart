@@ -39,20 +39,26 @@ const int hostingPort = 5000;
 FirebaseApp? _firebaseAppInstance;
 
 /// Get firebase initialization
-Future<FirebaseApp> get firebaseApp async {
+Future<FirebaseApp?> get firebaseApp async {
   if (_firebaseAppInstance == null) {
-    // firebase initialization
-    final FirebaseApp firebaseApp = await Firebase.initializeApp(
-      // doesn't await this allows the app to run without firebase
-      options: DefaultFirebaseOptions.currentPlatform,
-    ).then((value) {
-      return value;
-    });
+    try {
+      // firebase initialization
+      final FirebaseApp firebaseApp = await Firebase.initializeApp(
+        // doesn't await this allows the app to run without firebase
+        options: DefaultFirebaseOptions.currentPlatform,
+      ).then((value) {
+        return value;
+      });
 
-    // env update
-    _firebaseAppInstance = firebaseApp;
+      // env update
+      _firebaseAppInstance = firebaseApp;
 
-    return firebaseApp;
+      return firebaseApp;
+    } catch (e) {
+      _isInitialized = false;
+      _firebaseAppInstance = null;
+      return null;
+    }
   } else {
     return _firebaseAppInstance!;
   }
