@@ -13,14 +13,15 @@ class RosaryPrompt extends StatelessWidget {
     // var image = imageRef.getData();
 
     return PromptCard(
+      callback: () => Navigator.of(context).pushNamed(RosaryPage.routeName),
       backgroundImage: AssetImage(
         AhlAssets.rosaryHeroHeader,
       ),
-      title: const Text(
-        "Chapelet du jour",
+      title:  Text(
+        AppLocalizations.of(context)!.todaysRosary,
       ),
-      subtitle: const Text(
-        "Mediter la vie de Jesus avec Marie",
+      subtitle:  Text(
+       AppLocalizations.of(context)!.rosarySlogan,
       ),
     );
   }

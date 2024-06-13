@@ -39,6 +39,9 @@
     "october",
     "november",
     "december",
-    "whoWeAre"
+    "whoWeAre",
+    "allArticles",
+    "todaysRosary",
+    "rosarySlogan"
   ]
 }
