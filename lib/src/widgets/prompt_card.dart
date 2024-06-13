@@ -10,6 +10,7 @@ class PromptCard extends StatefulWidget {
     this.bottomHeight,
     this.backgroundColor,
     this.image,
+    this.callback,
   }) : assert(
             backgroundImage == null && image != null || backgroundImage != null,
             """One of backgroundImage or image should be provided.""");
@@ -25,6 +26,8 @@ class PromptCard extends StatefulWidget {
   final Widget? subtitle;
   final double? bottomHeight;
   final Color? backgroundColor;
+
+  final VoidCallback? callback;
 
   @override
   State<PromptCard> createState() => _PromptCardState();
@@ -92,7 +95,7 @@ class _PromptCardState extends State<PromptCard>
       elevation: _elevation,
       child: InkWell(
         onHover: _onHoverCallBack,
-        onTap: () {},
+        onTap: widget.callback ?? () {},
         child: Container(
           constraints:
               widget.constraints ?? BoxConstraints.loose(const Size(342, 380)),
