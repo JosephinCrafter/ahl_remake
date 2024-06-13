@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
-class ArticlesPage extends StatefulWidget {
-  const ArticlesPage({super.key});
+class WhoWeArePage extends StatefulWidget {
+  const WhoWeArePage({super.key});
 
-  static const String routeName = '/articles';
+  static const String routeName = '/whoWeAre';
 
   @override
-  State<ArticlesPage> createState() => _ArticlesPageState();
+  State<WhoWeArePage> createState() => _WhoWeArePageState();
 }
 
-class _ArticlesPageState extends State<ArticlesPage> {
+class _WhoWeArePageState extends State<WhoWeArePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
         child: Text(
-          'Project Space',
+          'WhoWeAre Space',
           style: Theme.of(context).textTheme.displayLarge,
         ),
       ),

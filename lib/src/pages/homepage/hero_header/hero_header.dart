@@ -1,3 +1,5 @@
+import 'package:ahl/src/pages/prayers/prayers_page.dart';
+import 'package:ahl/src/pages/who_we_are/saints.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,9 +16,9 @@ class HeroHeaderView extends StatelessWidget {
         if (constraints.maxWidth <= ScreenSizes.large) {
           // HeroHeader fo mobile
 
-          return const MobileHeroHeader();
+          return MobileHeroHeader();
         } else {
-          return const DefaultHeroHeader();
+          return DefaultHeroHeader();
         }
       },
     );
@@ -24,7 +26,9 @@ class HeroHeaderView extends StatelessWidget {
 }
 
 class MobileHeroHeader extends StatefulWidget {
-  const MobileHeroHeader({super.key});
+  const MobileHeroHeader({
+    super.key,
+  });
 
   @override
   State<MobileHeroHeader> createState() => _MobileHeroHeaderState();
@@ -58,8 +62,79 @@ class _MobileHeroHeaderState extends State<MobileHeroHeader> {
   }
 }
 
+class HeroActions extends StatefulWidget {
+  const HeroActions({
+    super.key,
+    this.primaryCallback,
+    this.secondaryCallback,
+  });
+
+  final VoidCallback? primaryCallback;
+  final VoidCallback? secondaryCallback;
+
+  @override
+  State<HeroActions> createState() => _HeroActionsState();
+}
+
+class _HeroActionsState extends State<HeroActions> {
+  void primaryAction() {
+    Navigator.pushNamed(context, PrayersPage.routeName);
+  }
+
+  void secondaryAction() {
+    Navigator.pushNamed(context, WhoWeArePage.routeName);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 50),
+      child: Wrap(
+        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        // direction: ,
+        spacing: 20,
+        runSpacing: 20,
+        children: [
+          OutlinedButton(
+            onPressed: widget.secondaryCallback ?? secondaryAction,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Paddings.small,
+              ),
+              child: Text(
+                AppLocalizations.of(context)!.aboutUs,
+                // overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: widget.primaryCallback ?? primaryAction,
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              backgroundColor: Theme.of(context).primaryColor,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Paddings.small,
+              ),
+              child: Text(
+                AppLocalizations.of(context)!.priesSpace,
+                // overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class DefaultHeroHeader extends StatefulWidget {
-  const DefaultHeroHeader({super.key});
+  const DefaultHeroHeader({
+    super.key,
+  });
 
   @override
   State<DefaultHeroHeader> createState() => _DefaultHeroHeaderState();
@@ -186,48 +261,7 @@ class HeroTextView extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: explanationTheme,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 50),
-                child: Wrap(
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  // direction: ,
-                  spacing: 20,
-                  runSpacing: 20,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Paddings.small,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.aboutUs,
-                          // overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor:
-                            Theme.of(context).colorScheme.onPrimary,
-                        backgroundColor: Theme.of(context).primaryColor,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Paddings.small,
-                        ),
-                        child: Text(
-                          AppLocalizations.of(context)!.priesSpace,
-                          // overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
+              const HeroActions(),
             ],
           ),
         ),

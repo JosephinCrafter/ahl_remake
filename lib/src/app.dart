@@ -1,4 +1,11 @@
+import 'dart:developer';
+
 import 'package:ahl/src/article_view/bloc/bloc.dart';
+import 'package:ahl/src/pages/prayers/prayers_page.dart';
+import 'package:ahl/src/pages/projects/projects_page.dart';
+import 'package:ahl/src/pages/rosary/rosary_page.dart';
+import 'package:ahl/src/pages/saints/saints.dart';
+import 'package:ahl/src/pages/who_we_are/saints.dart';
 import 'package:ahl/src/project_space/bloc.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +15,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'firebase_constants.dart';
-import 'pages/articles/article_page.dart';
+import 'pages/articles/articles_page.dart';
 import 'pages/homepage/homepage.dart';
 import 'theme/theme.dart';
 import 'sample_feature/sample_item_details_view.dart';
@@ -128,9 +135,19 @@ class _MyAppState extends State<MyApp> {
                         return const SampleItemDetailsView();
                       case HomePage.routeName:
                         return const HomePage();
+                      case ProjectsPage.routeName:
+                        return const ProjectsPage();
+                      case PrayersPage.routeName:
+                        return const PrayersPage();
+                      case RosaryPage.routeName:
+                        return const RosaryPage();
+                      case SaintsPage.routeName:
+                        return const SaintsPage();
                       case ArticlesPage.routeName:
-                        return const ArticlesPage(
-                        );
+                        return const ArticlesPage();
+                        case WhoWeArePage.routeName:
+                        return const WhoWeArePage();
+                      // todo: add 40 not found page
                       default:
                         return widget.home ?? const HomePage();
                     }

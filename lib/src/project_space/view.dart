@@ -12,7 +12,7 @@ import 'package:session_storage/session_storage.dart';
 
 import '../ahl_barrel.dart';
 import '../article_view/state/state.dart';
-import '../pages/articles/article_page.dart';
+import '../pages/articles/articles_page.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';
 
@@ -81,74 +81,73 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocBuilder<ProjectBloc, ArticleState<Article>>(
-      bloc: context.watch<ProjectBloc>(),
-      builder: (context, state) {
-        developer.log('state is type ${state.runtimeType}');
 
-        // Transform project list into widgets
-        final projectCards = buildProjectCards(state.articles);
+    if (state == null) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: Paddings.big),
+        child: LinearProgressIndicator(),
+      );
+    }
+    // Transform project list into widgets
+    final projectCards = buildProjectCards(state?.articles);
 
-        return SpaceView(
-          useGradient: false,
-          children: [
-            // Title
-            SectionTitle(
-              titleColor: AhlTheme.blackCharcoal,
-              title: AppLocalizations.of(context)!.projectsSpace,
-              subtitle: AppLocalizations.of(context)!.projectsSpaceSubtitle,
-            ),
-            // Introduction
-            Container(
-              constraints: BoxConstraints(
-                maxWidth:
-                    ContentSize.maxWidth(MediaQuery.of(context).size.width),
+    return SpaceView(
+      useGradient: false,
+      children: [
+        // Title
+        SectionTitle(
+          titleColor: AhlTheme.blackCharcoal,
+          title: AppLocalizations.of(context)!.projectsSpace,
+          subtitle: AppLocalizations.of(context)!.projectsSpaceSubtitle,
+        ),
+        // Introduction
+        Container(
+          constraints: BoxConstraints(
+            maxWidth: ContentSize.maxWidth(MediaQuery.of(context).size.width),
+          ),
+          padding: const EdgeInsets.all(Paddings.medium),
+          child: Text(
+            AppLocalizations.of(context)!.projectsSpaceIntroduction,
+          ),
+        ),
+        // Projects Carousel
+        Wrap(
+          alignment: WrapAlignment.center,
+          direction: Axis.horizontal,
+          runSpacing: Paddings.listSeparator,
+          spacing: Paddings.listSeparator,
+          children: projectCards,
+        ),
+        // Buttons
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Wrap(
+            alignment: WrapAlignment.center,
+            direction: Axis.horizontal,
+            spacing: 20,
+            runSpacing: 20,
+            children: [
+              TextButton(
+                onPressed: () {
+                  // Implement project found rising
+                },
+                child: const Text('Soutenir un projet'),
               ),
-              padding: const EdgeInsets.all(Paddings.medium),
-              child: Text(
-                AppLocalizations.of(context)!.projectsSpaceIntroduction,
+              const SizedBox(width: Paddings.listSeparator),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(ArticlesPage.routeName);
+                },
+                child: const Text("Voir tout les projet"),
               ),
-            ),
-            // Projects Carousel
-            Wrap(
-              alignment: WrapAlignment.center,
-              direction: Axis.horizontal,
-              runSpacing: Paddings.listSeparator,
-              spacing: Paddings.listSeparator,
-              children: projectCards,
-            ),
-            // Buttons
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                direction: Axis.horizontal,
-                spacing: 20,
-                runSpacing: 20,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      // Implement project found rising
-                    },
-                    child: const Text('Soutenir un projet'),
-                  ),
-                  const SizedBox(width: Paddings.listSeparator),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(ArticlesPage.routeName);
-                    },
-                    child: const Text("Voir tout les projet"),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        );
-      },
+            ],
+          ),
+        ),
+      ],
     );
   }
 

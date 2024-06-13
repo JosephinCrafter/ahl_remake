@@ -27,14 +27,14 @@ dependencies:
     sdk: flutter
   flutter_web_plugins:
     sdk: flutter
-  flutter_markdown: ^0.6.18+3
+  flutter_markdown: ^0.7.2
   #google_fonts: ^6.1.0
   intl: any
   json_annotation: ^4.8.1
   transparent_image: ^2.0.1
   web: any
   equatable: ^2.0.5
-  formz: ^0.6.1
+  formz: ^0.7.0
   markdown_widget: ^2.3.2+3
   provider: ^6.1.1
   flame: ^1.15.0
@@ -68,10 +68,6 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
-    - assets/audio/
-    - assets/audio/music/
-    - assets/audio/sfx/
-    - assets/tiles/
     - assets/content.md
   fonts:
     - family: Butler
