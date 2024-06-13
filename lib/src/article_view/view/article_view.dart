@@ -1,3 +1,4 @@
+import 'package:ahl/src/pages/articles/articles_page.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:convert';
@@ -21,6 +22,7 @@ import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 
 import '../../utils/storage_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 part 'article_content_view.dart';
 part 'highlight_article_tile.dart';

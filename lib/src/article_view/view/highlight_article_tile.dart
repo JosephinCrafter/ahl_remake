@@ -86,9 +86,12 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
                                   onPressed: () {
-                                    // todo: go to articles page
+                                    Navigator.of(context)
+                                        .pushNamed(ArticlesPage.routeName);
                                   },
-                                  child: const Text("Tous les articles"),
+                                  child: Text(
+                                    AppLocalizations.of(context)!.allArticles,
+                                  ),
                                 ),
                               ),
                             ],
