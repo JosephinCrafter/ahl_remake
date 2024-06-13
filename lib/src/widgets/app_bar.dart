@@ -29,8 +29,13 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
   final EdgeInsetsGeometry? padding;
   final Widget? bottomBar;
 
-  @override
-  Widget build(BuildContext context) {
+  Widget buildContentWidgets(
+    BuildContext context, {
+    Widget? leadingTitle,
+    List<Widget>? actions,
+    Widget? ending,
+    Widget? bottomBar,
+  }) {
     // make logo a button to home
     Widget title = InkWell(
       onTap: () => Navigator.of(context)
@@ -57,58 +62,97 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
             ? TextBaseline.ideographic
             : null
         : TextBaseline.alphabetic;
+
+    Widget leadingTitle0 = leadingTitle ??
+        Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (Navigator.of(context).canPop())
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.arrow_back_rounded)),
+              Expanded(
+                child: title,
+              ),
+            ],
+          ),
+        );
+
+    return Container(
+      constraints: computedConstraint,
+      color: color,
+      padding: computedPadding,
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            textBaseline: computedTextBaseLine,
+            crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              leadingTitle0,
+              ...?actions,
+              ending ?? const AhlMenuButton(),
+            ],
+          ),
+          bottomBar ?? const SizedBox.shrink(),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // make logo a button to home
+    Widget title = InkWell(
+      onTap: () => Navigator.of(context)
+          .pushNamedAndRemoveUntil(HomePage.routeName, (route) => false),
+      child: this.title,
+    );
+
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth <= ScreenSizes.large) {
           // use the mobile appBar
-          return Container(
-            constraints: computedConstraint,
-            color: color,
-            padding: computedPadding,
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  textBaseline: computedTextBaseLine,
-                  crossAxisAlignment:
-                      crossAxisAlignment ?? CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    title,
-                    ...actions,
-                    ending ?? const AhlMenuButton(),
-                  ],
-                ),
-                bottomBar ?? const SizedBox.shrink(),
-              ],
-            ),
+          return buildContentWidgets(
+            context,
+            actions: actions,
+            ending: ending ?? const AhlMenuButton(),
+            bottomBar: bottomBar ?? const SizedBox.shrink(),
           );
         } else {
           // Use the default web appBar
-          return Container(
-            constraints: computedConstraint,
-            color: color,
-            padding: computedPadding,
-            alignment: Alignment.center,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  textBaseline: computedTextBaseLine,
-                  crossAxisAlignment:
-                      crossAxisAlignment ?? CrossAxisAlignment.baseline,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    title,
-                    ...actions,
-                  ],
-                ),
-                bottomBar ?? const SizedBox.shrink(),
-              ],
-            ),
+          return buildContentWidgets(
+            context,
+            ending: const SizedBox.shrink(),
           );
+          // return Container(
+          //   constraints: computedConstraint,
+          //   color: color,
+          //   padding: computedPadding,
+          //   alignment: Alignment.center,
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     children: [
+          //       Row(
+          //         textBaseline: computedTextBaseLine,
+          //         crossAxisAlignment:
+          //             crossAxisAlignment ?? CrossAxisAlignment.baseline,
+          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //         children: [
+          //           leadingTitle,
+          //           ...actions,
+          //         ],
+          //       ),
+          //       bottomBar ?? const SizedBox.shrink(),
+          //     ],
+          //   ),
+          // );
         }
       },
     );
@@ -136,7 +180,7 @@ class AhlMenuButton extends StatelessWidget {
         ),
       );
     } else {
-      return  const SizedBox.shrink();
+      return const SizedBox.shrink();
     }
   }
 }
