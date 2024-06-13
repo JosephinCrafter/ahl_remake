@@ -27,31 +27,46 @@ class AhlLogo extends StatelessWidget {
             fontSize: 22,
             color: foregroundColor,
           ),
-      child: Row(
-        textBaseline: TextBaseline.alphabetic,
-        crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
-        children: [
-          leading ??
-              Container(
-                constraints: BoxConstraints.tight(size),
-                child: Image.asset(
-                  AhlAssets.logoForm,
-                  fit: BoxFit.contain,
-                ),
-              ),
-          separation ??
-              const SizedBox(
-                width: 15,
-              ),
-          title ??
-              Text(
-                "Ajourd'hui l'avenir",
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                      fontFamily: 'Butler',
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxWidth: 250,
+        ),
+        child: Row(
+          textBaseline: TextBaseline.alphabetic,
+          crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
+          children: [
+            leading ??
+                Flexible(
+                  fit: FlexFit.loose,
+                  flex: 1,
+                  child: Container(
+                    constraints: BoxConstraints.tight(size),
+                    child: Image.asset(
+                      AhlAssets.logoForm,
+                      fit: BoxFit.contain,
                     ),
-              ),
-        ],
+                  ),
+                ),
+            separation ??
+                const SizedBox(
+                  width: 15,
+                ),
+            title ??
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Ajourd'hui l'avenir",
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                fontFamily: 'Butler',
+                              ),
+                    ),
+                  ),
+                ),
+          ],
+        ),
       ),
     );
   }
