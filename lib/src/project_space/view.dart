@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:ahl/src/article_view/event/event.dart';
+import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/project_space/bloc.dart';
 import 'package:ahl/src/utils/storage_utils.dart';
 import 'package:firebase_article/firebase_article.dart';
@@ -31,9 +32,13 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
 
   List<Article?>? projects;
 
+  final SessionStorage _cache = SessionStorage();
+  final String _projectsCardsKey = '_ProjectCardsKey';
+
   @override
   void initState() {
     super.initState();
+
     final ProjectBloc bloc = context.read<ProjectBloc>();
 
     // Listen for state changes
@@ -70,13 +75,14 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
   }
 
   @override
-  bool get wantKeepAlive =>
-      storageUtils != null &&
-      storageUtils!.every(
-        (storageUtil) =>
-            storageUtil.cache[storageUtil.coverImageDataKey] != null,
-      ) &&
-      state?.status == ArticleStatus.succeed;
+  bool get wantKeepAlive {
+    if (_cache[_projectsCardsKey] != null &&
+        _cache[_projectsCardsKey] == "true") {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,9 +146,9 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
                   foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(ArticlesPage.routeName);
+                  Navigator.of(context).pushNamed(ProjectsPage.routeName);
                 },
-                child: const Text("Voir tout les projet"),
+                child: Text(AppLocalizations.of(context)!.allProjects),
               ),
             ],
           ),
@@ -176,54 +182,54 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
   }
 
   List<Widget> buildProjectCards(List<Article?>? projects) {
-    if (wantKeepAlive == false) {
-      return (projects != null)
-          ? projects.map<Widget>((project) {
-              if (project != null) {
-                final storageUtil = storageUtils?[projects.indexOf(project)];
-                return FutureBuilder(
-                  future: storageUtil?.getCoverImage(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return buildCard(
-                        context,
-                        snapshot.data!,
-                        project,
-                      );
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return const Align(
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      developer.log(
-                          '[ProjectSpace] Error getting cover image: ${snapshot.error}');
-                      return const Align(
-                        alignment: Alignment.center,
-                        child: Icon(Icons.warning_rounded),
-                      );
-                    }
-                  },
-                );
-              } else {
-                return const SizedBox.shrink();
-              }
-            }).toList()
-          : [];
-    } else {
-      return projects!.map<Widget>(
-        (project) {
-          final storageUtil = storageUtils?[projects.indexOf(project)];
-          return buildCard(
-              context,
-              decodeUint8ListFromString(
-                storageUtil!.cache[storageUtil.coverImageDataKey]!,
-              ),
-              project!);
-        },
-      ).toList();
-    }
+    _cache[_projectsCardsKey] = "true";
+    return (projects != null)
+        ? projects.map<Widget>((project) {
+            if (project != null) {
+              final storageUtil = storageUtils?[projects.indexOf(project)];
+              return FutureBuilder(
+                future: storageUtil?.getCoverImage(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return buildCard(
+                      context,
+                      snapshot.data!,
+                      project,
+                    );
+                  } else if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const Align(
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    developer.log(
+                        '[ProjectSpace] Error getting cover image: ${snapshot.error}');
+                    return const Align(
+                      alignment: Alignment.center,
+                      child: Icon(Icons.warning_rounded),
+                    );
+                  }
+                },
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }).toList()
+        : [];
+    // } else {
+    //   return projects!.map<Widget>(
+    //     (project) {
+    //       final storageUtil = storageUtils?[projects.indexOf(project)];
+    //       return buildCard(
+    //           context,
+    //           decodeUint8ListFromString(
+    //             storageUtil!.cache[storageUtil.coverImageDataKey]!,
+    //           ),
+    //           project!);
+    //     },
+    //   ).toList();
+    // }
   }
 }
 

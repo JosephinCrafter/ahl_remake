@@ -1,4 +1,4 @@
-{
+{"@@locale": "fr",
   "appTitle": "Aujourd'hui l'avenir",
   "@appTitle": {
     "description": "The title of the application"
@@ -116,5 +116,7 @@
   "whoWeAre":  "Qui sommes nous?",
   "allArticles": "Tous les articles",
   "todaysRosary": "Chapelet du jour",
-  "rosarySlogan":"Mediter la vie de Jesus avec Marie"
+  "rosarySlogan":"Mediter la vie de Jesus avec Marie",
+
+  "allProjects": "Voir tout les projet"
 }

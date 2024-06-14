@@ -42,6 +42,7 @@
     "whoWeAre",
     "allArticles",
     "todaysRosary",
-    "rosarySlogan"
+    "rosarySlogan",
+    "allProjects"
   ]
 }
