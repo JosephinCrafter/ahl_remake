@@ -17,11 +17,11 @@ class RosaryPrompt extends StatelessWidget {
       backgroundImage: AssetImage(
         AhlAssets.rosaryHeroHeader,
       ),
-      title:  Text(
+      title: Text(
         AppLocalizations.of(context)!.todaysRosary,
       ),
-      subtitle:  Text(
-       AppLocalizations.of(context)!.rosarySlogan,
+      subtitle: Text(
+        AppLocalizations.of(context)!.rosarySlogan,
       ),
     );
   }

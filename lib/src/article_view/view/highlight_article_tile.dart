@@ -9,6 +9,10 @@ class HighlightArticleTile extends StatefulWidget {
 
 class _HighlightArticleTileState extends State<HighlightArticleTile>
     with AutomaticKeepAliveClientMixin {
+  final SessionStorage _cache = SessionStorage();
+
+  final String _highlightArticleStateKey = 'isHighlightArticleReady';
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -17,7 +21,7 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
       future: firebase.firebaseApp,
       builder: (context, snapshot) {
         // if firebase is correctly initialized
-        if (snapshot.hasData && firebase.isInitialized) {
+        if (snapshot.hasData) {
           return BlocProvider(
             create: (BuildContext context) => ArticleBloc(
               repo: ArticlesRepository(
@@ -52,6 +56,10 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                           ),
                         );
                       case ArticleStatus.succeed:
+                        // update caching info
+
+                        _cache[_highlightArticleStateKey] = 'true';
+
                         String releaseMonth = DateTimeUtils.localMonth(
                           DateTimeUtils.parseReleaseDate(
                                   state.articles![0]!.releaseDate ??
@@ -113,6 +121,7 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
             ),
           );
         } else {
+          developer.log('article error: ${snapshot.error}');
           return Container(
             height: 310,
             margin: const EdgeInsets.symmetric(
@@ -145,10 +154,6 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
   bool keepAlive = false;
   @override
   bool get wantKeepAlive {
-    if (!keepAlive) {
-      keepAlive =
-          context.read<ArticleBloc>().state.status == ArticleStatus.succeed;
-    }
-    return keepAlive;
+    return _cache[_highlightArticleStateKey] == 'true';
   }
 }

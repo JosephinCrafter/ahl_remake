@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ahl/src/pages/articles/articles_page.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import "package:firebase_article/firebase_article.dart";
 import 'package:url_launcher/url_launcher.dart';
+import 'package:session_storage/session_storage.dart';
 
 import 'package:ahl/src/article_view/bloc/bloc.dart';
 import 'package:ahl/src/article_view/event/event.dart';
@@ -65,10 +68,10 @@ class _ArticleTileState extends State<ArticleTile> {
     _article = widget.article;
 
     articleStorageUtils =
-      ArticleStorageUtils(article: _article, collection: 'articles');
+        ArticleStorageUtils(article: _article, collection: 'articles');
     super.initState();
   }
- 
+
   void goToReadingPage() {
     Navigator.push(
       context,
@@ -134,8 +137,8 @@ class _ArticleTileState extends State<ArticleTile> {
                                         ?.first[RepoSetUp.coverImageKey] !=
                                     null)
                                 ? FutureBuilder(
-                                    future:
-                                        articleStorageUtils.getCoverImage(), //getHeroHeaderImage(),
+                                    future: articleStorageUtils
+                                        .getCoverImage(), //getHeroHeaderImage(),
                                     builder: (context, snapshot) {
                                       switch (snapshot.connectionState) {
                                         case ConnectionState.done:
