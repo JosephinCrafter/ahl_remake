@@ -98,7 +98,7 @@ class _PromptCardState extends State<PromptCard>
         onTap: widget.callback ?? () {},
         child: Container(
           constraints:
-              widget.constraints ?? BoxConstraints.loose(const Size(342, 380)),
+              widget.constraints ?? BoxConstraints.loose(const Size(278, 270)),
           child: Stack(
             children: [
               // FutureBuilder(

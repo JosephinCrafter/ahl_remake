@@ -461,8 +461,8 @@ class _AhlCardState extends State<AhlCard> {
               clipBehavior: Clip.hardEdge,
               constraints: widget.constraints ??
                   const BoxConstraints.expand(
-                    height: 390,
-                    width: 341,
+                    height: 270,
+                    width: 278,
                   ),
               decoration: widget.outerDecoration ??
                   BoxDecoration(

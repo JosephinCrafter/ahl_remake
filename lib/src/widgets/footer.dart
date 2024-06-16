@@ -51,7 +51,6 @@ class AhlFooter extends StatelessWidget {
             ),
             child: Image.asset(AhlAssets.logoFormTypoHorizontalColoredDark),
           ),
-          const Row(children: []),
 
           // Footer actions buttons.
           //
@@ -60,26 +59,36 @@ class AhlFooter extends StatelessWidget {
           //
           //  To make them work, we use a default text theme
 
-          Table(
+          // Table(
+          //   children: [
+          //     TableRow(
+          //       children: [
+          //         footerButtons.toList()[Actions.ourProjects.index],
+          //         footerButtons.toList()[Actions.makeDonation.index],
+          //       ],
+          //     ),
+          //     TableRow(
+          //       children: [
+          //         footerButtons.toList()[Actions.aboutUs.index],
+          //         footerButtons.toList()[Actions.news.index],
+          //       ],
+          //     ),
+          //     TableRow(
+          //       children: [
+          //         footerButtons.toList()[Actions.prayers.index],
+          //         footerButtons.toList()[Actions.contact.index],
+          //       ],
+          //     ),
+          //   ],
+          // ),
+
+          const Wrap(
             children: [
-              TableRow(
+              Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  footerButtons.toList()[Actions.ourProjects.index],
-                  footerButtons.toList()[Actions.makeDonation.index],
-                ],
-              ),
-              TableRow(
-                children: [
-                  footerButtons.toList()[Actions.aboutUs.index],
-                  footerButtons.toList()[Actions.news.index],
-                ],
-              ),
-              TableRow(
-                children: [
-                  footerButtons.toList()[Actions.prayers.index],
-                  footerButtons.toList()[Actions.contact.index],
-                ],
-              ),
+                  
+                ],)
             ],
           ),
 

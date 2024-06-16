@@ -26,8 +26,8 @@ class _WelcomingContent extends StatelessWidget {
   const _WelcomingContent();
   @override
   Widget build(BuildContext context) {
-    double avatarWidth = 132;
-    double avatarHeight = 117;
+    double avatarWidth = 174;
+    double avatarHeight = 155;
     GlobalKey containerKey = GlobalKey(debugLabel: 'welcoming_container');
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -108,7 +108,8 @@ class _WelcomingContent extends StatelessWidget {
             ),
             //todo: change the image to Sr Michelle Image
             Positioned(
-              bottom: -avatarHeight / 2, // avatarHeight is the image height
+              bottom:
+                  (-avatarHeight / 2) - 10, // avatarHeight is the image height
               left: resolveForBreakPoint<double>(
                 MediaQuery.of(context).size.width,
                 small: constraints.maxWidth / 2 - avatarWidth / 2,
@@ -119,7 +120,7 @@ class _WelcomingContent extends StatelessWidget {
                               MediaQuery.of(context).size.width),
                         ) /
                         2 -
-                    60 -
+                    25 -
                     avatarWidth,
               ),
               child: SizedBox(
