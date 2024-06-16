@@ -37,7 +37,7 @@ dependencies:
   formz: ^0.7.0
   markdown_widget: ^2.3.2+3
   provider: ^6.1.1
-  flame: ^1.15.0
+  flame: ^1.18.0
   parallax_effect: ^0.0.3
   animations: ^2.0.8
   flutter_animate: ^4.5.0

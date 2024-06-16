@@ -26,7 +26,7 @@ class SectionTitle extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(
-              vertical: Paddings.listSeparator,
+              vertical: Paddings.actionSeparator,
             ),
             child: Text(
               (isUpperCase) ? title.toUpperCase() : title,

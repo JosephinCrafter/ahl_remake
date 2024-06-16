@@ -25,8 +25,8 @@ class HomePage extends StatelessWidget {
     PrayerSpaceView(),
     ProjectsSpaceView(),
     PartnersView(),
-    WhoWeAreSpace(),
     NewsLetterPrompt(),
+    WhoWeAreSpace(),
     AhlFooter(),
   ];
 
@@ -70,22 +70,22 @@ class HomePage extends StatelessWidget {
           body: Stack(
             children: [
               ListView(
-                  addAutomaticKeepAlives: true,
-                  // itemCount: _children.length,
-                  // itemBuilder: (context, index) => _children[index],
-                  // separatorBuilder: (context, index) {
-                  //   if (index == _children.length - 2) {
-                  //     return const SizedBox.shrink();
-                  //   } else {
-                  //     return SizedBox.fromSize(
-                  //       size: const Size.fromHeight(Margins.extraLarge),
-                  //     );
-                  //   }
-                  // },
-                  restorationId: "home_list_view",
+                addAutomaticKeepAlives: true,
+                // itemCount: _children.length,
+                // itemBuilder: (context, index) => _children[index],
+                // separatorBuilder: (context, index) {
+                //   if (index == _children.length - 2) {
+                //     return const SizedBox.shrink();
+                //   } else {
+                //     return SizedBox.fromSize(
+                //       size: const Size.fromHeight(Margins.extraLarge),
+                //     );
+                //   }
+                // },
+                restorationId: "home_list_view",
 
-                  children: _children,
-                  ),
+                children: _children,
+              ),
               inConstructionPromotionalBar,
             ],
           ),

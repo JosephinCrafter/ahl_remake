@@ -107,6 +107,12 @@ class _WhoWeAreTileState extends State<WhoWeAreTile>
 
     if (wantKeepAlive) {
       return AhlCard(
+        constraints: BoxConstraints(
+          maxWidth: ContentSize.maxWidth(
+            MediaQuery.of(context).size.width,
+          ),
+          maxHeight: 500,
+        ),
         image: Expanded(
           flex: 2,
           child: Container(
@@ -137,6 +143,11 @@ class _WhoWeAreTileState extends State<WhoWeAreTile>
     } else {
       return Container(
         child: AhlCard(
+          constraints: BoxConstraints(
+            maxWidth: ContentSize.maxWidth(
+              MediaQuery.of(context).size.width,
+            ),
+          ),
           image: Expanded(
             flex: 2,
             child: FutureBuilder(
