@@ -126,9 +126,14 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
         ),
         // Buttons
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8.0,
+            vertical: Paddings.huge,
+          ),
           child: Wrap(
             alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            runAlignment: WrapAlignment.center,
             direction: Axis.horizontal,
             spacing: 20,
             runSpacing: 20,
@@ -435,9 +440,8 @@ class _AhlCardState extends State<AhlCard> {
     BorderRadius borderRadius = BorderRadius.circular(BorderSizes.big);
     return LayoutBuilder(
       builder: (context, constraints) => Container(
-        constraints: const BoxConstraints(
-          maxWidth: 345,
-          maxHeight: 370,
+        constraints: BoxConstraints(
+          maxWidth: ContentSize.maxWidth(MediaQuery.of(context).size.width),
         ),
         padding: const EdgeInsets.all(Paddings.medium),
         child: Material(
