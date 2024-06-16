@@ -100,7 +100,7 @@ class _PartnersViewState extends State<PartnersView>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(Paddings.medium),
+              padding: const EdgeInsets.all(Paddings.big),
               child: Text(
                 AppLocalizations.of(context)!.ourPartners,
                 style: resolveHeadlineTextThemeForBreakPoints(
