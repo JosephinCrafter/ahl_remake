@@ -58,6 +58,7 @@ class AhlLogo extends StatelessWidget {
                   fit: FlexFit.tight,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
+                    alignment: Alignment.bottomLeft,
                     child: Text(
                       "Ajourd'hui l'avenir",
                       maxLines: 1,

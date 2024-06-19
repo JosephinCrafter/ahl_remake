@@ -16,9 +16,9 @@ class HeroHeaderView extends StatelessWidget {
         if (constraints.maxWidth <= ScreenSizes.large) {
           // HeroHeader fo mobile
 
-          return MobileHeroHeader();
+          return const MobileHeroHeader();
         } else {
-          return DefaultHeroHeader();
+          return const DefaultHeroHeader();
         }
       },
     );
@@ -144,19 +144,31 @@ class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(
-        maxHeight: 700,
-        maxWidth: 1080,
+      key: const Key("HeroHeader_Container"),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.width * 2 / 3,
+        maxWidth: ContentSize.maxWidth(
+          MediaQuery.of(context).size.width,
+        ),
       ),
       alignment: Alignment.center,
       child: Stack(
         children: [
           const HeroImageView(),
-          Container(
-            margin: const EdgeInsets.only(left: Margins.extraLarge),
-            alignment: Alignment.centerLeft,
-            child: const HeroTextView(
-              alignment: Alignment.centerLeft,
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              constraints: const BoxConstraints(maxHeight: 470),
+              color: Theme.of(context).colorScheme.surface.withAlpha(0xB2),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: Margins.extraLarge)
+                      .add(
+                const EdgeInsets.only(top: 45),
+              ),
+              alignment: Alignment.bottomCenter,
+              child: const HeroTextView(
+                alignment: Alignment.bottomCenter,
+              ),
             ),
           ),
         ],
