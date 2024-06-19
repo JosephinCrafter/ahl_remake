@@ -22,7 +22,14 @@ class _NewsLetterPromptState extends State<NewsLetterPrompt> {
                 ),
               ),
               // Setup bloc providing
-              child: const NewsletterPromptView(),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: ContentSize.maxWidth(
+                    MediaQuery.of(context).size.width,
+                  ),
+                ),
+                child: const NewsletterPromptView(),
+              ),
             );
 
           default:

@@ -6,7 +6,7 @@
     "invalidEmail",
     "cantBeEmpty",
     "unknownError",
-    "shareYourPriers",
+    "priesIntention",
     "proverb",
     "priersInvitation",
     "nameAndFirstName",
@@ -27,6 +27,9 @@
     "projectsSpaceSubtitle",
     "projectsSpaceIntroduction",
     "ourPartners",
+    "inProgress",
+    "realized",
+    "initiative",
     "january",
     "february",
     "march",
@@ -40,9 +43,11 @@
     "november",
     "december",
     "whoWeAre",
+    "domSisters",
     "allArticles",
     "todaysRosary",
     "rosarySlogan",
-    "allProjects"
+    "allProjects",
+    "devInProgress"
   ]
 }

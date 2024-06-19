@@ -694,7 +694,7 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
 /// Title of the prayer request prompt.
 final Widget title = Builder(
   builder: (context) => Text(
-    AppLocalizations.of(context)!.shareYourPriers,
+    AppLocalizations.of(context)!.priesIntention,
     style: resolveHeadlineTextThemeForBreakPoints(
       MediaQuery.of(context).size.width,
       context,

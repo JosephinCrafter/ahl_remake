@@ -45,6 +45,8 @@ dependencies:
   url_launcher: ^6.2.4
   shared_preferences: ^2.2.3
   session_storage: ^0.0.1
+  gap: ^3.0.1
+  lottie: ^3.1.2
   #mouse_parallax: ^1.1.0
   #google_fonts: ^6.2.0
 
@@ -70,6 +72,10 @@ flutter:
     - assets/images/
     - assets/content.md
   fonts:
+    - family: MyFlutterIcons
+      fonts: 
+        - asset: assets/fonts/flutter_icons/MyFlutterIcons.ttf
+    
     - family: Butler
       fonts:
         - asset: assets/fonts/butler/Butler_Regular.otf

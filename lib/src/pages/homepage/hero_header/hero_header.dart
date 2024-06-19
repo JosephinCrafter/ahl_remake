@@ -1,5 +1,5 @@
 import 'package:ahl/src/pages/prayers/prayers_page.dart';
-import 'package:ahl/src/pages/who_we_are/saints.dart';
+import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

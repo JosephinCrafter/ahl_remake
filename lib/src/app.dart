@@ -5,7 +5,7 @@ import 'package:ahl/src/pages/prayers/prayers_page.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/pages/rosary/rosary_page.dart';
 import 'package:ahl/src/pages/saints/saints.dart';
-import 'package:ahl/src/pages/who_we_are/saints.dart';
+import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
 import 'package:ahl/src/project_space/bloc.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +145,7 @@ class _MyAppState extends State<MyApp> {
                         return const SaintsPage();
                       case ArticlesPage.routeName:
                         return const ArticlesPage();
-                        case WhoWeArePage.routeName:
+                      case WhoWeArePage.routeName:
                         return const WhoWeArePage();
                       // todo: add 40 not found page
                       default:

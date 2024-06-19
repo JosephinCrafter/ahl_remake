@@ -203,16 +203,20 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
                     );
                   } else if (snapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return const Align(
+                    return Container(
+                      height: 250,
+                      width: 270,
                       alignment: Alignment.center,
-                      child: CircularProgressIndicator(),
+                      child: const CircularProgressIndicator(),
                     );
                   } else {
                     developer.log(
                         '[ProjectSpace] Error getting cover image: ${snapshot.error}');
-                    return const Align(
+                    return Container(
+                      height: 250,
+                      width: 270,
                       alignment: Alignment.center,
-                      child: Icon(Icons.warning_rounded),
+                      child: const Icon(Icons.warning_rounded),
                     );
                   }
                 },
@@ -476,65 +480,65 @@ class _AhlCardState extends State<AhlCard> {
                     ),
                     borderRadius: borderRadius,
                   ),
-              child: ConstrainedBox(
-                constraints: const BoxConstraints.expand(),
-                child: Column(
-                  children: [
-                    widget.image,
-                    widget.content ??
-                        Container(
-                          // constraints: const BoxConstraints.expand(height: 100),
-                          padding: const EdgeInsets.all(
-                            Paddings.medium,
-                          ),
-                          alignment: Alignment.centerLeft,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              /// Label
-                              DefaultTextStyle(
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelMedium!
-                                      .copyWith(
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                  child:
-                                      widget.label ?? const SizedBox.shrink()),
-
-                              /// title
-                              DefaultTextStyle(
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineMedium!
-                                    .copyWith(
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                child: widget.title ?? const SizedBox.shrink(),
-                              ),
-
-                              /// Description
-                              DefaultTextStyle(
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                child: widget.description ??
-                                    const SizedBox.shrink(),
-                              ),
-                            ],
-                          ),
+              // child:
+              // ConstrainedBox(
+              //   constraints: const BoxConstraints.expand(),
+              child: Column(
+                children: [
+                  widget.image,
+                  widget.content ??
+                      Container(
+                        // constraints: const BoxConstraints.expand(height: 100),
+                        padding: const EdgeInsets.all(
+                          Paddings.medium,
                         ),
-                  ],
-                ),
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /// Label
+                            DefaultTextStyle(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium!
+                                    .copyWith(
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                child: widget.label ?? const SizedBox.shrink()),
+
+                            /// title
+                            DefaultTextStyle(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium!
+                                  .copyWith(
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                              child: widget.title ?? const SizedBox.shrink(),
+                            ),
+
+                            /// Description
+                            DefaultTextStyle(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                              child:
+                                  widget.description ?? const SizedBox.shrink(),
+                            ),
+                          ],
+                        ),
+                      ),
+                ],
               ),
             ),
           ),
         ),
       ),
+      // ),
     );
   }
 }
