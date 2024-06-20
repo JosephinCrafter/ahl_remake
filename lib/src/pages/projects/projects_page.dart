@@ -1,3 +1,4 @@
+import 'package:ahl/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class ProjectsPage extends StatefulWidget {
@@ -13,7 +14,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: const AhlAppBar(),
       body: Center(
         child: Text(
           'Project Space',
