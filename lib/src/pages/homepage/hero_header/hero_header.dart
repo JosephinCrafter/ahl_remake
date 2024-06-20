@@ -1,5 +1,6 @@
 import 'package:ahl/src/pages/prayers/prayers_page.dart';
 import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
+import 'package:ahl/src/theme/theme.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,12 +40,12 @@ class _MobileHeroHeaderState extends State<MobileHeroHeader> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          constraints: const BoxConstraints(
-            maxHeight: Sizes.mobileHeroHeaderImageHeight,
-          ),
-          child: const HeroImageView(isWithBorder: false),
-        ),
+        // Container(
+        //   constraints: const BoxConstraints(
+        //     maxHeight: Sizes.mobileHeroHeaderImageHeight,
+        //   ),
+        //   child: const HeroImageView(isWithBorder: false),
+        // ),
         Container(
           margin:
               const EdgeInsets.only(top: Sizes.mobileHeroHeaderImageHeight).add(
@@ -154,12 +155,12 @@ class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
       alignment: Alignment.center,
       child: Stack(
         children: [
-          const HeroImageView(),
+          // const HeroImageView(),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
               constraints: const BoxConstraints(maxHeight: 470),
-              color: Theme.of(context).colorScheme.surface.withAlpha(0xB2),
+              color: AhlTheme.yellowLight.withAlpha(0xB2),
               padding:
                   const EdgeInsets.symmetric(horizontal: Margins.extraLarge)
                       .add(
@@ -190,8 +191,9 @@ class HeroImageView extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: isWithBorder
-            ? BorderRadius.circular(
-                BorderSizes.big,
+            ? const BorderRadius.only(
+                bottomLeft: Radius.circular(BorderSizes.big),
+                bottomRight: Radius.circular(BorderSizes.big),
               )
             : null,
         image: DecorationImage(
