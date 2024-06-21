@@ -171,8 +171,8 @@ class _HomePageState extends State<HomePage> {
                   const HeroHeaderView(),
                   Container(
                     constraints: const BoxConstraints(
-                      maxHeight: 6000,
-                    ),
+                        // maxHeight: 6000,
+                        ),
                     // fix transparent background error.
                     color: AhlTheme.yellowLight,
                     child: Column(
