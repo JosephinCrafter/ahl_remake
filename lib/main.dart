@@ -31,7 +31,7 @@ void main() async {
   // here we go with firebase setup.
   // It is better to await this flutter app, but when working offline, it makes
   // the app not loading.
-  firebaseApp;
+  await firebaseApp;
 
   runApp(
     ChangeNotifierProvider.value(

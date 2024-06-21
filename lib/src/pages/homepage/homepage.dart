@@ -170,10 +170,16 @@ class _HomePageState extends State<HomePage> {
                   // ),
                   const HeroHeaderView(),
                   Container(
-
+                    constraints: const BoxConstraints(
+                      maxHeight: 6000,
+                    ),
                     // fix transparent background error.
                     color: AhlTheme.yellowLight,
-                    child: Column(children: _children),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      key: const Key("main_homepage_column"),
+                      children: _children,
+                    ),
                   ),
                 ],
                 // child: Column(
