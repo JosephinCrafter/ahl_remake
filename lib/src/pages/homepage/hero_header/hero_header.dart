@@ -3,7 +3,6 @@ import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
 import 'package:ahl/src/theme/theme.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../ahl_barrel.dart';

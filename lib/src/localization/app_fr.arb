@@ -62,7 +62,7 @@
   "sendPray": "Soumettre mon intention",
   "optional" : "Facultatif",
   "yourPrayer" : "Votre intention de prière",
-
+  "prayerRequestInvitation":"Unissons nous dans la prière. Confiez vos intentions à notre communauté.",
   
   "priesSpace": "Espace de Prière",
   "@priesSpace": {
@@ -85,6 +85,21 @@
         "type": "DateTime",
         "format": "jm"
       }
+    }
+  },
+  "priersOf": "Intention de prière de {name},\n{email}",
+  "@priersOf":{
+    "description": "Presentation of Prayer owner in Prayer Request",
+    "placeholders": {
+      "name":{
+        "type":"String",
+        "example": "John Doe"
+      },
+      "email":{
+        "type":"String",
+        "example": "johndoe@example.com"    
+      }
+
     }
   },
   "mass" : "la Messe",

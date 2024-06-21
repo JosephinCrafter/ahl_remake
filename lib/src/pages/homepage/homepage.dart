@@ -9,7 +9,6 @@ import 'package:ahl/src/theme/theme.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 
 import '../../project_space/view.dart';
@@ -20,7 +19,7 @@ import '../../who_we_are/view.dart';
 class HomePage extends StatefulWidget {
   static const String routeName = "/home";
 
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -57,7 +56,7 @@ class _HomePageState extends State<HomePage> {
         );
       },
       onDetach: (position) async {
-        await Future.delayed(Duration.zero);
+        await Future.delayed(Durations.short1);
         setState(
           () => controllerIsAttached = false,
         );

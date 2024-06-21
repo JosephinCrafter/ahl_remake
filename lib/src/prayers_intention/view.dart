@@ -20,7 +20,8 @@ class PrayersIntentionRequestView extends StatefulWidget {
 }
 
 class _PrayersIntentionRequestViewState
-    extends State<PrayersIntentionRequestView> {
+    extends State<PrayersIntentionRequestView>
+    with SingleTickerProviderStateMixin {
   late List<Widget> views;
 
   late String? name;
@@ -57,7 +58,7 @@ class _PrayersIntentionRequestViewState
   }
 
   // // todo: change to 0 after building dateView view
-  final duration = AhlDurations.subtle;
+  final duration = Durations.medium2;
   final curvesIn = Curves.easeIn;
   final curvesOut = Curves.easeOut;
 
@@ -137,7 +138,7 @@ class _PrayersIntentionRequestViewState
             maxHeight:
                 (MediaQuery.of(context).size.width < ScreenSizes.extraLarge)
                     ? 900
-                    : 450,
+                    : 657,
           ),
           child: PageView(
             controller: _controller,
@@ -210,18 +211,70 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
         child: Flex(
           direction: direction,
           children: [
-            Expanded(
+            Flexible(
               flex: 1,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  prayerDecorationImage,
-                  title,
+                  Flexible(
+                    flex: 2,
+                    child: prayerDecorationImage,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: title,
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      height: 350,
+                      child: Text(
+                        "${context.read<PrayerRequestBloc>().state.request?.prayer}",
+                        style: resolveBodyTextThemeForBreakPoints(
+                            MediaQuery.of(context).size.width, context),
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: DefaultTextStyle(
+                      style: Theme.of(context).textTheme.labelLarge!,
+                      child: (context
+                                  .read<PrayerRequestBloc>()
+                                  .state
+                                  .request!
+                                  .name !=
+                              null)
+                          ? Text(
+                              AppLocalizations.of(context)!.priersOf(
+                                context
+                                    .read<PrayerRequestBloc>()
+                                    .state
+                                    .request!
+                                    .name!,
+                                context
+                                    .read<PrayerRequestBloc>()
+                                    .state
+                                    .request!
+                                    .email,
+                              ),
+                            )
+                          : Text(context
+                              .read<PrayerRequestBloc>()
+                              .state
+                              .request!
+                              .email),
+                    ),
+                  ),
                 ],
               ),
             ),
-            Expanded(
+            const Gap(Paddings.big),
+            Flexible(
               flex: (direction == Axis.vertical) ? 3 : 1,
               child: Column(
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   Container(
                     margin: const EdgeInsets.only(top: Paddings.listSeparator),
@@ -416,8 +469,14 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                prayerDecorationImage,
-                title,
+                Flexible(
+                  flex: 1,
+                  child: prayerDecorationImage,
+                ),
+                Flexible(
+                  flex: 1,
+                  child: title,
+                ),
                 Container(
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(
@@ -425,20 +484,26 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                   child: Text(AppLocalizations.of(context)!.proverb,
                       style: Theme.of(context).textTheme.labelMedium),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    AppLocalizations.of(context)!.priersInvitation,
-                    style: Theme.of(context).textTheme.bodyMedium,
+                Flexible(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      AppLocalizations.of(context)!.priersInvitation,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
+          const Gap(Paddings.big),
           Flexible(
             child: Column(
+              mainAxisSize: MainAxisSize.max,
               children: [
-                Flexible(
+                Expanded(
+                  flex: 1,
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: Paddings.big),
                     padding: const EdgeInsets.all(Paddings.medium),
@@ -449,10 +514,14 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        Text(
+                          AppLocalizations.of(context)!.prayerRequestInvitation,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
                         //name and First name
                         Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: Paddings.listSeparator),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: Paddings.listSeparator),
 
                           /// Name
                           child: TextFormField(
@@ -489,7 +558,7 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                         /// Prayer
                         Flexible(
                           child: TextFormField(
-                            minLines: 5,
+                            // minLines: 5,
                             maxLines: 10,
                             controller: _prayer,
                             // maxLines: 3,
@@ -682,7 +751,10 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
 
     Widget child = Column(
       children: [
-        prayerDecorationImage,
+        Flexible(
+          flex: 1,
+          child: prayerDecorationImage,
+        ),
         contentView,
       ],
     );
@@ -702,16 +774,14 @@ final Widget title = Builder(
   ),
 );
 
-Widget prayerDecorationImage = Expanded(
-  child: Container(
-    // width: 215,
-    // height: 141,
-    decoration: BoxDecoration(
-      image: DecorationImage(
-        fit: BoxFit.contain,
-        image: AssetImage(
-          AhlAssets.praying,
-        ),
+Widget prayerDecorationImage = Container(
+  // width: 215,
+  // height: 141,
+  decoration: BoxDecoration(
+    image: DecorationImage(
+      fit: BoxFit.contain,
+      image: AssetImage(
+        AhlAssets.praying,
       ),
     ),
   ),

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:ahl/src/article_view/bloc/bloc.dart';
 import 'package:ahl/src/pages/prayers/prayers_page.dart';
@@ -134,7 +133,7 @@ class _MyAppState extends State<MyApp> {
                       case SampleItemDetailsView.routeName:
                         return const SampleItemDetailsView();
                       case HomePage.routeName:
-                        return HomePage();
+                        return const HomePage();
                       case ProjectsPage.routeName:
                         return const ProjectsPage();
                       case PrayersPage.routeName:
@@ -149,7 +148,7 @@ class _MyAppState extends State<MyApp> {
                         return const WhoWeArePage();
                       // todo: add 40 not found page
                       default:
-                        return widget.home ?? HomePage();
+                        return widget.home ?? const HomePage();
                     }
                   },
                 );

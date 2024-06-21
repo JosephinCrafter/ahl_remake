@@ -13,7 +13,6 @@ import 'package:session_storage/session_storage.dart';
 
 import '../ahl_barrel.dart';
 import '../article_view/state/state.dart';
-import '../pages/articles/articles_page.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';
 
@@ -484,6 +483,7 @@ class _AhlCardState extends State<AhlCard> {
               // ConstrainedBox(
               //   constraints: const BoxConstraints.expand(),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   widget.image,
                   widget.content ??
@@ -494,6 +494,7 @@ class _AhlCardState extends State<AhlCard> {
                         ),
                         alignment: Alignment.centerLeft,
                         child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
