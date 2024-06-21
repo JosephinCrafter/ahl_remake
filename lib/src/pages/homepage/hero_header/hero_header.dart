@@ -38,8 +38,9 @@ class MobileHeroHeader extends StatefulWidget {
 class _MobileHeroHeaderState extends State<MobileHeroHeader> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
+    return
+        //  Stack(
+        //   children: [
         // Container(
         //   constraints: const BoxConstraints(
         //     maxHeight: Sizes.mobileHeroHeaderImageHeight,
@@ -47,18 +48,17 @@ class _MobileHeroHeaderState extends State<MobileHeroHeader> {
         //   child: const HeroImageView(isWithBorder: false),
         // ),
         Container(
-          margin:
-              const EdgeInsets.only(top: Sizes.mobileHeroHeaderImageHeight).add(
-            const EdgeInsets.symmetric(
-              horizontal: Paddings.big,
-            ),
-          ),
-          child: const HeroTextView(
-            needMargin: true,
-            margin: 50,
-          ),
-        ),
-      ],
+      color: AhlTheme.yellowLight.withAlpha(0xB6),
+      margin: const EdgeInsets.only(top: Sizes.mobileHeroHeaderImageHeight),
+      padding: const EdgeInsets.symmetric(
+        horizontal: Paddings.big,
+      ),
+      child: const HeroTextView(
+        needMargin: true,
+        margin: 50,
+      ),
+      //   ),
+      // ],
     );
   }
 }
