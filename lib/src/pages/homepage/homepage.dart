@@ -170,6 +170,8 @@ class _HomePageState extends State<HomePage> {
                   // ),
                   const HeroHeaderView(),
                   Container(
+
+                    // fix transparent background error.
                     color: AhlTheme.yellowLight,
                     child: Column(children: _children),
                   ),
