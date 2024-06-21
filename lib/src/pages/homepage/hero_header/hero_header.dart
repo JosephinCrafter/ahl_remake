@@ -3,6 +3,7 @@ import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
 import 'package:ahl/src/theme/theme.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../ahl_barrel.dart';
@@ -49,7 +50,7 @@ class _MobileHeroHeaderState extends State<MobileHeroHeader> {
         // ),
         Container(
       color: AhlTheme.yellowLight.withAlpha(0xB6),
-      margin: const EdgeInsets.only(top: Sizes.mobileHeroHeaderImageHeight),
+      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.72),
       padding: const EdgeInsets.symmetric(
         horizontal: Paddings.big,
       ),
@@ -147,7 +148,7 @@ class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
     return Container(
       key: const Key("HeroHeader_Container"),
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.width * 2 / 3,
+        maxHeight: MediaQuery.of(context).size.height * 1.2,
         maxWidth: ContentSize.maxWidth(
           MediaQuery.of(context).size.width,
         ),
@@ -156,6 +157,7 @@ class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
       child: Stack(
         children: [
           // const HeroImageView(),
+          //todo: implement ScrollIncitation(),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -281,5 +283,42 @@ class HeroTextView extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class ScrollIncitation extends StatefulWidget {
+  const ScrollIncitation({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ScrollIncitation();
+  }
+}
+
+class _ScrollIncitation extends State<ScrollIncitation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      vsync: this,
+      duration: Durations.medium1,
+    )..repeat();
+
+    // controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        height: 500,
+        width: 10,
+        color: Theme.of(context).colorScheme.surface,
+      ),
+    );
   }
 }
