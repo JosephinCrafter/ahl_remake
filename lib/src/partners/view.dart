@@ -9,6 +9,7 @@ import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter/material.dart";
+import "package:gap/gap.dart";
 
 import 'package:http/http.dart' as http;
 import "package:session_storage/session_storage.dart";
@@ -88,18 +89,20 @@ class _PartnersViewState extends State<PartnersView>
     computeImage();
     super.build(context);
     return Container(
-      constraints: const BoxConstraints.expand(height: 210),
+      constraints: const BoxConstraints.expand(height: 245),
       color: Theme.of(context).colorScheme.surface,
       child: Container(
         constraints: const BoxConstraints(
           maxWidth: 1080,
-          maxHeight: 210,
+          maxHeight: 245,
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Padding(
+            Container(
+              alignment: Alignment.center,
               padding: const EdgeInsets.all(Paddings.big),
               child: Text(
                 AppLocalizations.of(context)!.ourPartners,
@@ -127,14 +130,15 @@ class _PartnersViewState extends State<PartnersView>
                           );
                         } else if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return Container(child: CircularProgressIndicator());
+                          return const CircularProgressIndicator();
                         } else {
-                          return Icon(Icons.warning);
+                          return const Icon(Icons.warning_rounded);
                         }
                       }),
                 ),
               ],
-            )
+            ),
+            const Gap(45),
           ],
         ),
       ),

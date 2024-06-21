@@ -22,14 +22,14 @@ class _NewsLetterPromptState extends State<NewsLetterPrompt> {
                 ),
               ),
               // Setup bloc providing
-              child: Container(
-                constraints: BoxConstraints(
-                  maxWidth: ContentSize.maxWidth(
-                    MediaQuery.of(context).size.width,
-                  ),
-                ),
-                child: const NewsletterPromptView(),
-              ),
+              // child: Container(
+              // constraints: BoxConstraints(
+              // maxWidth: ContentSize.maxWidth(
+              //   MediaQuery.of(context).size.width,
+              // ),
+              // ),
+              child: const NewsletterPromptView(),
+              // ),
             );
 
           default:
@@ -57,84 +57,92 @@ class _NewsletterPromptViewState extends State<NewsletterPromptView> {
       builder: (context, state) => Container(
         padding: const EdgeInsets.all(Paddings.huge),
         color: theme.AhlTheme.yellowRelax,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// This handle 2 state object
-            NewsletterTextPrompt(
-              test: () => false,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Paddings.big,
+        alignment: Alignment.center,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: ContentSize.maxWidth(MediaQuery.of(context).size.width),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// This handle 2 state object
+              NewsletterTextPrompt(
+                test: () => false,
               ),
-              child: TextField(
-                controller: emailInputController,
-                onTap: () {
-                  context
-                      .read<NewsletterSubscriptionBloc>()
-                      .add(InitializeRequestEvent());
-                },
-                onEditingComplete: () {
-                  context.read<NewsletterSubscriptionBloc>().add(
-                        SubscriptionRequestEvent(
-                          email: emailInputController.text,
-                        ),
-                      );
-                },
-                decoration: InputDecoration(
-                  label: const Text('e-mail'),
-                  hintText: AppLocalizations.of(context)!.exampleMail,
-                  border: const OutlineInputBorder(),
-                  error: state.hasError
-                      ? Text('${state.getError(context)}')
-                      : null,
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: Paddings.big,
+                ),
+                child: TextField(
+                  controller: emailInputController,
+                  onTap: () {
+                    context
+                        .read<NewsletterSubscriptionBloc>()
+                        .add(InitializeRequestEvent());
+                  },
+                  onEditingComplete: () {
+                    context.read<NewsletterSubscriptionBloc>().add(
+                          SubscriptionRequestEvent(
+                            email: emailInputController.text,
+                          ),
+                        );
+                  },
+                  decoration: InputDecoration(
+                    label: const Text('e-mail'),
+                    hintText: AppLocalizations.of(context)!.exampleMail,
+                    border: const OutlineInputBorder(),
+                    error: state.hasError
+                        ? Text('${state.getError(context)}')
+                        : null,
+                  ),
                 ),
               ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
-                foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              ),
-              onPressed: (state.status == NewsletterSubscriptionStatus.initial)
-                  ? () {
-                      context.read<NewsletterSubscriptionBloc>().add(
-                            SubscriptionRequestEvent(
-                              email: emailInputController.text,
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                ),
+                onPressed:
+                    (state.status == NewsletterSubscriptionStatus.initial)
+                        ? () {
+                            context.read<NewsletterSubscriptionBloc>().add(
+                                  SubscriptionRequestEvent(
+                                    email: emailInputController.text,
+                                  ),
+                                );
+                            emailInputController.clear();
+                          }
+                        : null,
+                child: Builder(
+                  builder: (context) {
+                    switch (state.status) {
+                      case NewsletterSubscriptionStatus.loading:
+                        return const CircularProgressIndicator();
+                      case NewsletterSubscriptionStatus.success:
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(right: Paddings.small),
+                              child: Icon(Icons.done_all_rounded),
                             ),
-                          );
-                      emailInputController.clear();
+                            Text(
+                              AppLocalizations.of(context)!
+                                  .thanksForRegistering,
+                            ),
+                          ],
+                        );
+                      default:
+                        return Text(
+                          AppLocalizations.of(context)!.register,
+                        );
                     }
-                  : null,
-              child: Builder(
-                builder: (context) {
-                  switch (state.status) {
-                    case NewsletterSubscriptionStatus.loading:
-                      return const CircularProgressIndicator();
-                    case NewsletterSubscriptionStatus.success:
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: Paddings.small),
-                            child: Icon(Icons.done_all_rounded),
-                          ),
-                          Text(
-                            AppLocalizations.of(context)!.thanksForRegistering,
-                          ),
-                        ],
-                      );
-                    default:
-                      return Text(
-                        AppLocalizations.of(context)!.register,
-                      );
-                  }
-                },
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -40,8 +40,8 @@ class _HomePageState extends State<HomePage> {
     const PrayerSpaceView(),
     const ProjectsSpaceView(),
     const PartnersView(),
-    const NewsLetterPrompt(),
     const WhoWeAreSpace(),
+    const NewsLetterPrompt(),
     const AhlFooter(),
   ];
 
