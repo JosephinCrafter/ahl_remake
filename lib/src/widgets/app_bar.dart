@@ -180,7 +180,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
     };
 
     Widget donationButton = Flexible(
-      flex: 1,
+      flex: 2,
       child: Container(
         alignment: Alignment.centerRight,
         child: OutlinedButton(
@@ -192,9 +192,12 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
           onPressed: () {
             Navigator.of(context).pushNamed(DonationPage.routeName);
           },
+          // child: FittedBox(
+          //   fit: BoxFit.contain,
           child: Text(
             actions.keys.lastOrNull,
           ),
+          // ),
         ),
       ),
     );
