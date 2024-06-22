@@ -11,7 +11,7 @@ class AhlAssets {
   static String get releasePath =>
       kDebugMode ? '' : 'assets/'; // used to set up path when deployed
 
-  static String heroBk = "${releasePath}images/hero_bk.png";
+  static String heroBk = "${releasePath}images/hero_bk.webp";
   static String heroBkAlt = "${releasePath}images/hero_bk_alt.jpg";
   static String logoForm = "${releasePath}images/logo_form_colored.png";
   static String logoFormTypoHorizontalColored =

@@ -1,6 +1,8 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:ahl/src/article_view/event/event.dart';
+import 'package:ahl/src/article_view/view/article_view.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/project_space/bloc.dart';
 import 'package:ahl/src/utils/storage_utils.dart';
@@ -163,6 +165,18 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
 
   Widget buildCard(BuildContext context, Uint8List imageData, Article project) {
     return AhlCard(
+      callback: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ArticleContentView(
+              article: project,
+            ),
+          ),
+        );
+
+        log("${project.contentPath}");
+      },
       image: Expanded(
         flex: 2,
         child: Container(
@@ -407,6 +421,7 @@ class AhlCard extends StatefulWidget {
     this.label,
     this.description,
     this.content,
+    this.callback,
   });
 
   final BoxConstraints? constraints;
@@ -415,6 +430,7 @@ class AhlCard extends StatefulWidget {
   final Widget? title;
   final Widget? label;
   final Widget? description;
+  final VoidCallback? callback;
 
   /// if [content] is provided then [title], [label] and [description] is omitted.
   final Widget? content;
@@ -457,15 +473,16 @@ class _AhlCardState extends State<AhlCard> {
             },
             onTap: () {
               // Implement navigation to article view
+              if (widget.callback != null) widget.callback!();
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               clipBehavior: Clip.hardEdge,
               constraints: widget.constraints ??
-                  const BoxConstraints.expand(
-                    height: 270,
-                    width: 278,
+                  const BoxConstraints(
+                    maxHeight: 270,
+                    maxWidth: 278,
                   ),
               decoration: widget.outerDecoration ??
                   BoxDecoration(
@@ -479,67 +496,67 @@ class _AhlCardState extends State<AhlCard> {
                     ),
                     borderRadius: borderRadius,
                   ),
-              // child:
-              // ConstrainedBox(
-              //   constraints: const BoxConstraints.expand(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  widget.image,
-                  widget.content ??
-                      Container(
-                        // constraints: const BoxConstraints.expand(height: 100),
-                        padding: const EdgeInsets.all(
-                          Paddings.medium,
-                        ),
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            /// Label
-                            DefaultTextStyle(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 770),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    widget.image,
+                    widget.content ??
+                        Container(
+                          // constraints: const BoxConstraints.expand(height: 100),
+                          padding: const EdgeInsets.all(
+                            Paddings.medium,
+                          ),
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              /// Label
+                              DefaultTextStyle(
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelMedium!
+                                      .copyWith(
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                  child:
+                                      widget.label ?? const SizedBox.shrink()),
+
+                              /// title
+                              DefaultTextStyle(
                                 style: Theme.of(context)
                                     .textTheme
-                                    .labelMedium!
+                                    .headlineMedium!
                                     .copyWith(
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                child: widget.label ?? const SizedBox.shrink()),
+                                child: widget.title ?? const SizedBox.shrink(),
+                              ),
 
-                            /// title
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineMedium!
-                                  .copyWith(
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                              child: widget.title ?? const SizedBox.shrink(),
-                            ),
-
-                            /// Description
-                            DefaultTextStyle(
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                              child:
-                                  widget.description ?? const SizedBox.shrink(),
-                            ),
-                          ],
+                              /// Description
+                              DefaultTextStyle(
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                child: widget.description ??
+                                    const SizedBox.shrink(),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
         ),
       ),
-      // ),
     );
   }
 }
