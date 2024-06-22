@@ -1,4 +1,3 @@
-
 import 'package:ahl/src/article_view/bloc/bloc.dart';
 import 'package:ahl/src/pages/prayers/prayers_page.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
@@ -21,7 +20,7 @@ import 'sample_feature/sample_item_details_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
-/// The Widget that configures your application.
+/// The route widget of the website.
 class MyApp extends StatefulWidget {
   const MyApp({
     super.key,
