@@ -237,36 +237,53 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
       // ),
     );
 
-    Widget projectsButton = PopupMenuButton(
-      child: Text(actions.keys.elementAtOrNull(2)),
+    Widget projectsButton = TextButton(
+      style: ButtonStyle(
+        foregroundColor: WidgetStateColor.resolveWith(
+          (states) => Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      onPressed: () {
+        Navigator.of(context).pushNamed(ProjectsPage.routeName);
+      },
+      child: Text(
+        actions.keys.elementAtOrNull(2),
+        style: resolveStyle(actions.values.elementAt(2)),
+      ),
 
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              ProjectsPage.routeName,
-            );
-          },
-          child: const Text('Projet En cours'),
-        ),
-        PopupMenuItem(
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              ProjectsPage.routeName,
-            );
-          },
-          child: const Text('Initiative des soeurs'),
-        ),
-        PopupMenuItem(
-          onTap: () {
-            Navigator.of(context).pushNamed(
-              ProjectsPage.routeName,
-            );
-          },
-          child: const Text('Soutenir un projet'),
-        ),
-      ],
-      // style: ButtonStyle(
+      // PopupMenuButton(
+      /// This part of the code is defining a `PopupMenuButton` widget. The `child` property is setting
+      /// the text that will be displayed on the button. In this case, it is setting the text based on
+      /// the key at index 2 of the `actions` map.
+      // child: Text(actions.keys.elementAtOrNull(2)),
+
+      // itemBuilder: (context) => [
+      //   PopupMenuItem(
+      //     onTap: () {
+      //       Navigator.of(context).pushNamed(
+      //         ProjectsPage.routeName,
+      //       );
+      //     },
+      //     child: const Text('Projet En cours'),
+      //   ),
+      //   PopupMenuItem(
+      //     onTap: () {
+      //       Navigator.of(context).pushNamed(
+      //         ProjectsPage.routeName,
+      //       );
+      //     },
+      //     child: const Text('Initiative des soeurs'),
+      //   ),
+      //   PopupMenuItem(
+      //     onTap: () {
+      //       Navigator.of(context).pushNamed(
+      //         ProjectsPage.routeName,
+      //       );
+      //     },
+      //     child: const Text('Soutenir un projet'),
+      //   ),
+      // ],
+      // // style: ButtonStyle(
       //   foregroundColor: WidgetStateColor.resolveWith(
       //     (states) => Theme.of(context).colorScheme.onSurface,
       //   ),

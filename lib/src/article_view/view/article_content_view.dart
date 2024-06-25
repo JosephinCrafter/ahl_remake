@@ -2,14 +2,12 @@ part of 'article_view.dart';
 
 /// Article Page
 class ArticleContentPage extends StatefulWidget {
-  const ArticleContentPage({
-    super.key,
-    this.article,
-  });
+  const ArticleContentPage(
+      {super.key, this.article, this.collection = "/articles"});
 
   static const String routeName = '/articles';
   final Article? article;
-
+  final String? collection;
   @override
   State<ArticleContentPage> createState() => ArticleContentPageState();
 }
@@ -29,6 +27,7 @@ class ArticleContentPageState extends State<ArticleContentPage> {
             : null,
         appBar: const AhlAppBar(),
         body: ArticleContentView(
+          collection: widget.collection,
           article: widget.article,
         ),
       ),
@@ -40,13 +39,15 @@ class ArticleContentView extends StatelessWidget {
   const ArticleContentView({
     super.key,
     required this.article,
+    this.collection,
   });
 
   final Article? article;
+  final String? collection;
 
   Future<String> get content async {
     final bytes = await firebase.storage
-        .child('articles/${article?.id}/${article?.contentPath}')
+        .child('$collection/${article?.id}/${article?.contentPath}')
         .getData();
 
     String decodedString = utf8.decode(bytes!.toList());

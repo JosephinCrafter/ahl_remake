@@ -169,7 +169,8 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ArticleContentView(
+            builder: (context) => ArticleContentPage(
+              collection: "/projects",
               article: project,
             ),
           ),

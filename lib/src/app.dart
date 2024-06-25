@@ -1,4 +1,5 @@
 import 'package:ahl/src/article_view/bloc/bloc.dart';
+import 'package:ahl/src/pages/homepage/donation/donationpage.dart';
 import 'package:ahl/src/pages/prayers/prayers_page.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/pages/rosary/rosary_page.dart';
@@ -145,6 +146,8 @@ class _MyAppState extends State<MyApp> {
                         return const ArticlesPage();
                       case WhoWeArePage.routeName:
                         return const WhoWeArePage();
+                      case DonationPage.routeName:
+                        return const DonationPage();
                       // todo: add 40 not found page
                       default:
                         return widget.home ?? const HomePage();

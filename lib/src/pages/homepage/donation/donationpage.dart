@@ -1,3 +1,4 @@
+import 'package:ahl/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
 class DonationPage extends StatefulWidget {
@@ -12,6 +13,14 @@ class DonationPage extends StatefulWidget {
 class _DonationPageState extends State<DonationPage> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: const AhlAppBar(),
+      body: Center(
+        child: Text(
+          "Donation Page",
+          style: Theme.of(context).textTheme.displayLarge,
+        ),
+      ),
+    );
   }
 }
