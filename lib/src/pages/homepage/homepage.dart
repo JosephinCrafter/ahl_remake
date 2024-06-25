@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     scrollController.addListener(updatePosition);
+    
   }
 
   double _bottom = 0;

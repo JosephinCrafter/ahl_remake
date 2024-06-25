@@ -171,6 +171,14 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
           : null;
     }
 
+    TextStyle? resolveStyleIf(bool Function() test) {
+      return (test())
+          ? Theme.of(context).textTheme.labelLarge!.copyWith(
+                fontWeight: FontWeight.bold,
+              )
+          : null;
+    }
+
     Map actions = {
       AppLocalizations.of(context)!.homeText: HomePage.routeName,
       AppLocalizations.of(context)!.priesSpace: PrayersPage.routeName,
@@ -216,9 +224,15 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
         },
         child: Text(
           actions.keys.elementAtOrNull(0),
-          style: resolveStyle(actions.values.elementAtOrNull(0)),
+          style: resolveStyleIf(
+            () {
+              return (currentRouteName == actions.values.elementAt(0) ||
+                  currentRouteName == "/");
+            },
+          ),
         ),
       ),
+      // ),
 
       // ),
     );
