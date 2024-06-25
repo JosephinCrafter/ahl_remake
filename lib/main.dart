@@ -34,11 +34,21 @@ void main() async {
   firebaseApp;
 
   runApp(
-    ChangeNotifierProvider.value(
-      value: settingsController,
-      child: MyApp(
-        settingsController: settingsController,
-      ),
+    FutureBuilder(
+      future: firebaseApp,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ChangeNotifierProvider.value(
+            value: settingsController,
+            child: MyApp(
+              settingsController: settingsController,
+            ),
+          );
+        } else {
+          //todo: add here custom loading
+          return Container();
+        }
+      },
     ),
   );
 }
