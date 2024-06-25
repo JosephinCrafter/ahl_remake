@@ -1,7 +1,5 @@
 part of 'prayer_request.dart';
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 /// The route view to collect, setup date and confirm prayers
 /// request.
 ///
@@ -431,9 +429,12 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _prayer = TextEditingController();
 
+  late final GlobalKey<FormState> _formKey;
+
   PrayerRequest? _request;
   @override
   void initState() {
+    _formKey = GlobalKey<FormState>(debugLabel: toString());
     super.initState();
 
     try {

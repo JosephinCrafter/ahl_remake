@@ -28,7 +28,7 @@ class _WelcomingContent extends StatelessWidget {
   Widget build(BuildContext context) {
     double avatarWidth = 174;
     double avatarHeight = 155;
-    GlobalKey containerKey = GlobalKey(debugLabel: 'welcoming_container');
+    // GlobalKey containerKey = GlobalKey(debugLabel: 'welcoming_container');
     return LayoutBuilder(
       builder: (context, constraints) {
         return Stack(
@@ -37,7 +37,7 @@ class _WelcomingContent extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Container(
-                key: containerKey,
+                // key: containerKey,
                 constraints: BoxConstraints(
                   minWidth: 342,
                   maxWidth:
