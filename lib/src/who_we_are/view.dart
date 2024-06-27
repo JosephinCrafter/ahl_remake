@@ -10,6 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gap/gap.dart';
 import 'package:session_storage/session_storage.dart';
 
 import '../project_space/view.dart';
@@ -36,6 +37,7 @@ class WhoWeAreSpace extends StatelessWidget {
             ),
           ),
           const WhoWeAreTile(),
+          const Gap(50),
         ],
       ),
     );
@@ -45,7 +47,7 @@ class WhoWeAreSpace extends StatelessWidget {
 class WhoWeAreTile extends StatefulWidget {
   const WhoWeAreTile({super.key});
 
-  static const String imagePath = 'statics/who_we_are/les_soeurs_ndd.png';
+  static const String imagePath = 'statics/who_we_are/les_soeurs_ndd.webp';
   static const String titlePath = 'statics/setup';
   static const String titleIndex = 'who_we_are_title';
 
@@ -105,14 +107,21 @@ class _WhoWeAreTileState extends State<WhoWeAreTile>
   Widget build(BuildContext context) {
     super.build(context);
 
+    BoxConstraints constraints = BoxConstraints(
+      maxWidth: ContentSize.maxWidth(
+        MediaQuery.of(context).size.width,
+      ),
+      maxHeight: resolveForBreakPoint(
+        MediaQuery.of(context).size.width,
+        other: 500,
+        small: 300,
+        medium: 300,
+      ),
+    );
+
     if (wantKeepAlive) {
       return AhlCard(
-        constraints: BoxConstraints(
-          maxWidth: ContentSize.maxWidth(
-            MediaQuery.of(context).size.width,
-          ),
-          maxHeight: 500,
-        ),
+        constraints: constraints,
         image: Expanded(
           flex: 2,
           child: Container(
@@ -142,6 +151,7 @@ class _WhoWeAreTileState extends State<WhoWeAreTile>
       );
     } else {
       return Container(
+        constraints: constraints,
         child: AhlCard(
           constraints: BoxConstraints(
             maxWidth: ContentSize.maxWidth(
@@ -171,6 +181,7 @@ class _WhoWeAreTileState extends State<WhoWeAreTile>
                 } else if (snapshot.connectionState ==
                     ConnectionState.waiting) {
                   return Container(
+                    constraints: constraints,
                     alignment: Alignment.center,
                     margin: const EdgeInsets.all(Margins.small),
                     decoration: BoxDecoration(
@@ -182,8 +193,9 @@ class _WhoWeAreTileState extends State<WhoWeAreTile>
                     child: const CircularProgressIndicator(),
                   );
                 } else {
-                  print('${snapshot.error}');
+                  log('${snapshot.error}');
                   return Container(
+                    constraints: constraints,
                     color: Theme.of(context).colorScheme.errorContainer,
                     child: Text(
                       "Error loading image: ${snapshot.error}",

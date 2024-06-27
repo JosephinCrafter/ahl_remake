@@ -24,6 +24,14 @@ class FormsLayoutBase extends StatelessWidget {
       ),
 
       decoration: BoxDecoration(
+        image: DecorationImage(
+          opacity: 0.4,
+          scale: 10,
+          repeat: ImageRepeat.repeat,
+          image: AssetImage(
+            AhlAssets.requestMotif,
+          ),
+        ),
         color: Theme.of(context).colorScheme.secondaryContainer,
       ),
       padding: EdgeInsets.symmetric(

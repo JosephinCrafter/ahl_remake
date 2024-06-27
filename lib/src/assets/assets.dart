@@ -31,4 +31,5 @@ class AhlAssets {
       "${releasePath}images/rosary_hero_header.jpg";
   static String praying = "${releasePath}images/praying.png";
   static String prayingAlt = "${releasePath}images/praying_alt.png";
+  static String requestMotif = "${releasePath}images/motif_prayer.webp";
 }

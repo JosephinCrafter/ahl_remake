@@ -188,62 +188,90 @@ class AhlFooter extends StatelessWidget {
 
             const Gap(45),
 
-            Container(
-              constraints: const BoxConstraints(maxWidth: 180),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  FooterIconButton(
-                    callback: () {
-                      launchUrl(
-                        Uri.parse("https://web.facebook.com/LaureSabes"),
-                      );
-                    },
-                    icon: MyFlutterIcons.facebook_circled,
-                  ),
-                  FooterIconButton(
-                    callback: () {
-                      launchUrl(
-                        Uri.parse(
-                            "https://www.youtube.com/@DominicainesMissionnairesMada"),
-                      );
-                    },
-                    icon: MyFlutterIcons.youtube,
-                  ),
-                  FooterIconButton(
-                    callback: () {
-                      //todo: implement whatsapp
-                    },
-                    icon: MyFlutterIcons.whatsapp,
-                  ),
-                ],
-              ),
-            ),
-
             /// Sisters denomination
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                      vertical: Paddings.big, horizontal: Paddings.small + 5)
-                  .copyWith(bottom: 0),
-              child: Text(
-                '© ${DateTime.now().year}',
-                style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                      color: theme.AhlTheme.yellowLight,
-                    ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: Paddings.small + 5,
-                vertical: Paddings.small,
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.sisterDenomination,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(color: theme.AhlTheme.yellowLight),
-              ),
+            // Flex(
+            //   textDirection: TextDirection.ltr,
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   direction: resolveForBreakPoint(
+            //     MediaQuery.of(context).size.width,
+            //     other: Axis.horizontal,
+            //     small: Axis.vertical,
+            //     medium: Axis.vertical,
+            //   ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxHeight: 100,
+                  ),
+                  child: Column(
+                    textDirection: TextDirection.ltr,
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                                // vertical: Paddings.big,
+                                horizontal: Paddings.small + 5)
+                            .copyWith(bottom: 0),
+                        child: Text(
+                          '© ${DateTime.now().year}',
+                          style:
+                              Theme.of(context).textTheme.labelSmall!.copyWith(
+                                    color: theme.AhlTheme.yellowLight,
+                                  ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: Paddings.small + 5,
+                          vertical: Paddings.small,
+                        ),
+                        child: Text(
+                          AppLocalizations.of(context)!.appTitle,
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelSmall!
+                              .copyWith(color: theme.AhlTheme.yellowLight),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  constraints: const BoxConstraints(maxWidth: 180),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      FooterIconButton(
+                        callback: () {
+                          launchUrl(
+                            Uri.parse("https://web.facebook.com/LaureSabes"),
+                          );
+                        },
+                        icon: MyFlutterIcons.facebook_circled,
+                      ),
+                      FooterIconButton(
+                        callback: () {
+                          launchUrl(
+                            Uri.parse(
+                                "https://www.youtube.com/@DominicainesMissionnairesMada"),
+                          );
+                        },
+                        icon: MyFlutterIcons.youtube,
+                      ),
+                      FooterIconButton(
+                        callback: () {
+                          //todo: implement whatsapp
+                        },
+                        icon: MyFlutterIcons.whatsapp,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),
