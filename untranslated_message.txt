@@ -2,6 +2,7 @@
   "en": [
     "heroHeaderSubtitle",
     "articles",
+    "read",
     "thanksForRegistering",
     "invalidEmail",
     "cantBeEmpty",

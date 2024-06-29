@@ -25,7 +25,8 @@ class FormsLayoutBase extends StatelessWidget {
 
       decoration: BoxDecoration(
         image: DecorationImage(
-          opacity: 0.4,
+
+          opacity: 0.25,
           scale: 10,
           repeat: ImageRepeat.repeat,
           image: AssetImage(

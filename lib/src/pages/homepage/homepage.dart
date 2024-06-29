@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage> {
     );
 
     scrollController.addListener(updatePosition);
-    
   }
 
   double _bottom = 0;
@@ -137,53 +136,61 @@ class _HomePageState extends State<HomePage> {
                 ),
                 // ),
               ),
-              ListView(
-                addAutomaticKeepAlives: true,
+              Scrollbar(
                 controller: scrollController,
-                // itemCount: _children.length,
-                // itemBuilder: (context, index) => _children[index],
-                // separatorBuilder: (context, index) {
-                //   if (index == _children.length - 2) {
-                //     return const SizedBox.shrink();
-                //   } else {
-                //     return SizedBox.fromSize(
-                //       size: const Size.fromHeight(Margins.extraLarge),
-                //     );
-                //   }
-                // },
-                restorationId: "home_list_view",
+                // thumbVisibility: true,
+                trackVisibility: true,
 
-                children: [
-                  // HeroHeaderView(),
-                  // Container(
-                  //   margin: const EdgeInsets.only(
-                  //           top: Sizes.mobileHeroHeaderImageHeight)
-                  //       .add(
-                  //     const EdgeInsets.symmetric(
-                  //       horizontal: Paddings.big,
-                  //     ),
-                  //   ),
-                  //   child: const HeroTextView(
-                  //     needMargin: true,
-                  //     margin: 50,
-                  //   ),
-                  // ),
-                  const HeroHeaderView(),
-                  Container(
-                    constraints: const BoxConstraints(
-                        // maxHeight: 6000,
-                        ),
-                    // fix transparent background error.
-                    color: AhlTheme.yellowLight,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      key: const Key("main_homepage_column"),
-                      children: _children,
+                thickness: 10,
+                child: ListView(
+                  addAutomaticKeepAlives: true,
+                  controller: scrollController,
+
+                  // itemCount: _children.length,
+                  // itemBuilder: (context, index) => _children[index],
+                  // separatorBuilder: (context, index) {
+                  //   if (index == _children.length - 2) {
+                  //     return const SizedBox.shrink();
+                  //   } else {
+                  //     return SizedBox.fromSize(
+                  //       size: const Size.fromHeight(Margins.extraLarge),
+                  //     );
+                  //   }
+                  // },
+                  restorationId: "home_list_view",
+
+                  children: [
+                    // HeroHeaderView(),
+                    // Container(
+                    //   margin: const EdgeInsets.only(
+                    //           top: Sizes.mobileHeroHeaderImageHeight)
+                    //       .add(
+                    //     const EdgeInsets.symmetric(
+                    //       horizontal: Paddings.big,
+                    //     ),
+                    //   ),
+                    //   child: const HeroTextView(
+                    //     needMargin: true,
+                    //     margin: 50,
+                    //   ),
+                    // ),
+                    const HeroHeaderView(),
+                    Container(
+                      constraints: const BoxConstraints(
+                          // maxHeight: 6000,
+                          ),
+                      // fix transparent background error.
+                      color: AhlTheme.yellowLight,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        key: const Key("main_homepage_column"),
+                        children: _children,
+                      ),
                     ),
-                  ),
-                ],
-                // child: Column(
-                //   children: _children,
+                  ],
+                  // child: Column(
+                  //   children: _children,
+                ),
               ),
 
               inConstructionPromotionalBar,

@@ -215,22 +215,12 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
                       snapshot.data!,
                       project,
                     );
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
+                  } else {
                     return Container(
                       height: 250,
                       width: 270,
                       alignment: Alignment.center,
                       child: const CircularProgressIndicator(),
-                    );
-                  } else {
-                    developer.log(
-                        '[ProjectSpace] Error getting cover image: ${snapshot.error}');
-                    return Container(
-                      height: 250,
-                      width: 270,
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.warning_rounded),
                     );
                   }
                 },

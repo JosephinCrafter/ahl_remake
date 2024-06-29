@@ -76,7 +76,6 @@ final class ArticleStorageUtils {
 
     return coverImageUrl;
   }
-
   Future<Uint8List?> getCoverImage() async {
     Uint8List? data;
     String? dataString = cache[coverImageDataKey];

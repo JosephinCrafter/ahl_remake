@@ -74,23 +74,29 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                monthTextResolve(
-                                  context,
-                                  releaseMonth,
-                                ).toUpperCase(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
+                              // Text(
+                              //   monthTextResolve(
+                              //     context,
+                              //     releaseMonth,
+                              //   ).toUpperCase(),
+                              //   style: Theme.of(context)
+                              //       .textTheme
+                              //       .labelLarge!
+                              //       .copyWith(
+                              //         color:
+                              //             Theme.of(context).colorScheme.primary,
+                              //       ),
+                              // ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: CardArticleTile(
+                                  article: state.articles![0]!,
+                                ),
                               ),
-                              ArticleTile(article: state.articles![0]!),
                               Container(
                                 margin: const EdgeInsets.symmetric(
-                                    vertical: Margins.medium),
+                                  vertical: Margins.medium,
+                                ),
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
                                   onPressed: () {
