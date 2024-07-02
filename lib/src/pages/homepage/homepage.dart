@@ -9,6 +9,7 @@ import 'package:ahl/src/theme/theme.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:gap/gap.dart';
 
 import '../../project_space/view.dart';
@@ -16,10 +17,10 @@ import '../../who_we_are/view.dart';
 
 /// Home page
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatefulWidget  with ChangeNotifier{
   static const String routeName = "/home";
 
-  const HomePage({super.key});
+   HomePage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -133,7 +134,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   child: const HeroImageView(),
-                ),
+                ).animate().fadeIn(
+                      curve: Curves.easeIn,
+                      duration: Durations.long4,
+                    ),
                 // ),
               ),
               Scrollbar(

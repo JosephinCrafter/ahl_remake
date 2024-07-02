@@ -21,9 +21,9 @@ class AhlAssets {
   static String logoNdd = "${releasePath}images/logo_ndd.png";
   static String priorAvatar = "${releasePath}images/prior_avatar.png";
 
-  static String prayersHeroHeader =
-      "${releasePath}images/prayers_hero_header.png";
-
+  static String prayersSpaceCover =
+      "${releasePath}images/prayers_space_banner.webp";
+  @Deprecated("use projectSpaceCover instead.")
   static String projectHeroHeader =
       "${releasePath}images/projects_hero_header.png";
   static String cantineImage = "${releasePath}images/cantine_hero.png";
@@ -32,4 +32,6 @@ class AhlAssets {
   static String praying = "${releasePath}images/praying.png";
   static String prayingAlt = "${releasePath}images/praying_alt.png";
   static String requestMotif = "${releasePath}images/motif_prayer.webp";
+  static String projectSpaceCover =
+      '${releasePath}images/project_space_banner.webp';
 }

@@ -6,11 +6,13 @@ class SpaceView extends StatelessWidget {
     this.headerImage,
     required this.children,
     this.useGradient = true,
+    this.opacity,
   });
 
   final ImageProvider? headerImage;
   final List<Widget> children;
   final bool useGradient;
+  final double? opacity;
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +22,14 @@ class SpaceView extends StatelessWidget {
         constraints: const BoxConstraints(minHeight: 650),
         decoration: headerImage != null
             ? BoxDecoration(
-                color: const Color(0xFF2e2e2e),
-                backgroundBlendMode: BlendMode.multiply,
+                // color: const Color(0xFF2e2e2e),
+                // backgroundBlendMode: BlendMode.multiply,
                 image: DecorationImage(
-                  opacity: 2.0,
+                  opacity: opacity ?? 1,
                   fit: BoxFit.cover,
                   image: headerImage ??
                       AssetImage(
-                        AhlAssets.prayersHeroHeader,
+                        AhlAssets.prayersSpaceCover,
                       ),
                 ),
               )

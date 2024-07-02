@@ -50,6 +50,7 @@
     "allArticles",
     "todaysRosary",
     "rosarySlogan",
+    "getNotified",
     "allProjects",
     "devInProgress"
   ]

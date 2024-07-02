@@ -133,7 +133,7 @@ class _MyAppState extends State<MyApp> {
                       case SampleItemDetailsView.routeName:
                         return const SampleItemDetailsView();
                       case HomePage.routeName:
-                        return const HomePage();
+                        return  HomePage();
                       case ProjectsPage.routeName:
                         return const ProjectsPage();
                       case PrayersPage.routeName:
@@ -150,7 +150,7 @@ class _MyAppState extends State<MyApp> {
                         return const DonationPage();
                       // todo: add 40 not found page
                       default:
-                        return widget.home ?? const HomePage();
+                        return widget.home ??  HomePage();
                     }
                   },
                 );

@@ -595,7 +595,7 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        TrySnack(() {
+                        trySnack(() {
                           // execute callback or nothing
                           if (widget._callback != null) widget._callback!();
                           context.read<PrayerRequestBloc>().add(
@@ -788,7 +788,7 @@ Widget prayerDecorationImage = Container(
   ),
 );
 
-void TrySnack(
+void trySnack(
   Function fun,
   BuildContext context, {
   String message = "Erreur Server. Recharger la page!",

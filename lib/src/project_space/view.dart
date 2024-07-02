@@ -100,6 +100,7 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
 
     return SpaceView(
       useGradient: false,
+      // headerImage: AssetImage(AhlAssets.projectSpaceCover),
       children: [
         // Title
         SectionTitle(

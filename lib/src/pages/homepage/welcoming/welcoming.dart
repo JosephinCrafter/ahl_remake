@@ -106,7 +106,6 @@ class _WelcomingContent extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: LogoNDD(),
             ),
-            //todo: change the image to Sr Michelle Image
             Positioned(
               bottom:
                   (-avatarHeight / 2) - 10, // avatarHeight is the image height
@@ -160,7 +159,7 @@ class Signature extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-          text: '${AppLocalizations.of(context)!.sister} Michelle Marie, o.p',
+          text: '${AppLocalizations.of(context)!.sister} Michèle Marie, o.p',
           style: AhlTheme.name,
           children: [
             TextSpan(

@@ -34,9 +34,9 @@ class PrayerSpaceView extends StatelessWidget {
     ];
 
     return SpaceView(
-      useGradient: true,
+      useGradient: false,
       headerImage: AssetImage(
-        AhlAssets.prayersHeroHeader,
+        AhlAssets.prayersSpaceCover,
       ),
       children: children,
     );

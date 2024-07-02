@@ -809,26 +809,27 @@ class _ArticlePreviewViewState extends State<ArticlePreviewTextView> {
                     softWrap: true,
                     // overflow: TextOverflow.ellipsis,
                     text: TextSpan(
-                        text: snapshot.data!,
-                        //  softWrap: true,
-                        // maxLines: 5,
+                      text: snapshot.data!,
+                      //  softWrap: true,
+                      // maxLines: 5,
 
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(overflow: TextOverflow.ellipsis),
-                        children: [
-                          WidgetSpan(
-                            child: TextButton(
-                              child: Text(
-                                AppLocalizations.of(context)!.read,
-                              ),
-                              onPressed: () {
-                                if (widget.callback != null) widget.callback!();
-                              },
-                            ),
-                          ),
-                        ]),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(overflow: TextOverflow.ellipsis),
+                      // children: [
+                      //   WidgetSpan(
+                      //     child: TextButton(
+                      //       child: Text(
+                      //         AppLocalizations.of(context)!.read,
+                      //       ),
+                      //       onPressed: () {
+                      //         if (widget.callback != null) widget.callback!();
+                      //       },
+                      //     ),
+                      //   ),
+                      // ],
+                    ),
                   ),
                 );
               } else if (snapshot.connectionState == ConnectionState.waiting) {
