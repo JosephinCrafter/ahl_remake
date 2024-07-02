@@ -26,7 +26,8 @@ class SpaceView extends StatelessWidget {
                 // backgroundBlendMode: BlendMode.multiply,
                 image: DecorationImage(
                   opacity: opacity ?? 1,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fitWidth,
+                  alignment: Alignment.topCenter,
                   image: headerImage ??
                       AssetImage(
                         AhlAssets.prayersSpaceCover,

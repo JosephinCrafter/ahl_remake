@@ -446,8 +446,8 @@ class _CardArticleTileState extends State<CardArticleTile>
           constraints: BoxConstraints(
             maxWidth: resolveForBreakPoint(
               MediaQuery.of(context).size.width,
-              small: 330,
-              medium: 330,
+              // small: 330,
+              // medium: 330,
               other: ContentSize.maxWidth(MediaQuery.of(context).size.width),
             ),
             minWidth: 330,

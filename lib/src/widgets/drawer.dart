@@ -9,8 +9,9 @@ class AhlDrawer extends StatelessWidget {
       builder: (context, constraints) => Drawer(
         width: constraints.maxWidth,
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+          backgroundColor: theme.AhlTheme.yellowLight,
           appBar: AhlAppBar(
+            backgroundColor: theme.AhlTheme.yellowLight,
             padding: const EdgeInsets.only(left: Paddings.drawerAppBarPadding),
             crossAxisAlignment: CrossAxisAlignment.center,
             title: AhlLogo(
@@ -53,28 +54,33 @@ class AhlDrawer extends StatelessWidget {
                 ),
               ),
               Positioned(
+                right: 20,
                 bottom: 50,
-                child: Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        LocaleUtils.changeLocale(
-                          context,
-                          const Locale('fr'),
-                        );
-                      },
-                      child: const Text('Français'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        LocaleUtils.changeLocale(
-                          context,
-                          const Locale('en'),
-                        );
-                      },
-                      child: const Text('English'),
-                    ),
-                  ],
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  color: theme.AhlTheme.yellowLight,
+                  child: Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          LocaleUtils.changeLocale(
+                            context,
+                            const Locale('fr'),
+                          );
+                        },
+                        child: const Text('Français'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          LocaleUtils.changeLocale(
+                            context,
+                            const Locale('en'),
+                          );
+                        },
+                        child: const Text('English'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const DrawerFooter(),

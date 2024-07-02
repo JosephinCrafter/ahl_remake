@@ -31,6 +31,7 @@ class _RosaryPageState extends State<RosaryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AhlAppBar(),
+      drawer: const AhlDrawer(),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
