@@ -33,6 +33,8 @@
     "inProgress",
     "realized",
     "initiative",
+    "projectSpaceTitle",
+    "projectSpaceDescription",
     "january",
     "february",
     "march",

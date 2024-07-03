@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/view/article_view.dart';
+import 'package:ahl/src/firebase_constants.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/project_space/bloc.dart';
 import 'package:ahl/src/utils/storage_utils.dart';
@@ -171,7 +172,7 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
           context,
           MaterialPageRoute(
             builder: (context) => ArticleContentPage(
-              collection: "/projects",
+              collection: projectsCollection,
               article: project,
             ),
           ),

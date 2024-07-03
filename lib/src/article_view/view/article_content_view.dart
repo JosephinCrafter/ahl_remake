@@ -26,16 +26,23 @@ class ArticleContentPageState extends State<ArticleContentPage> {
             ? const AhlDrawer()
             : null,
         appBar: const AhlAppBar(),
-        body: ArticleContentView(
-          collection: widget.collection,
-          article: widget.article,
+        body: ListView(
+          children: [
+            ArticleContentView(
+              collection: widget.collection,
+              article: widget.article,
+            ),
+            const Gap(25),
+            const NewsLetterPrompt(),
+            const AhlFooter(),
+          ],
         ),
       ),
     );
   }
 }
 
-class ArticleContentView extends StatelessWidget {
+class ArticleContentView extends StatefulWidget {
   const ArticleContentView({
     super.key,
     required this.article,
@@ -45,19 +52,30 @@ class ArticleContentView extends StatelessWidget {
   final Article? article;
   final String? collection;
 
+  @override
+  State<ArticleContentView> createState() => _ArticleContentViewState();
+}
+
+class _ArticleContentViewState extends State<ArticleContentView> {
   Future<String> get content async {
     final bytes = await firebase.storage
-        .child('$collection/${article?.id}/${article?.contentPath}')
+        .child(
+            '${widget.collection}/${widget.article?.id}/${widget.article?.contentPath}')
         .getData();
 
     String decodedString = utf8.decode(bytes!.toList());
     return decodedString;
   }
 
+  late double screenWidth;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
     // Style for Markdown from Flutter_markdown
     // final styleSheet = MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
     //   p: AhlTheme.bodyMedium,
@@ -98,11 +116,61 @@ class ArticleContentView extends StatelessWidget {
     //       .copyWith(fontStyle: FontStyle.italic),
     // ),
 
+    screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: resolveForBreakPoint(
+          screenWidth,
+          other: Margins.small,
+          extraHuge: Margins.extraHuge,
+          huge: Margins.huge,
+          extraLarge: Margins.extraLarge,
+          large: Margins.large,
+        ),
+      ),
+      constraints: BoxConstraints(
+        maxWidth: ContentSize.maxWidth(
+          screenWidth,
+        ),
+      ),
+      child: buildMarkdownBlock(context),
+    );
+  }
+
+  Widget buildMarkdownBlock(BuildContext context) {
     MarkdownConfig minimalisticCorporateConfig = MarkdownConfig(
       configs: [
+        ImgConfig(builder: (String url, Map<String, dynamic> attributes) {
+          // parse url to uri
+          developer.log(url);
+          return FutureBuilder(
+            future: http.get(
+              Uri.parse(url),
+            ),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                try {
+                  return Image.memory(
+                    Uint8List.fromList(
+                      snapshot.data!.body.codeUnits,
+                    ),
+                  );
+                } catch (e) {
+                  return Container();
+                }
+              } else {
+                return Container(
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(),
+                );
+              }
+            },
+          );
+        }),
         H1Config(
           style: resolveHeadlineTextThemeForBreakPoints(screenWidth, context)!,
         ),
+
         LinkConfig(
           onTap: (url) {
             launchUrl(Uri.parse(url));
@@ -133,31 +201,39 @@ class ArticleContentView extends StatelessWidget {
         // ),
       ],
     );
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: resolveForBreakPoint(
-          screenWidth,
-          other: Margins.small,
-          extraHuge: Margins.extraHuge,
-          huge: Margins.huge,
-          extraLarge: Margins.extraLarge,
-          large: Margins.large,
-        ),
-      ),
-      constraints: BoxConstraints(
-        maxWidth: ContentSize.maxWidth(
-          screenWidth,
-        ),
-      ),
-      child: FutureBuilder(
+    String articleKey = "${widget.article!.contentPath}";
+    SessionStorage cache = SessionStorage();
+
+    if (cache[articleKey] == null) {
+      return FutureBuilder(
         future: content,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
               if (snapshot.hasData) {
-                return MarkdownWidget(
-                  data: snapshot.data ?? 'Error loading article.',
-                  config: minimalisticCorporateConfig,
+                cache[articleKey] = snapshot.data!;
+                return Card(
+                  color: const Color(0xFFFAFAFA),
+                  child: Container(
+                      padding: const EdgeInsets.all(Paddings.medium),
+                      child: Column(
+                        children: [
+                          MarkdownBlock(
+                            data: snapshot.data ?? 'Error loading article.',
+                            config: minimalisticCorporateConfig,
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: OutlinedButton.icon(
+                              onPressed: () {
+                                // todo: implement sharing mechanisme.
+                              },
+                              label: const Text('Partager'),
+                              icon: const Icon(Icons.share_outlined),
+                            ),
+                          ),
+                        ],
+                      )),
                 );
               } else {
                 return Align(
@@ -190,7 +266,31 @@ class ArticleContentView extends StatelessWidget {
             //   );
           }
         },
-      ),
-    );
+      );
+    } else {
+      return Card(
+        color: const Color(0xFFFAFAFA),
+        child: Container(
+            padding: const EdgeInsets.all(Paddings.medium),
+            child: Column(
+              children: [
+                MarkdownBlock(
+                  data: cache[articleKey] ?? 'Error loading article.',
+                  config: minimalisticCorporateConfig,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      // todo: implement sharing mechanisme.
+                    },
+                    label: const Text('Partager'),
+                    icon: const Icon(Icons.share_outlined),
+                  ),
+                ),
+              ],
+            )),
+      );
+    }
   }
 }

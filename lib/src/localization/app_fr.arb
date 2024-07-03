@@ -30,7 +30,7 @@
     "description": "The title of the welcoming message."
   },
   "welcomingBody": "Bienvenu sur le site des Soeurs Dominicaines Missionnaires de Notre Dame de la Délivrande, Madagascar, Saharoaloha.\n\nEn tant que Sœur Supérieure, je vous accueille chaleureusement pour partager notre histoire, notre mission et notre engagement envers la foi.\n\nUnissez-vous à nous dans la prière, en explorant ce site dédié à cultiver ensemble une vie spirituelle enrichissante.",
-  "sister": "Sœurs",
+  "sister": "Sœur",
   "sisterDenomination": "Sœurs Dominicaines Missionnaires de Notre Dame de la Délivrande",
   "@sisterDenomination": {
     "description": "Text qui est utiliser dans le footer comme signiture du site internet"
@@ -118,6 +118,8 @@
   "inProgress": "Projets en cours",
   "realized": "Réalisation",
   "initiative": "Initiative des soeurs",
+  "projectSpaceTitle" : "Nos projets",
+  "projectSpaceDescription" : "Découvrez les initiatives concrètes qui animent notre mission au service du peuple malgache et de l’eglise locale. Nous vous invitons à découvrir sur cette page les initiatives que nous menons.",
 
   "january": "Janvier",
   "february": "Fevrier",
@@ -139,7 +141,7 @@
   "rosarySlogan":"Mediter la vie de Jesus avec Marie",
   "getNotified": "Être notifier",
 
-  "allProjects": "Voir tout les projet",
+  "allProjects": "Voir projets",
 
   "devInProgress": "Bientôt disponible"
 }

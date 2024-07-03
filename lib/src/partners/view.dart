@@ -1,9 +1,9 @@
-
 import "package:ahl/src/ahl_barrel.dart";
 import "package:ahl/src/firebase_constants.dart";
 import "package:ahl/src/utils/breakpoint_resolver.dart";
 import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/foundation.dart";
+import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:flutter/material.dart";
 import "package:gap/gap.dart";
@@ -85,12 +85,13 @@ class _PartnersViewState extends State<PartnersView>
     computeImage();
     super.build(context);
     return Container(
-      constraints: const BoxConstraints.expand(height: 245),
+      alignment: Alignment.center,
+      // constraints: const BoxConstraints.expand(height: 245),
       color: Theme.of(context).colorScheme.surface,
       child: Container(
-        constraints: const BoxConstraints(
-          maxWidth: 1080,
-          maxHeight: 245,
+        constraints: BoxConstraints(
+          maxWidth: ContentSize.maxWidth(MediaQuery.of(context).size.width),
+          maxHeight: 300,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -112,7 +113,7 @@ class _PartnersViewState extends State<PartnersView>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  constraints: BoxConstraints.tight(const Size.square(100)),
+                  constraints: BoxConstraints.tight(const Size.square(150)),
                   child: FutureBuilder(
                       future: images,
                       builder: (context, snapshot) {
@@ -120,13 +121,20 @@ class _PartnersViewState extends State<PartnersView>
                           return Row(
                             children: snapshot.data!
                                 .map<Widget>(
-                                  (element) => Image.memory(element),
+                                  (element) => Card(
+                                    clipBehavior: Clip.hardEdge,
+                                    borderOnForeground: true,
+                                    child: Image.memory(element),
+                                  ).animate().fadeIn(),
                                 )
                                 .toList(),
                           );
                         } else if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
+                          return const Align(
+                            // alignment: Alignment.center,
+                            child: CircularProgressIndicator(),
+                          );
                         } else {
                           return const Icon(Icons.warning_rounded);
                         }

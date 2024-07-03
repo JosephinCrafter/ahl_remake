@@ -52,10 +52,10 @@ class WhoWeAreTile extends StatefulWidget {
   static const String titleIndex = 'who_we_are_title';
 
   @override
-  State<WhoWeAreTile> createState() => _WhoWeAreTileState();
+  State<WhoWeAreTile> createState() => WhoWeAreTileState();
 }
 
-class _WhoWeAreTileState extends State<WhoWeAreTile>
+class WhoWeAreTileState extends State<WhoWeAreTile>
     with AutomaticKeepAliveClientMixin {
   final String whoWeAreImageKey = 'who_we_are_image_key';
 
