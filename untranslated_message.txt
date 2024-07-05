@@ -34,6 +34,7 @@
     "realized",
     "initiative",
     "projectSpaceTitle",
+    "projectLongTitle",
     "projectSpaceDescription",
     "january",
     "february",

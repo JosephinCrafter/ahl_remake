@@ -29,6 +29,7 @@ class ProjectsSpaceView extends StatefulWidget {
 class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
     with AutomaticKeepAliveClientMixin {
   List<ArticleStorageUtils>? storageUtils;
+  late List<Future> futureImageCovers;
 
   ArticleState<Article>? state;
 
@@ -70,6 +71,8 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
               ),
             )
             .toList();
+        if(storageUtils != null){
+        futureImageCovers = storageUtils!.map<Future>((element)=>element.getCoverImage(),).toList();}
       },
     );
 
@@ -207,9 +210,9 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
     return (projects != null)
         ? projects.map<Widget>((project) {
             if (project != null) {
-              final storageUtil = storageUtils?[projects.indexOf(project)];
+              final futureImageCover = futureImageCovers[projects.indexOf(project)];
               return FutureBuilder(
-                future: storageUtil?.getCoverImage(),
+                future: futureImageCover,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return buildCard(

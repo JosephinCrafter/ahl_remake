@@ -128,11 +128,17 @@ class _ArticleContentViewState extends State<ArticleContentView> {
           large: Margins.large,
         ),
       ),
-      constraints: BoxConstraints(
-        maxWidth: ContentSize.maxWidth(
+      padding: EdgeInsets.symmetric(
+        horizontal: resolveForBreakPoint(
           screenWidth,
+          small: Margins.small,
+          medium: Margins.small,
+          large: Margins.large,
+          extraLarge: Margins.extraLarge,
+          other: Margins.huge,
         ),
       ),
+      constraints: const BoxConstraints(maxWidth: 1024),
       child: buildMarkdownBlock(context),
     );
   }
@@ -271,25 +277,26 @@ class _ArticleContentViewState extends State<ArticleContentView> {
       return Card(
         color: const Color(0xFFFAFAFA),
         child: Container(
-            padding: const EdgeInsets.all(Paddings.medium),
-            child: Column(
-              children: [
-                MarkdownBlock(
-                  data: cache[articleKey] ?? 'Error loading article.',
-                  config: minimalisticCorporateConfig,
+          padding: const EdgeInsets.all(Paddings.medium),
+          child: Column(
+            children: [
+              MarkdownBlock(
+                data: cache[articleKey] ?? 'Error loading article.',
+                config: minimalisticCorporateConfig,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    //todo: implement sharing mechanism
+                  },
+                  label: const Text('Partager'),
+                  icon: const Icon(Icons.share_outlined),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      // todo: implement sharing mechanisme.
-                    },
-                    label: const Text('Partager'),
-                    icon: const Icon(Icons.share_outlined),
-                  ),
-                ),
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
       );
     }
   }

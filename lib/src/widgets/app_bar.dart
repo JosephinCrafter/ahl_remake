@@ -369,17 +369,22 @@ class AhlMenuButton extends StatelessWidget {
     if (scaffoldHasEndDrawer) {
       return Hero(
         tag: 'menu_button_tag',
-        child: SizedBox.square(
-          dimension: 28,
+        child: Container(
+          alignment: Alignment.center,
+          width: 32,
+          height: 32,
           // alignment: Alignment.center,
           child: IconButton(
             onPressed: () => scaffoldState.openEndDrawer(),
-            icon: const FittedBox(
+            icon:Container(
+                alignment: Alignment.center,
+                child:const FittedBox(
               fit: BoxFit.contain,
-              child: Icon(
-                size: 24,
-                MyFlutterIcons.menu,
-                applyTextScaling: true,
+              child:   Icon(
+                  size: 24,
+                  MyFlutterIcons.menu,
+                  applyTextScaling: true,
+                ),
               ),
             ),
           ),

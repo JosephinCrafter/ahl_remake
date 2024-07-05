@@ -38,7 +38,6 @@ class _PrayersIntentionRequestViewState
       ),
       PrayerDateCollectionView(
         key: const ValueKey(2),
-        //todo: change to new widget index
         callback: nextView,
         backCallback: previousView,
       ),

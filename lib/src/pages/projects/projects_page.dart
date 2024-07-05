@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:typed_data';
 
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/state/state.dart';
@@ -23,7 +22,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/widgets/widgets.dart';
-import 'package:markdown_widget/markdown_widget.dart';
 
 import '../../article_view/view/article_view.dart';
 
@@ -46,7 +44,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const AhlDrawer(),
+      endDrawer: const AhlDrawer(),
       appBar: const AhlAppBar(),
 
       /// The project and all page are organized as list views
@@ -238,17 +236,18 @@ class Header extends StatelessWidget {
           maxWidth: ContentSize.maxWidth(MediaQuery.of(context).size.width),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              AppLocalizations.of(context)!.projectSpaceTitle,
+              AppLocalizations.of(context)!.projectLongTitle,
               style: Theme.of(context).textTheme.displaySmall,
-              // textAlign: TextAlign.center,
+              textAlign: TextAlign.center,
             ),
             const Gap(10),
             Text(
               AppLocalizations.of(context)!.projectsSpaceSubtitle,
               style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center,
             ),
             const Gap(20),
             Text(
@@ -346,7 +345,7 @@ class _AllArticleViewState extends State<AllArticleView> {
                 if (projectWaiting != null && projectWaiting.isNotEmpty) ...[
                   const Gap(45),
                   ProjectsView(
-                    title: 'Projet en attente de financement',
+                    title: 'En attente financement',
                     articles: projectWaiting,
                   ),
                 ],
@@ -482,27 +481,34 @@ class _ProjectsViewState extends State<ProjectsView> {
                   widget.title,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => _controller.animateTo(
-                        _controller.offset - 300,
-                        duration: Durations.long1,
-                        curve: Curves.easeIn,
+                Container(
+                  padding: const EdgeInsets.all(4.0),
+                  decoration: ShapeDecoration(
+                    color: Theme.of(context).colorScheme.surfaceBright,
+                    shape: const StadiumBorder(),
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => _controller.animateTo(
+                          _controller.offset - 300,
+                          duration: Durations.long1,
+                          curve: Curves.easeIn,
+                        ),
+                        icon: const Icon(Icons.arrow_back_outlined),
                       ),
-                      icon: const Icon(Icons.arrow_back_outlined),
-                    ),
-                    IconButton(
-                      onPressed: () => _controller.animateTo(
-                        _controller.offset + 300,
-                        duration: Durations.long1,
-                        curve: Curves.easeIn,
-                      ),
-                      icon: const Icon(
-                        Icons.arrow_forward_rounded,
-                      ),
-                    )
-                  ],
+                      IconButton(
+                        onPressed: () => _controller.animateTo(
+                          _controller.offset + 300,
+                          duration: Durations.long1,
+                          curve: Curves.easeIn,
+                        ),
+                        icon: const Icon(
+                          Icons.arrow_forward_rounded,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ],
             ),
