@@ -22,6 +22,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/widgets/widgets.dart';
+import 'package:session_storage/session_storage.dart';
 
 import '../../article_view/view/article_view.dart';
 
@@ -118,26 +119,52 @@ class AhlDivider extends StatelessWidget {
   }
 }
 
-class SuggestionSection extends StatelessWidget {
+class SuggestionSection extends StatefulWidget {
   const SuggestionSection({super.key});
 
   @override
+  State<StatefulWidget> createState() => _SuggestionSectionState();
+}
+
+class _SuggestionSectionState extends State<SuggestionSection>
+    with AutomaticKeepAliveClientMixin {
+  late Future image;
+
+  static const String coverImageKey = 'coverImage';
+
+  @override
+  void initState() {
+    image = getImage();
+    super.initState();
+  }
+
+  Future getImage() async {
+    final cache = SessionStorage();
+
+    return await WhoWeAreTileState().getImage().then((value) {
+      cache[coverImageKey] = 'loaded';
+      return value;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Align(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: Margins.small),
-        constraints: BoxConstraints(
-          maxWidth: ContentSize.maxWidth(
-            MediaQuery.of(context).size.width,
-          ),
-        ),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-              // overlayColor: Colors.black26,
-              backgroundBuilder: (context, states, child) {
-            return FutureBuilder(
-                future: WhoWeAreTileState().getImage(),
-                builder: (context, snapshot) {
+    super.build(context);
+    return FutureBuilder(
+      future: image,
+      builder: (context, snapshot) {
+        return Align(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: Margins.small),
+            constraints: BoxConstraints(
+              maxWidth: ContentSize.maxWidth(
+                MediaQuery.of(context).size.width,
+              ),
+            ),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                // overlayColor: Colors.black26,
+                backgroundBuilder: (context, states, child) {
                   return Align(
                     child: AnimatedContainer(
                       duration: Durations.long1,
@@ -169,14 +196,20 @@ class SuggestionSection extends StatelessWidget {
                       ),
                     ),
                   );
-                });
-          }),
-          onPressed: () => Navigator.pushNamed(context, WhoWeArePage.routeName),
-          child: Text(AppLocalizations.of(context)!.whoWeAre),
-        ),
-      ),
+                },
+              ),
+              onPressed: () =>
+                  Navigator.pushNamed(context, WhoWeArePage.routeName),
+              child: Text(AppLocalizations.of(context)!.whoWeAre),
+            ),
+          ),
+        );
+      },
     );
   }
+
+  @override
+  bool get wantKeepAlive => SessionStorage()[coverImageKey] != null;
 }
 
 class HeroImage extends StatelessWidget {
