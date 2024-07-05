@@ -444,7 +444,7 @@ class _CardArticleTileState extends State<CardArticleTile>
         borderRadius: BorderRadius.circular(BorderSizes.medium),
       ),
       child: InkWell(
-        // onHover: _onHover,
+        onHover: _onHover,
         onTap: goToReadingPage,
         child: Container(
           // padding: const EdgeInsets.all(Paddings.medium),
@@ -618,7 +618,7 @@ class ArticleCoverImage extends StatefulWidget {
 
 class _ArticleCoverImageState extends State<ArticleCoverImage> {
   late ArticleStorageUtils articleStorageUtils;
-
+  late Future articleCoverImage;
   late Article _article;
 
   final SessionStorage cache = SessionStorage();
@@ -634,141 +634,148 @@ class _ArticleCoverImageState extends State<ArticleCoverImage> {
     _article = widget.article;
 
     coverImageCacheKey = "${_article.id}_cover_image";
+
+    articleCoverImage =
+        articleStorageUtils.getCoverImage(); //getHeroHeaderImage()
   }
 
   @override
   Widget build(BuildContext context) {
-    return (cache[coverImageCacheKey] == null)
-        ? ConstrainedBox(
+    return
+        // (cache[coverImageCacheKey] == null)
+        //     ?
+        ConstrainedBox(
             constraints: const BoxConstraints(
                 // minHeight: 135,
                 // maxHeight: 232,
                 ),
-            child: (_article.relations?.first[RepoSetUp.coverImageKey] != null)
-                ? FutureBuilder(
-                    future: articleStorageUtils
-                        .getCoverImage(), //getHeroHeaderImage(),
-                    builder: (context, snapshot) {
-                      // switch (snapshot.connectionState) {
-                      //   case ConnectionState.done:
-                      if (snapshot.hasData) {
-                        cache[coverImageCacheKey] =
-                            encodeUint8ListToString(snapshot.data!);
-                        return ClipPath(
-                          clipper: resolveForBreakPoint(
-                            MediaQuery.of(context).size.width,
-                            other: LargeArticleClipper(),
-                            small: MobileArticleClipper(),
-                            medium: MobileArticleClipper(),
-                          ),
-                          child: Container(
-                            // constraints: const BoxConstraints(
-                            //   // maxHeight: 135,
-                            //   // maxWidth: 185,
-                            //   // minWidth: 107,
-                            // ),
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: MemoryImage(snapshot.data!),
-                              ),
-                            ),
-                          ).animate().fadeIn(),
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                      //      else {
-                      //       return Container(
-                      //         decoration: BoxDecoration(
-                      //           borderRadius:
-                      //               BorderRadius.circular(BorderSizes.small),
-                      //           color: Theme.of(context)
-                      //               .colorScheme
-                      //               .errorContainer,
-                      //         ),
-                      //         child: Text(
-                      //           'Error getting image: ${snapshot.error}',
-                      //           style: Theme.of(context)
-                      //               .textTheme
-                      //               .labelSmall!
-                      //               .copyWith(
-                      //                 color:
-                      //                     Theme.of(context).colorScheme.error,
-                      //               ),
-                      //         ).animate().fadeIn(),
-                      //       );
-                      //     }
-                      //   case ConnectionState.waiting:
-                      //     return Container(
-                      //       alignment: Alignment.center,
-                      //       decoration: BoxDecoration(
-                      //         borderRadius:
-                      //             BorderRadius.circular(BorderSizes.small),
-                      //         color: Theme.of(context)
-                      //             .colorScheme
-                      //             .primaryContainer,
-                      //       ),
-                      //       child: SizedBox.square(
-                      //         dimension: 50,
-                      //         child: CircularProgressIndicator(
-                      //           color: Theme.of(context).colorScheme.primary,
-                      //         ),
-                      //       ),
-                      //     );
-                      //   default:
-                      //     return Container(
-                      //       alignment: Alignment.center,
-                      //       decoration: BoxDecoration(
-                      //         borderRadius:
-                      //             BorderRadius.circular(BorderSizes.small),
-                      //         color: Theme.of(context)
-                      //             .colorScheme
-                      //             .secondaryContainer,
-                      //       ),
-                      //       child: SizedBox.square(
-                      //         dimension: 50,
-                      //         child: CircularProgressIndicator(
-                      //           color: Theme.of(context).colorScheme.secondary,
-                      //         ),
-                      //       ),
-                      //     );
-                      // }
-                    },
-                  )
-                : Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(BorderSizes.small),
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                      ),
+            child:
+                // (_article.relations?.first[RepoSetUp.coverImageKey] != null)
+                //     ?
+                FutureBuilder(
+              future: articleCoverImage,
+              builder: (context, snapshot) {
+                // switch (snapshot.connectionState) {
+                //   case ConnectionState.done:
+                if (snapshot.hasData) {
+                  cache[coverImageCacheKey] =
+                      encodeUint8ListToString(snapshot.data!);
+                  return ClipPath(
+                    clipper: resolveForBreakPoint(
+                      MediaQuery.of(context).size.width,
+                      other: LargeArticleClipper(),
+                      small: MobileArticleClipper(),
+                      medium: MobileArticleClipper(),
                     ),
-                  ),
-          )
-        : ClipPath(
-            clipper: resolveForBreakPoint(
-              MediaQuery.of(context).size.width,
-              other: LargeArticleClipper(),
-              small: MobileArticleClipper(),
-              medium: MobileArticleClipper(),
-            ),
-            child: Container(
-              // constraints: const BoxConstraints(
-              //   // maxHeight: 135,
-              //   // maxWidth: 185,
-              //   // minWidth: 107,
-              // ),
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: MemoryImage(decodeUint8ListFromString(
-                      cache[coverImageCacheKey] ?? "[[]]")),
-                ),
-              ),
-            ).animate().fadeIn(
-                  curve: Curves.easeInOutBack,
-                ),
-          );
+                    child: Container(
+                      // constraints: const BoxConstraints(
+                      //   // maxHeight: 135,
+                      //   // maxWidth: 185,
+                      //   // minWidth: 107,
+                      // ),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: MemoryImage(snapshot.data!),
+                        ),
+                      ),
+                    ).animate().fadeIn(),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+                //      else {
+                //       return Container(
+                //         decoration: BoxDecoration(
+                //           borderRadius:
+                //               BorderRadius.circular(BorderSizes.small),
+                //           color: Theme.of(context)
+                //               .colorScheme
+                //               .errorContainer,
+                //         ),
+                //         child: Text(
+                //           'Error getting image: ${snapshot.error}',
+                //           style: Theme.of(context)
+                //               .textTheme
+                //               .labelSmall!
+                //               .copyWith(
+                //                 color:
+                //                     Theme.of(context).colorScheme.error,
+                //               ),
+                //         ).animate().fadeIn(),
+                //       );
+                //     }
+                //   case ConnectionState.waiting:
+                //     return Container(
+                //       alignment: Alignment.center,
+                //       decoration: BoxDecoration(
+                //         borderRadius:
+                //             BorderRadius.circular(BorderSizes.small),
+                //         color: Theme.of(context)
+                //             .colorScheme
+                //             .primaryContainer,
+                //       ),
+                //       child: SizedBox.square(
+                //         dimension: 50,
+                //         child: CircularProgressIndicator(
+                //           color: Theme.of(context).colorScheme.primary,
+                //         ),
+                //       ),
+                //     );
+                //   default:
+                //     return Container(
+                //       alignment: Alignment.center,
+                //       decoration: BoxDecoration(
+                //         borderRadius:
+                //             BorderRadius.circular(BorderSizes.small),
+                //         color: Theme.of(context)
+                //             .colorScheme
+                //             .secondaryContainer,
+                //       ),
+                //       child: SizedBox.square(
+                //         dimension: 50,
+                //         child: CircularProgressIndicator(
+                //           color: Theme.of(context).colorScheme.secondary,
+                //         ),
+                //       ),
+                //     );
+                // }
+              },
+            )
+            // : Expanded(
+            //     child: Container(
+            //       decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(BorderSizes.small),
+            //         color: Theme.of(context).colorScheme.primaryContainer,
+            //       ),
+            //     ),
+            //   ),
+            )
+        // : ClipPath(
+        //     clipper: resolveForBreakPoint(
+        //       MediaQuery.of(context).size.width,
+        //       other: LargeArticleClipper(),
+        //       small: MobileArticleClipper(),
+        //       medium: MobileArticleClipper(),
+        //     ),
+        //     child: Container(
+        //       // constraints: const BoxConstraints(
+        //       //   // maxHeight: 135,
+        //       //   // maxWidth: 185,
+        //       //   // minWidth: 107,
+        //       // ),
+        //       decoration: BoxDecoration(
+        //         image: DecorationImage(
+        //           fit: BoxFit.cover,
+        //           image: MemoryImage(decodeUint8ListFromString(
+        //               cache[coverImageCacheKey] ?? "[[]]")),
+        //         ),
+        //       ),
+        //     ).animate().fadeIn(
+        //           curve: Curves.easeInOutBack,
+        //         ),
+        //   );
+        ;
   }
 }
 

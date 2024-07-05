@@ -62,7 +62,9 @@ class ActionsLists {
       builder: (context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: Paddings.small),
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(WhoWeArePage.routeName);
+          },
           child: Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(vertical: Paddings.medium),
@@ -81,7 +83,9 @@ class ActionsLists {
       builder: (context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: Paddings.small),
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(PrayersPage.routeName);
+          },
           child: Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(vertical: Paddings.medium),
@@ -100,7 +104,9 @@ class ActionsLists {
       builder: (context) => Padding(
         padding: const EdgeInsets.symmetric(vertical: Paddings.small),
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(ProjectsPage.routeName);
+          },
           child: Container(
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(vertical: Paddings.medium),
@@ -140,7 +146,9 @@ class ActionsLists {
       builder: (context) => Container(
         margin: const EdgeInsets.only(top: 64),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushNamed(DonationPage.routeName);
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).primaryColor,
             foregroundColor: Theme.of(context).colorScheme.onPrimary,

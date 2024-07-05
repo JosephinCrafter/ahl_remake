@@ -7,6 +7,7 @@ class AhlDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => Drawer(
+        clipBehavior: Clip.antiAlias,
         width: constraints.maxWidth,
         child: Scaffold(
           backgroundColor: theme.AhlTheme.yellowLight,

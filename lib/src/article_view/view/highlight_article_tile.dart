@@ -45,7 +45,8 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                       case ArticleStatus.failed:
                         developer.log('${state.error}');
                         return Container(
-                          color: Theme.of(context).colorScheme.onErrorContainer,
+                          padding: const EdgeInsets.all(4.0),
+                          // color: Theme.of(context).colorScheme.onErrorContainer,
                           margin: const EdgeInsets.symmetric(
                             horizontal: Margins.medium,
                           ),
