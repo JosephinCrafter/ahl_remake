@@ -150,15 +150,29 @@ class _ArticleContentViewState extends State<ArticleContentView> {
           // parse url to uri
           developer.log(url);
           return FutureBuilder(
-            future: http.get(
-              Uri.parse(url),
-            ),
+            future:
+                // http.get(
+                //   Uri.parse(url),
+                // ),
+                firebase.storage.child(url).getData(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 try {
-                  return Image.memory(
-                    Uint8List.fromList(
-                      snapshot.data!.body.codeUnits,
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        DialogRoute(
+                          context: context,
+                          builder: (context) => ImageViewer(
+                            child: Image.memory(snapshot.data!),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Image.memory(
+                      Uint8List.fromList(
+                        snapshot.data!,
+                      ),
                     ),
                   );
                 } catch (e) {
@@ -174,9 +188,13 @@ class _ArticleContentViewState extends State<ArticleContentView> {
           );
         }),
         H1Config(
-          style: resolveHeadlineTextThemeForBreakPoints(screenWidth, context)!,
+          style: const H1Config().style.copyWith(fontFamily: "Butler"),
         ),
 
+        H2Config(
+          style: const H2Config().style.copyWith(fontFamily: "Butler"),
+        ),
+        PConfig(textStyle: PConfig().textStyle.copyWith(fontFamily: 'Poppins')),
         LinkConfig(
           onTap: (url) {
             launchUrl(Uri.parse(url));
