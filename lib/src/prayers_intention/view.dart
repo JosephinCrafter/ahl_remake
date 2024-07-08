@@ -28,6 +28,7 @@ class _PrayersIntentionRequestViewState
   late String prayer;
   late PrayerType prayerType;
   late PageController _controller;
+  late AnimationController lottieController;
 
   @override
   void initState() {
@@ -43,13 +44,40 @@ class _PrayersIntentionRequestViewState
       ),
       ReviewPrayerView(
         backCallback: previousView,
-        callback: _submitPrayer,
+        callback: nextView,
+      ),
+      FormsLayoutBase(
+        child: Container(
+          alignment: Alignment.center,
+          child: DotLottieLoader.fromAsset(
+            "animations/done.lottie",
+            frameBuilder: (BuildContext ctx, DotLottie? dotlottie) {
+              if (dotlottie != null) {
+                return Lottie.memory(
+                  dotlottie.animations.values.single,
+                  controller: lottieController,
+                  onLoaded: (p0) => lottieController.forward(),
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ),
       ),
     ];
 
     _controller = PageController(
       keepPage: true,
     );
+    lottieController =
+        AnimationController(vsync: this, duration: const Duration(seconds: 3))
+          ..addListener(() {
+            if (lottieController.status == AnimationStatus.completed) {
+              _controller.animateToPage(0,
+                  duration: duration, curve: Curves.easeIn);
+            }
+          });
 
     super.initState();
   }
@@ -724,8 +752,6 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
                   ),
                   onPressed: (request != null)
                       ? () {
-                          if (widget._callback != null) widget._callback!();
-
                           context.read<PrayerRequestBloc>().add(
                                 PrayerRequestCompletedEvent(
                                   name: request.name,
@@ -738,6 +764,8 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
                           context
                               .read<PrayerRequestBloc>()
                               .add(PrayerRequestInitializeEvent());
+
+                          if (widget._callback != null) widget._callback!();
                         }
                       : null,
                   child: const Text("Confirmer"),

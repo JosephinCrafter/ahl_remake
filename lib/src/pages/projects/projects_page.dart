@@ -54,7 +54,7 @@ class _ProjectsPageState extends State<ProjectsPage> {
         controller: ProjectsPage.controller,
         children: const [
           HeroImage(),
-          Gap(20),
+          Gap(45),
           Header(),
           Gap(50),
           PartnersView(),
@@ -228,7 +228,7 @@ class HeroImage extends StatelessWidget {
           ),
           maxHeight: resolveForBreakPoint(
             MediaQuery.of(context).size.width,
-            other: 330,
+            other: 300,
             small: 133,
             medium: 133,
           ),
@@ -273,7 +273,8 @@ class Header extends StatelessWidget {
           children: [
             Text(
               AppLocalizations.of(context)!.projectLongTitle,
-              style: Theme.of(context).textTheme.displaySmall,
+              style: resolveDisplayTextThemeForBreakPoints(
+                  MediaQuery.of(context).size.width, context),
               textAlign: TextAlign.center,
             ),
             const Gap(10),
@@ -282,12 +283,12 @@ class Header extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
               textAlign: TextAlign.center,
             ),
-            const Gap(20),
+            const Gap(45),
             Text(
               AppLocalizations.of(context)!.projectSpaceDescription,
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            const Gap(50),
+            const Gap(45),
             Align(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -512,13 +513,14 @@ class _ProjectsViewState extends State<ProjectsView> {
               children: [
                 Text(
                   widget.title,
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: resolveTitleTextThemeForBreakPoints(
+                      MediaQuery.of(context).size.width, context),
                 ),
                 Container(
                   padding: const EdgeInsets.all(4.0),
-                  decoration: ShapeDecoration(
-                    color: Theme.of(context).colorScheme.surfaceBright,
-                    shape: const StadiumBorder(),
+                  decoration: const ShapeDecoration(
+                    color: Colors.white,
+                    shape: StadiumBorder(),
                   ),
                   child: Row(
                     children: [

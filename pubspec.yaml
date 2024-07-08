@@ -50,6 +50,7 @@ dependencies:
   #mouse_parallax: ^1.1.0
   #google_fonts: ^6.2.0
   share_plus: ^9.0.0
+  dotlottie_loader: ^0.0.4
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,7 @@ flutter:
     # Add assets from the images directory to the application.
     - assets/images/
     - assets/content.md
+    - assets/animations/
   fonts:
     - family: MyFlutterIcons
       fonts: 
