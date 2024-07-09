@@ -121,27 +121,27 @@ class ActionsLists {
         ),
       ),
     ),
-    Builder(
-      builder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: Paddings.small),
-        child: TextButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(ArticleContentPage.routeName);
-          },
-          child: Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(vertical: Paddings.medium),
-            child: Text(
-              AppLocalizations.of(context)!.articles,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontFamily: 'Aileron',
-                    fontWeight: FontWeight.w900,
-                  ),
-            ),
-          ),
-        ),
-      ),
-    ),
+    // Builder(
+    //   builder: (context) => Padding(
+    //     padding: const EdgeInsets.symmetric(vertical: Paddings.small),
+    //     child: TextButton(
+    //       onPressed: () {
+    //         Navigator.of(context).pushNamed(ArticleContentPage.routeName);
+    //       },
+    //       child: Container(
+    //         alignment: Alignment.centerLeft,
+    //         padding: const EdgeInsets.symmetric(vertical: Paddings.medium),
+    //         child: Text(
+    //           AppLocalizations.of(context)!.articles,
+    //           style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+    //                 fontFamily: 'Aileron',
+    //                 fontWeight: FontWeight.w900,
+    //               ),
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // ),
     Builder(
       builder: (context) => Container(
         margin: const EdgeInsets.only(top: 64),

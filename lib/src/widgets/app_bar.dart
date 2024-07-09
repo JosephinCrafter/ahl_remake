@@ -44,7 +44,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
 
     /// background color of the app bar
-    var color = backgroundColor ?? Theme.of(context).colorScheme.surface;
+    var color = backgroundColor ?? theme.AhlTheme.yellowLight;
 
     /// constraints
     BoxConstraints computedConstraint = BoxConstraints.loose(
@@ -376,11 +376,11 @@ class AhlMenuButton extends StatelessWidget {
           // alignment: Alignment.center,
           child: IconButton(
             onPressed: () => scaffoldState.openEndDrawer(),
-            icon:Container(
-                alignment: Alignment.center,
-                child:const FittedBox(
-              fit: BoxFit.contain,
-              child:   Icon(
+            icon: Container(
+              alignment: Alignment.center,
+              child: const FittedBox(
+                fit: BoxFit.contain,
+                child: Icon(
                   size: 24,
                   MyFlutterIcons.menu,
                   applyTextScaling: true,
