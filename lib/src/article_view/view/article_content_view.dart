@@ -27,6 +27,7 @@ class ArticleContentPageState extends State<ArticleContentPage> {
             : null,
         appBar: const AhlAppBar(),
         body: ListView(
+          addAutomaticKeepAlives: true,
           children: [
             ArticleContentView(
               collection: widget.collection,
@@ -57,7 +58,7 @@ class ArticleContentView extends StatefulWidget {
 }
 
 class _ArticleContentViewState extends State<ArticleContentView> {
-  Future<String> get content async {
+  Future<String> contentFetching() async {
     final bytes = await firebase.storage
         .child(
             '${widget.collection}/${widget.article?.id}/${widget.article?.contentPath}')
@@ -67,11 +68,15 @@ class _ArticleContentViewState extends State<ArticleContentView> {
     return decodedString;
   }
 
+  late Future content;
+
   late double screenWidth;
 
   @override
   void initState() {
     super.initState();
+
+    content = contentFetching();
   }
 
   @override
@@ -146,45 +151,11 @@ class _ArticleContentViewState extends State<ArticleContentView> {
   Widget buildMarkdownBlock(BuildContext context) {
     MarkdownConfig minimalisticCorporateConfig = MarkdownConfig(
       configs: [
-        ImgConfig(builder: (String url, Map<String, dynamic> attributes) {
-          // parse url to uri
-          developer.log(url);
-          return FutureBuilder(
-            future:
-                // http.get(
-                //   Uri.parse(url),
-                // ),
-                firebase.storage.child(url).getData(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                try {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        DialogRoute(
-                          context: context,
-                          builder: (context) => ImageViewer(
-                            child: Image.memory(snapshot.data!),
-                          ),
-                        ),
-                      );
-                    },
-                    child: Image.memory(
-                      Uint8List.fromList(
-                        snapshot.data!,
-                      ),
-                    ),
-                  );
-                } catch (e) {
-                  return Container();
-                }
-              } else {
-                return Container(
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(),
-                );
-              }
-            },
+        ImgConfig(builder: (String url, Map<String, String>? attribute) {
+          final Future future = firebase.storage.child(url).getData();
+          return AhlImageViewer.fromFuture(
+            future: future,
+            attributes: attribute,
           );
         }),
         H1Config(
@@ -317,5 +288,80 @@ class _ArticleContentViewState extends State<ArticleContentView> {
         ),
       );
     }
+  }
+
+  @override
+  bool get wantKeepAlive => throw UnimplementedError();
+}
+
+class AhlImageViewer extends StatefulWidget {
+  const AhlImageViewer({
+    super.key,
+    required this.url,
+    this.attributes,
+  }) : future = null;
+
+  const AhlImageViewer.fromFuture(
+      {super.key, required this.future, this.attributes})
+      : url = null;
+
+  final Future? future;
+  final String? url;
+  final Map<String, String>? attributes;
+
+  @override
+  State<AhlImageViewer> createState() => _AhlImageViewerState();
+}
+
+class _AhlImageViewerState extends State<AhlImageViewer> {
+  late Future imageFuture;
+
+  @override
+  void initState() {
+    developer.log("[AhlImageViewer] State is initialized.");
+    super.initState();
+
+    if (widget.url != null) {
+      imageFuture = firebase.storage.child(widget.url!).getData();
+    } else {
+      imageFuture = widget.future!;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: imageFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          try {
+            return InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  DialogRoute(
+                    context: context,
+                    builder: (context) => ImageViewer(
+                      child: Image.memory(snapshot.data!),
+                    ),
+                  ),
+                );
+              },
+              child: Image.memory(
+                Uint8List.fromList(
+                  snapshot.data!,
+                ),
+              ),
+            );
+          } catch (e) {
+            return Container();
+          }
+        } else {
+          return Container(
+            alignment: Alignment.center,
+            child: const CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 }
