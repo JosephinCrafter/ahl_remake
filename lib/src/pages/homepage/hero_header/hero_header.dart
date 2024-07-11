@@ -4,6 +4,7 @@ import 'package:ahl/src/theme/theme.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gap/gap.dart';
 
 import '../../../ahl_barrel.dart';
 
@@ -54,7 +55,7 @@ class _MobileHeroHeaderState extends State<MobileHeroHeader> {
           ),
           child: const HeroTextView(
             needMargin: true,
-            margin: 50,
+            margin: 0,
           ),
         ),
       ],
@@ -87,8 +88,8 @@ class _HeroActionsState extends State<HeroActions> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 50),
+    return Container(
+      padding: const EdgeInsets.only(top: 30),
       child: Wrap(
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         // direction: ,
@@ -253,6 +254,7 @@ class HeroTextView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              const Gap(30),
               Padding(
                 padding: const EdgeInsets.only(bottom: 0),
                 child: Text(
@@ -261,14 +263,18 @@ class HeroTextView extends StatelessWidget {
                   style: titleTheme,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: Paddings.huge),
-                child: Text(
-                  AppLocalizations.of(context)!.heroHeaderSubtitle,
-                  textAlign: TextAlign.center,
-                  style: subtitleTheme,
-                ),
+
+              const Gap(20),
+              // Padding(
+              //   padding: const EdgeInsets.only(bottom: Paddings.huge),
+              //   child:
+              Text(
+                AppLocalizations.of(context)!.heroHeaderSubtitle,
+                textAlign: TextAlign.center,
+                style: subtitleTheme,
               ),
+              // ),
+              const Gap(20),
               Text(
                 AppLocalizations.of(context)!.heroExplanation,
                 textAlign: TextAlign.center,

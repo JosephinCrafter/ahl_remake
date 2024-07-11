@@ -331,21 +331,21 @@ class _ArticleTileState extends State<ArticleTile> {
                                   ],
                                 ),
                               ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                  onPressed: () {
-                                    goToReadingPage();
-                                  },
-                                  child: const Text('Lire'),
-                                ),
-                              ),
+                              // Align(
+                              //   alignment: Alignment.centerRight,
+                              //   child: ElevatedButton(
+                              //     style: ElevatedButton.styleFrom(
+                              //       foregroundColor:
+                              //           Theme.of(context).colorScheme.onPrimary,
+                              //       backgroundColor:
+                              //           Theme.of(context).colorScheme.primary,
+                              //     ),
+                              //     onPressed: () {
+                              //       goToReadingPage();
+                              //     },
+                              //     child: const Text('Lire'),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),

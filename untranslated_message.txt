@@ -55,6 +55,10 @@
     "rosarySlogan",
     "getNotified",
     "allProjects",
-    "devInProgress"
+    "devInProgress",
+    "prayerSpace",
+    "todaySaint",
+    "office",
+    "availableSoon"
   ]
 }

@@ -1,3 +1,4 @@
+import 'package:ahl/src/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 
@@ -7,6 +8,7 @@ import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
 import 'src/firebase_constants.dart';
+import 'src/widgets/widgets.dart';
 // test on github auto deploy
 
 void main() async {
@@ -33,21 +35,11 @@ void main() async {
   // the app not loading.
 
   runApp(
-    FutureBuilder(
-      future: firebaseApp,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ChangeNotifierProvider.value(
-            value: settingsController,
-            child: MyApp(
-              settingsController: settingsController,
-            ),
-          );
-        } else {
-          //todo: add here custom loading
-          return Container();
-        }
-      },
+    ChangeNotifierProvider.value(
+      value: settingsController,
+      child: MyApp(
+        settingsController: settingsController,
+      ),
     ),
   );
 }

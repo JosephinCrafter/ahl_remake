@@ -17,10 +17,10 @@ import '../../who_we_are/view.dart';
 
 /// Home page
 
-class HomePage extends StatefulWidget  with ChangeNotifier{
+class HomePage extends StatefulWidget with ChangeNotifier {
   static const String routeName = "/home";
 
-   HomePage({super.key});
+  HomePage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -36,7 +36,13 @@ class _HomePageState extends State<HomePage> {
   final List<Widget> _children = [
     const Gap(45),
     const WelcomingView(),
+    const Gap(45),
+    Container(color: Colors.white, height: 4),
+    const Gap(45),
     const HighlightArticleTile(),
+    const Gap(45),
+    Container(color: Colors.white, height: 4),
+    const Gap(45),
     const PrayerSpaceView(),
     const ProjectsSpaceView(),
     const PartnersView(),

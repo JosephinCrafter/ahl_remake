@@ -11,7 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../ahl_barrel.dart';
 import '../localization/locale_utils.dart';
 import '../article_view/view/article_view.dart';
-import '../pages/homepage/donation/donationpage.dart';
+import '../pages/homepage/donation/donation_page.dart';
 import '../pages/homepage/homepage.dart';
 import '../pages/projects/projects_page.dart';
 import '../pages/who_we_are/who_we_are.dart';

@@ -94,27 +94,27 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                                   article: state.articles![0]!,
                                 ),
                               ),
-                              Container(
-                                margin: const EdgeInsets.symmetric(
-                                  vertical: Margins.medium,
-                                ),
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pushNamed(ArticlesPage.routeName);
-                                  },
-                                  child: Text(
-                                    AppLocalizations.of(context)!.allArticles,
-                                  ),
-                                ),
-                              ),
+                              // Container(
+                              //   margin: const EdgeInsets.symmetric(
+                              //     vertical: Margins.medium,
+                              //   ),
+                              //   alignment: Alignment.centerRight,
+                              //   child: TextButton(
+                              //     onPressed: () {
+                              //       Navigator.of(context)
+                              //           .pushNamed(ArticlesPage.routeName);
+                              //     },
+                              //     child: Text(
+                              //       AppLocalizations.of(context)!.allArticles,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         );
                       default:
                         return Container(
-                          height: 310,
+                          height: 408,
                           margin: const EdgeInsets.symmetric(
                             horizontal: Margins.medium,
                           ),
