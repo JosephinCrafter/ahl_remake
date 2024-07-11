@@ -780,7 +780,7 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
     Widget child = Column(
       children: [
         Flexible(
-          flex: 1,
+          flex: 2,
           child: prayerDecorationImage,
         ),
         contentView,
