@@ -45,11 +45,13 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
     final ProjectBloc bloc = context.read<ProjectBloc>();
 
     // Listen for state changes
-    bloc.stream.listen((incomingState) {
-      updateState(
-        incomingState,
-      );
-    });
+    bloc.stream.listen(
+      (incomingState) {
+        updateState(
+          incomingState,
+        );
+      },
+    );
 
     // Fetch the initial project list
     bloc.add(const GetArticleListEvent(foldLength: 3));
@@ -71,8 +73,13 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
               ),
             )
             .toList();
-        if(storageUtils != null){
-        futureImageCovers = storageUtils!.map<Future>((element)=>element.getCoverImage(),).toList();}
+        if (storageUtils != null) {
+          futureImageCovers = storageUtils!
+              .map<Future>(
+                (element) => element.getCoverImage(),
+              )
+              .toList();
+        }
       },
     );
 
@@ -210,7 +217,8 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
     return (projects != null)
         ? projects.map<Widget>((project) {
             if (project != null) {
-              final futureImageCover = futureImageCovers[projects.indexOf(project)];
+              final futureImageCover =
+                  futureImageCovers[projects.indexOf(project)];
               return FutureBuilder(
                 future: futureImageCover,
                 builder: (context, snapshot) {
