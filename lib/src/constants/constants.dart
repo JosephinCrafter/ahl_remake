@@ -127,7 +127,7 @@ class HeroHeaderGeometry {
   HeroHeaderGeometry._();
 
   static const double heroHeaderExtrasHeight = 200;
-  static const double heroHeaderExtrasWidth = 450;
+  static const double heroHeaderExtrasWidth = 650;
 }
 
 class AhlDurations {

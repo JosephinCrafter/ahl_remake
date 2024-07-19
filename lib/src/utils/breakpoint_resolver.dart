@@ -72,3 +72,14 @@ TextStyle? resolveDisplayTextThemeForBreakPoints(
     other: Theme.of(context).textTheme.displayLarge,
   );
 }
+
+double resolveSeparatorSize(
+  BuildContext context
+){
+  return resolveForBreakPoint<double>(
+    MediaQuery.of(context).size.width,
+    small: 45,
+    medium: 45,
+    other: 50,
+  );
+}

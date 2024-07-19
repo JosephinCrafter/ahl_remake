@@ -130,6 +130,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
             context,
             actions: actions ?? buildActions(context),
             ending: const SizedBox.shrink(),
+            bottomBar: bottomBar ?? const SizedBox.shrink(),
           );
           // return Container(
           //   constraints: computedConstraint,
@@ -183,7 +184,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
       AppLocalizations.of(context)!.homeText: HomePage.routeName,
       AppLocalizations.of(context)!.priesSpace: PrayersPage.routeName,
       AppLocalizations.of(context)!.projectsSpace: ProjectsPage.routeName,
-      AppLocalizations.of(context)!.aboutUs: WhoWeArePage.routeName,
+      AppLocalizations.of(context)!.whoWeAre: WhoWeArePage.routeName,
       AppLocalizations.of(context)!.makeDonation: DonationPage.routeName,
     };
 

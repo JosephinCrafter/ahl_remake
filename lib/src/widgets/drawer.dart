@@ -47,13 +47,14 @@ class AhlDrawer extends StatelessWidget {
                   // ),
                   margin: const EdgeInsets.only(left: Paddings.medium),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ...ActionsLists.actionsWidgets,
-                    ],
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...ActionsLists.actionsWidgets,
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              
               Positioned(
                 right: 20,
                 bottom: 50,

@@ -1,13 +1,12 @@
 import 'dart:typed_data';
 
 import 'package:ahl/src/newsletter/newsletter.dart';
-import 'package:ahl/src/pages/articles/articles_page.dart';
+import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'dart:convert';
 import 'dart:developer' as developer;
-import 'package:http/http.dart' as http;
 
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -28,7 +27,6 @@ import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 
 import '../../utils/storage_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 part 'article_content_view.dart';
 part 'highlight_article_tile.dart';
@@ -797,12 +795,12 @@ class ArticlePreviewTextView extends StatefulWidget {
 }
 
 class _ArticlePreviewViewState extends State<ArticlePreviewTextView> {
-  late ArticleStorageUtils _articleStorageUtils;
+  // late ArticleStorageUtils _articleStorageUtils;
 
   @override
   void initState() {
-    _articleStorageUtils = ArticleStorageUtils(
-        article: widget.article, collection: widget.collection);
+    // _articleStorageUtils = ArticleStorageUtils(
+    //     article: widget.article, collection: widget.collection);
 
     super.initState();
   }

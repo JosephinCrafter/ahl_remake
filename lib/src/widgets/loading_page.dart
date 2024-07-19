@@ -28,8 +28,9 @@ class _LoadingViewState extends State<LoadingView>
 
   @override
   void dispose() {
-    super.dispose();
     lottieController.dispose();
+
+    super.dispose();
   }
 
   void animation(AnimationStatus status) {

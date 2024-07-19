@@ -4,11 +4,13 @@ import 'dart:typed_data';
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/view/article_view.dart';
 import 'package:ahl/src/firebase_constants.dart';
+import 'package:ahl/src/pages/projects/project_page_view.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/project_space/bloc.dart';
 import 'package:ahl/src/utils/storage_utils.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -18,6 +20,7 @@ import '../ahl_barrel.dart';
 import '../article_view/state/state.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';
+import 'model.dart';
 
 class ProjectsSpaceView extends StatefulWidget {
   const ProjectsSpaceView({super.key});
@@ -58,6 +61,8 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
 
     // Initialize state
     state = bloc.state;
+
+    updateState(state!);
   }
 
   void updateState(ArticleState<Article> incomingState) {
@@ -141,8 +146,8 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 8.0,
-            vertical: Paddings.huge,
-          ),
+            // vertical: Paddings.huge,
+          ).copyWith(top: Paddings.huge),
           child: Wrap(
             alignment: WrapAlignment.center,
             crossAxisAlignment: WrapCrossAlignment.center,
@@ -155,7 +160,7 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
                 onPressed: () {
                   // Implement project found rising
                 },
-                child: const Text('Soutenir un projet'),
+                child: Text(AppLocalizations.of(context)!.supportProject),
               ),
               const SizedBox(width: Paddings.listSeparator),
               ElevatedButton(
@@ -181,30 +186,29 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ArticleContentPage(
+            builder: (context) => ProjectPageView(
               collection: projectsCollection,
-              article: project,
+              project: project,
             ),
           ),
         );
 
         log("${project.contentPath}");
       },
-      image: Expanded(
-        flex: 2,
-        child: Container(
-          margin: const EdgeInsets.all(Paddings.medium),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: MemoryImage(imageData),
-              fit: BoxFit.cover,
-            ),
-            borderRadius: BorderRadius.circular(BorderSizes.small),
+      image: Container(
+        // margin: const EdgeInsets.all(Paddings.medium),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: MemoryImage(imageData),
+            fit: BoxFit.cover,
           ),
+          borderRadius: BorderRadius.circular(BorderSizes.small),
         ),
       ),
       label: Text(
-        "${project.relations?[0]['status']}",
+        LocalizedProject.getProjectStatus(
+                context, "${project.relations?[0]['status']}") ??
+            "",
       ),
       title: Text(
         "${project.title}",
@@ -443,18 +447,31 @@ class AhlCard extends StatefulWidget {
   State<AhlCard> createState() => _AhlCardState();
 }
 
-class _AhlCardState extends State<AhlCard> {
+class _AhlCardState extends State<AhlCard> with SingleTickerProviderStateMixin {
   bool _isHovered = false;
+  late AnimationController animation;
 
   @override
   void initState() {
     super.initState();
+    animation = AnimationController(vsync: this);
   }
 
   void setHoveringTo(bool isHovered) {
     setState(
       () => _isHovered = isHovered,
     );
+    if (isHovered) {
+      animation.forward();
+    } else {
+      animation.reverse();
+    }
+  }
+
+  @override
+  void dispose() {
+    animation.dispose();
+    super.dispose();
   }
 
   @override
@@ -492,10 +509,10 @@ class _AhlCardState extends State<AhlCard> {
                   BoxDecoration(
                     border: Border.all(
                       strokeAlign: BorderSide.strokeAlignInside,
-                      width: borderThickness,
+                      width: 3, //borderThickness,
                       color: _isHovered
-                          ? AhlTheme.yellowRelax
-                          : AhlTheme.blueNight,
+                          ? Theme.of(context).primaryColor
+                          : AhlTheme.lightGrey,
                       style: BorderStyle.solid,
                     ),
                     borderRadius: borderRadius,
@@ -505,7 +522,26 @@ class _AhlCardState extends State<AhlCard> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    widget.image,
+                    Flexible(
+                      child: Container(
+                        margin: const EdgeInsets.all(Paddings.medium),
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          // image: DecorationImage(
+                          //   image: MemoryImage(snapshot.data!),
+                          //   fit: BoxFit.cover,
+                          // ),
+                          borderRadius:
+                              BorderRadius.circular(BorderSizes.small),
+                        ),
+                        child: widget.image
+                            .animate(controller: animation, autoPlay: false)
+                            .scale(
+                              begin: const Offset(1, 1),
+                              end: const Offset(1.25, 1.25),
+                            ),
+                      ),
+                    ),
                     widget.content ??
                         Container(
                           // constraints: const BoxConstraints.expand(height: 100),

@@ -168,7 +168,7 @@ class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
               ),
               alignment: Alignment.bottomCenter,
               child: const HeroTextView(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.topCenter,
               ),
             ),
           ),
@@ -185,6 +185,7 @@ class HeroImageView extends StatelessWidget {
   });
 
   final bool isWithBorder;
+  
 
   @override
   Widget build(BuildContext context) {

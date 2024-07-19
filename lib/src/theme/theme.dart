@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../utils/breakpoint_resolver.dart';
@@ -12,6 +11,7 @@ class AhlTheme {
   static const Color blackCharcoal = Color(0xFF282828);
   static const Color blueNight = Color(0xFF36454F);
   static const Color darkNight = Color(0xFF1A202C);
+  static const Color lightGrey =  Color(0xFF8E8E8E);
 
   static ThemeData lightTheme(double constraints) => ThemeData(
         brightness: Brightness.light,

@@ -198,8 +198,17 @@ class AhlFooter extends StatelessWidget {
             //     small: Axis.vertical,
             //     medium: Axis.vertical,
             //   ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            Wrap(
+              verticalDirection: VerticalDirection.down,
+
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              direction: Axis.horizontal,
+              runAlignment: WrapAlignment.spaceBetween,
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              // runSpacing: 200,
+              spacing: 50,
               children: [
                 ConstrainedBox(
                   constraints: const BoxConstraints(

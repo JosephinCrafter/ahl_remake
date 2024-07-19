@@ -1,8 +1,11 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/state/state.dart';
 import 'package:ahl/src/firebase_constants.dart';
+import 'package:ahl/src/pages/prayers/prayers_page.dart';
+import 'package:ahl/src/pages/projects/project_page_view.dart';
 import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
 import 'package:ahl/src/partners/view.dart';
 import 'package:ahl/src/project_space/bloc.dart';
@@ -52,22 +55,44 @@ class _ProjectsPageState extends State<ProjectsPage> {
       /// and individual components that follows each over.
       body: ListView(
         controller: ProjectsPage.controller,
-        children: const [
-          HeroImage(),
-          Gap(45),
-          Header(),
-          Gap(50),
-          PartnersView(),
-          Gap(50),
-          InProgressProjectListView(),
-          Gap(50),
-          AhlDivider.symmetric(
+        children: [
+          const HeroImage(),
+          const Gap(45),
+          const Header(),
+          const Gap(50),
+          const PartnersView(),
+          const Gap(50),
+          const InProgressProjectListView(),
+          const Gap(50),
+          const AhlDivider.symmetric(
             space: 25,
           ),
-          Gap(25),
-          SuggestionSection(),
-          Gap(50),
-          AhlFooter(),
+          const Gap(25),
+          SuggestionSection(
+            callback: () =>
+                Navigator.pushNamed(context, WhoWeArePage.routeName),
+            child: Text(
+              AppLocalizations.of(context)!.whoWeAre,
+            ),
+          ),
+          Gap(resolveSeparatorSize(context)),
+          SuggestionSection(
+            callback: () => Navigator.pushNamed(context, PrayersPage.routeName),
+            image: Future.value(
+              AssetImage(
+                AhlAssets.prayersSpaceCover,
+              ),
+            ),
+            child: Text(
+              AppLocalizations.of(context)!.prayerSpace,
+            ),
+          ),
+          Gap(resolveSeparatorSize(context)),
+          const AhlDivider.symmetric(
+            space: 25,
+          ),
+          Gap(resolveSeparatorSize(context)),
+          const AhlFooter(),
         ],
       ),
     );
@@ -120,7 +145,16 @@ class AhlDivider extends StatelessWidget {
 }
 
 class SuggestionSection extends StatefulWidget {
-  const SuggestionSection({super.key});
+  const SuggestionSection({
+    super.key,
+    this.image,
+    required this.callback,
+    this.child,
+  });
+
+  final Future? image;
+  final VoidCallback callback;
+  final Widget? child;
 
   @override
   State<StatefulWidget> createState() => _SuggestionSectionState();
@@ -134,14 +168,14 @@ class _SuggestionSectionState extends State<SuggestionSection>
 
   @override
   void initState() {
-    image = getImage();
+    image = widget.image ?? getImage();
     super.initState();
   }
 
-  Future getImage() async {
+  Future<Uint8List?> getImage() async {
     final cache = SessionStorage();
 
-    return await WhoWeAreTileState().getImage().then((value) {
+    return await WhoWeAreTileState.getImage().then((value) {
       cache[coverImageKey] = 'loaded';
       return value;
     });
@@ -174,7 +208,9 @@ class _SuggestionSectionState extends State<SuggestionSection>
                           ? BoxDecoration(
                               image: DecorationImage(
                                 alignment: const Alignment(-1, -0.3),
-                                image: MemoryImage(snapshot.data!),
+                                image: (snapshot.data is ImageProvider)
+                                    ? snapshot.data!
+                                    : MemoryImage(snapshot.data!),
                                 fit: BoxFit.cover,
                               ),
                             )
@@ -198,9 +234,8 @@ class _SuggestionSectionState extends State<SuggestionSection>
                   );
                 },
               ),
-              onPressed: () =>
-                  Navigator.pushNamed(context, WhoWeArePage.routeName),
-              child: Text(AppLocalizations.of(context)!.whoWeAre),
+              onPressed: widget.callback,
+              child: widget.child,
             ),
           ),
         );
@@ -243,7 +278,7 @@ class HeroImage extends StatelessWidget {
             ),
           ),
           image: DecorationImage(
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             image: AssetImage(
               AhlAssets.projectSpaceCover,
             ),
@@ -279,8 +314,9 @@ class Header extends StatelessWidget {
             ),
             const Gap(10),
             Text(
-              AppLocalizations.of(context)!.projectsSpaceSubtitle,
-              style: Theme.of(context).textTheme.titleMedium,
+              AppLocalizations.of(context)!.slogan,
+              style: resolveTitleTextThemeForBreakPoints(
+                  MediaQuery.of(context).size.width, context),
               textAlign: TextAlign.center,
             ),
             const Gap(45),
@@ -385,9 +421,16 @@ class _AllArticleViewState extends State<AllArticleView> {
                 ],
                 if (projectDone != null && projectDone.isNotEmpty) ...[
                   const Gap(45),
-                  ProjectsView(
-                    title: 'Projet achevé',
-                    articles: projectDone,
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: ContentSize.maxWidth(
+                          MediaQuery.of(context).size.width),
+                    ),
+                    child: ProjectsView(
+                      alignment: Alignment.centerLeft,
+                      title: 'Projet achevé',
+                      articles: projectDone,
+                    ),
                   ),
                 ],
               ],
@@ -413,12 +456,14 @@ class ProjectsView extends StatefulWidget {
     required this.title,
     this.subtitle,
     required this.articles,
+    this.alignment,
   });
 
   final List<Article?> articles;
 
   final String title;
   final String? subtitle;
+  final Alignment? alignment;
 
   @override
   State<ProjectsView> createState() {
@@ -450,45 +495,42 @@ class _ProjectsViewState extends State<ProjectsView> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ArticleContentPage(
+            builder: (context) => ProjectPageView(
               collection: projectsCollection,
-              article: article,
+              project: article,
             ),
           ),
         );
 
         log("${article.contentPath}");
       },
-      image: Flexible(
-        flex: 2,
-        child: FutureBuilder(
-            future: ArticleStorageUtils(
-              article: article,
-              collection: projectsCollection,
-            ).getCoverImage(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Container(
-                  margin: const EdgeInsets.all(Paddings.medium),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: MemoryImage(snapshot.data!),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(BorderSizes.small),
+      image: FutureBuilder(
+          future: ArticleStorageUtils(
+            article: article,
+            collection: projectsCollection,
+          ).getCoverImage(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Container(
+                // margin: const EdgeInsets.all(Paddings.medium),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: MemoryImage(snapshot.data!),
+                    fit: BoxFit.cover,
                   ),
-                );
-              } else {
-                return Container(
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(),
-                );
-              }
-            }),
-      ),
-      label: Text(
-        "${article.relations?[0]['status']}",
-      ),
+                  borderRadius: BorderRadius.circular(BorderSizes.small),
+                ),
+              );
+            } else {
+              return Container(
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(),
+              );
+            }
+          }),
+      // label: Text(
+      //   "${article.relations?[0]['status']}",
+      // ),
       title: Text(
         "${article.title}",
       ),
@@ -513,13 +555,17 @@ class _ProjectsViewState extends State<ProjectsView> {
               children: [
                 Text(
                   widget.title,
-                  style: resolveTitleTextThemeForBreakPoints(
-                      MediaQuery.of(context).size.width, context),
+                  style: /*resolveTitleTextThemeForBreakPoints(
+                          MediaQuery.of(context).size.width, context)!*/
+                      Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: AhlTheme.darkNight,
+                          ),
                 ),
                 Container(
                   padding: const EdgeInsets.all(4.0),
                   decoration: const ShapeDecoration(
-                    color: Colors.white,
+                    color:
+                        Colors.white, //Theme.of(context).colorScheme.surface,
                     shape: StadiumBorder(),
                   ),
                   child: Row(
@@ -528,15 +574,27 @@ class _ProjectsViewState extends State<ProjectsView> {
                         onPressed: () => _controller.animateTo(
                           _controller.offset - 300,
                           duration: Durations.long1,
-                          curve: Curves.easeIn,
+                          curve: Curves.easeInOut,
                         ),
                         icon: const Icon(Icons.arrow_back_outlined),
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxWidth: resolveForBreakPoint<double>(
+                              MediaQuery.of(context).size.width,
+                              other: 150,
+                              small: 0,
+                              medium: 0,
+                              large: 50,
+                            ),
+                            maxHeight: 5),
+                        child: const SizedBox.expand(),
                       ),
                       IconButton(
                         onPressed: () => _controller.animateTo(
                           _controller.offset + 300,
                           duration: Durations.long1,
-                          curve: Curves.easeIn,
+                          curve: Curves.easeInOut,
                         ),
                         icon: const Icon(
                           Icons.arrow_forward_rounded,
@@ -560,7 +618,7 @@ class _ProjectsViewState extends State<ProjectsView> {
               maxWidth: MediaQuery.of(context).size.width,
               maxHeight: 330,
             ),
-            alignment: Alignment.center,
+            alignment: Alignment.centerLeft,
             child: ListView(
               controller: _controller,
               shrinkWrap: true,

@@ -12,25 +12,25 @@ class AhlAssets {
       kDebugMode ? '' : 'assets/'; // used to set up path when deployed
 
   static String heroBk = "${releasePath}images/hero_bk.webp";
-  static String heroBkAlt = "${releasePath}images/hero_bk_alt.jpg";
-  static String logoForm = "${releasePath}images/logo_form_colored.png";
+  static String heroBkAlt = "${releasePath}images/praying_alt.webp";
+  static String logoForm = "${releasePath}images/logo_form_colored.webp";
   static String logoFormTypoHorizontalColored =
-      "${releasePath}images/logo_form_typo_horizon_colored.png";
+      "${releasePath}images/logo_form_typo_horizon_colored.webp";
   static String logoFormTypoHorizontalColoredDark =
-      "${releasePath}images/logo_form_typo_horizontal_colored_dark.png";
-  static String logoNdd = "${releasePath}images/logo_ndd.png";
-  static String priorAvatar = "${releasePath}images/prior_avatar.png";
+      "${releasePath}images/logo_form_typo_horizontal_colored_dark.webp";
+  static String logoNdd = "${releasePath}images/logo_ndd.webp";
+  static String priorAvatar = "${releasePath}images/prior_avatar.webp";
 
   static String prayersSpaceCover =
       "${releasePath}images/prayers_space_banner.webp";
   @Deprecated("use projectSpaceCover instead.")
   static String projectHeroHeader =
-      "${releasePath}images/projects_hero_header.png";
-  static String cantineImage = "${releasePath}images/cantine_hero.png";
+      "${releasePath}images/projects_hero_header.webp";
+  static String cantineImage = "${releasePath}images/cantine_hero.webp";
   static String rosaryHeroHeader =
-      "${releasePath}images/rosary_hero_header.jpg";
-  static String praying = "${releasePath}images/praying.png";
-  static String prayingAlt = "${releasePath}images/praying_alt.png";
+      "${releasePath}images/rosary_hero_header.webp";
+  static String praying = "${releasePath}images/praying.webp";
+  static String prayingAlt = "${releasePath}images/praying_alt.webp";
   static String requestMotif = "${releasePath}images/motif_prayer.webp";
   static String projectSpaceCover =
       '${releasePath}images/project_space_banner.webp';

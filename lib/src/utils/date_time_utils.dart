@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -10,16 +11,16 @@ extension DateTimeUtils on DateTime {
     DateTime? date;
     try {
       date = DateTime.parse(dateString);
-    } catch (e) {
-      if (e is FormatException) {
-        log(
-          'Error formatting release date: e. The required format should follow this pattern: yyyy-mm-dd. ReleaseDate: $dateString',
-          error: e,
-        );
-      }
+    } on FormatException catch (e) {
+      log(
+        'Error formatting release date: e. The required format should follow this pattern: yyyy-mm-dd. ReleaseDate: $dateString',
+        error: e,
+      );
+    } catch (e, stacktrace) {
+      log('Error occurred when parsing Article.releaseDate',
+          error: e, stackTrace: stacktrace);
     } finally {
       date = date ?? DateTime.now();
-      
     }
     return date;
   }
@@ -53,5 +54,20 @@ extension DateTimeUtils on DateTime {
       default:
         return 'Month';
     }
+  }
+
+  static String localizedToString(
+      {required DateTime dateTime, required BuildContext context}) {
+    return "${dateTime.day} ${localMonth(dateTime.month, context)} ${dateTime.year}";
+  }
+
+  static String localizedFromStringDate(
+      {required String? dateString, required BuildContext context}) {
+    if (dateString == null || dateString.isEmpty) {
+      throw ArgumentError('dateString is empty or null');
+    }
+    DateTime dateTime = parseReleaseDate(dateString);
+
+    return localizedToString(dateTime: dateTime, context: context);
   }
 }

@@ -34,19 +34,23 @@ class _HomePageState extends State<HomePage> {
   bool controllerIsAttached = false;
 
   final List<Widget> _children = [
-    const Gap(45),
+    Builder(builder: (context) => Gap(resolveSeparatorSize(context))),
     const WelcomingView(),
-    const Gap(45),
+    Builder(builder: (context) => Gap(resolveSeparatorSize(context))),
     Container(color: Colors.white, height: 4),
-    const Gap(45),
+    Builder(builder: (context) => Gap(resolveSeparatorSize(context))),
     const HighlightArticleTile(),
-    const Gap(45),
+    Builder(builder: (context) => Gap(resolveSeparatorSize(context))),
     Container(color: Colors.white, height: 4),
-    const Gap(45),
+    Builder(builder: (context) => Gap(resolveSeparatorSize(context))),
     const PrayerSpaceView(),
+    Builder(builder: (context) => Gap(resolveSeparatorSize(context))),
     const ProjectsSpaceView(),
+    Builder(builder: (context) => Gap(resolveSeparatorSize(context))),
     const PartnersView(),
+    Builder(builder: (context) => Gap(resolveSeparatorSize(context))),
     const WhoWeAreSpace(),
+    Builder(builder: (context) => Gap(resolveSeparatorSize(context))),
     const NewsLetterPrompt(),
     const AhlFooter(),
   ];
@@ -71,6 +75,12 @@ class _HomePageState extends State<HomePage> {
     );
 
     scrollController.addListener(updatePosition);
+
+    widget.addListener(dispatchScrollNotification);
+  }
+
+  void dispatchScrollNotification() {
+    
   }
 
   double _bottom = 0;

@@ -1,5 +1,6 @@
 import "package:ahl/src/ahl_barrel.dart";
 import "package:ahl/src/firebase_constants.dart";
+import "package:ahl/src/theme/theme.dart";
 import "package:ahl/src/utils/breakpoint_resolver.dart";
 import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/foundation.dart";
@@ -87,7 +88,7 @@ class _PartnersViewState extends State<PartnersView>
     return Container(
       alignment: Alignment.center,
       // constraints: const BoxConstraints.expand(height: 245),
-      color: Theme.of(context).colorScheme.surface,
+      color: Colors.white,
       child: Container(
         constraints: BoxConstraints(
           maxWidth: ContentSize.maxWidth(MediaQuery.of(context).size.width),
@@ -106,7 +107,8 @@ class _PartnersViewState extends State<PartnersView>
                 style: resolveHeadlineTextThemeForBreakPoints(
                   MediaQuery.of(context).size.width,
                   context,
-                ),
+                )!
+                    .copyWith(color: AhlTheme.blackCharcoal),
               ),
             ),
             Row(
@@ -115,30 +117,37 @@ class _PartnersViewState extends State<PartnersView>
                 Container(
                   constraints: BoxConstraints.tight(const Size.square(150)),
                   child: FutureBuilder(
-                      future: images,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Row(
-                            children: snapshot.data!
-                                .map<Widget>(
-                                  (element) => Card(
-                                    clipBehavior: Clip.hardEdge,
-                                    borderOnForeground: true,
-                                    child: Image.memory(element),
-                                  ).animate().fadeIn(),
-                                )
-                                .toList(),
-                          );
-                        } else if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Align(
-                            // alignment: Alignment.center,
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          return const Icon(Icons.warning_rounded);
-                        }
-                      }),
+                    future: images,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Row(
+                          children: snapshot.data!
+                              .map<Widget>(
+                                (element) => Container(
+                                  clipBehavior: Clip.hardEdge,
+
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                      BorderSizes.small,
+                                    ),
+                                  ),
+                                  // borderOnForeground: true,
+                                  child: Image.memory(element),
+                                ).animate().fadeIn(),
+                              )
+                              .toList(),
+                        );
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const Align(
+                          // alignment: Alignment.center,
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return const Icon(Icons.warning_rounded);
+                      }
+                    },
+                  ),
                 ),
               ],
             ),

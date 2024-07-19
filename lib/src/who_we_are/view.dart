@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/firebase_constants.dart';
+import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/utils/storage_utils.dart';
 import 'package:ahl/src/widgets/widgets.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:gap/gap.dart';
 import 'package:session_storage/session_storage.dart';
 
 import '../project_space/view.dart';
@@ -22,22 +22,23 @@ class WhoWeAreSpace extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
+      // padding: EdgeInsets.symmetric(vertical: Paddings.huge),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: Margins.large),
-            child: SectionTitle(
-              caretColor: Theme.of(context).primaryColor,
-              isUpperCase: false,
-              title: AppLocalizations.of(context)!.whoWeAre,
-              titleStyle: resolveHeadlineTextThemeForBreakPoints(
-                MediaQuery.of(context).size.width,
-                context,
-              ),
+          // Padding(
+          // padding: const EdgeInsets.symmetric(vertical: Margins.large),
+          // child:
+          SectionTitle(
+            caretColor: Theme.of(context).primaryColor,
+            isUpperCase: false,
+            title: AppLocalizations.of(context)!.whoWeAre,
+            titleStyle: resolveHeadlineTextThemeForBreakPoints(
+              MediaQuery.of(context).size.width,
+              context,
             ),
+            // ),
           ),
           const WhoWeAreTile(),
-          const Gap(50),
         ],
       ),
     );
@@ -57,21 +58,21 @@ class WhoWeAreTile extends StatefulWidget {
 
 class WhoWeAreTileState extends State<WhoWeAreTile>
     with AutomaticKeepAliveClientMixin {
-  final String whoWeAreImageKey = 'who_we_are_image_key';
+  static const String whoWeAreImageKey = 'who_we_are_image_key';
 
-  final String whoWeAreTitleKey = 'who_we_are_title_key';
+  static const String whoWeAreTitleKey = 'who_we_are_title_key';
 
-  Uint8List? _data;
+  static Uint8List? data;
 
-  final SessionStorage cache = SessionStorage();
+  static SessionStorage cache = SessionStorage();
 
   String? _title;
-  Future<Uint8List?> getImage() async {
-    _data = await storage.child(WhoWeAreTile.imagePath).getData();
-    if (_data != null) {
-      cache[whoWeAreImageKey] = encodeUint8ListToString(_data!);
+  static Future<Uint8List?> getImage() async {
+    data = await storage.child(WhoWeAreTile.imagePath).getData();
+    if (data != null) {
+      cache[whoWeAreImageKey] = encodeUint8ListToString(data!);
     }
-    return _data;
+    return data;
   }
 
   Future<String?> getTitle() async {
@@ -94,7 +95,7 @@ class WhoWeAreTileState extends State<WhoWeAreTile>
   @override
   bool get wantKeepAlive {
     if (cache[whoWeAreImageKey] != null && cache[whoWeAreTitleKey] != null) {
-      _data = decodeUint8ListFromString(cache[whoWeAreImageKey]!);
+      data = decodeUint8ListFromString(cache[whoWeAreImageKey]!);
       _title = cache[whoWeAreTitleKey];
 
       return true;
@@ -121,21 +122,19 @@ class WhoWeAreTileState extends State<WhoWeAreTile>
 
     if (wantKeepAlive) {
       return AhlCard(
+        callback: () => Navigator.pushNamed(context, WhoWeArePage.routeName),
         constraints: constraints,
-        image: Expanded(
-          flex: 2,
-          child: Container(
-            margin: const EdgeInsets.all(Margins.small),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: MemoryImage(
-                  _data!,
-                ),
+        image: Container(
+          // margin: const EdgeInsets.all(Margins.small),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: MemoryImage(
+                data!,
               ),
-              borderRadius: BorderRadius.circular(
-                BorderSizes.small,
-              ),
+            ),
+            borderRadius: BorderRadius.circular(
+              BorderSizes.small,
             ),
           ),
         ),
@@ -153,61 +152,57 @@ class WhoWeAreTileState extends State<WhoWeAreTile>
       return Container(
         constraints: constraints,
         child: AhlCard(
+          callback: () => Navigator.pushNamed(context, WhoWeArePage.routeName),
           constraints: BoxConstraints(
             maxWidth: ContentSize.maxWidth(
               MediaQuery.of(context).size.width,
             ),
           ),
-          image: Expanded(
-            flex: 2,
-            child: FutureBuilder(
-              future: getImage(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Container(
-                    margin: const EdgeInsets.all(Margins.small),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: MemoryImage(
-                          snapshot.data!,
+          image: FutureBuilder(
+            future: getImage(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Container(
+                  // margin: const EdgeInsets.all(Margins.small),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: MemoryImage(
+                        snapshot.data!,
+                      ),
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      BorderSizes.small,
+                    ),
+                  ),
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container(
+                  constraints: constraints,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.all(Margins.small),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(
+                      BorderSizes.small,
+                    ),
+                  ),
+                  child: const CircularProgressIndicator(),
+                );
+              } else {
+                log('${snapshot.error}');
+                return Container(
+                  constraints: constraints,
+                  color: Theme.of(context).colorScheme.errorContainer,
+                  child: Text(
+                    "Error loading image: ${snapshot.error}",
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Theme.of(context).colorScheme.onErrorContainer,
                         ),
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        BorderSizes.small,
-                      ),
-                    ),
-                  );
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return Container(
-                    constraints: constraints,
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.all(Margins.small),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.circular(
-                        BorderSizes.small,
-                      ),
-                    ),
-                    child: const CircularProgressIndicator(),
-                  );
-                } else {
-                  log('${snapshot.error}');
-                  return Container(
-                    constraints: constraints,
-                    color: Theme.of(context).colorScheme.errorContainer,
-                    child: Text(
-                      "Error loading image: ${snapshot.error}",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onErrorContainer,
-                          ),
-                    ),
-                  );
-                }
-              },
-            ),
+                  ),
+                );
+              }
+            },
           ),
           title: FutureBuilder(
             future: getTitle(),

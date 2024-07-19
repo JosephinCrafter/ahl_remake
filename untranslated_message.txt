@@ -1,5 +1,6 @@
 {
   "en": [
+    "slogan",
     "heroHeaderSubtitle",
     "articles",
     "read",
@@ -31,6 +32,9 @@
     "projectsSpaceIntroduction",
     "ourPartners",
     "inProgress",
+    "waitingBudget",
+    "done",
+    "supportProject",
     "realized",
     "initiative",
     "projectSpaceTitle",
@@ -51,6 +55,7 @@
     "whoWeAre",
     "domSisters",
     "allArticles",
+    "share",
     "todaysRosary",
     "rosarySlogan",
     "getNotified",

@@ -61,13 +61,13 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
 
                         _cache[_highlightArticleStateKey] = 'true';
 
-                        String releaseMonth = DateTimeUtils.localMonth(
-                          DateTimeUtils.parseReleaseDate(
-                                  state.articles![0]!.releaseDate ??
-                                      '2024-04-28')
-                              .month,
-                          context,
-                        );
+                        // String releaseMonth = DateTimeUtils.localMonth(
+                        //   DateTimeUtils.parseReleaseDate(
+                        //           state.articles![0]!.releaseDate ??
+                        //               '2024-04-28')
+                        //       .month,
+                        //   context,
+                        // );
                         return Container(
                           margin: const EdgeInsets.symmetric(
                             horizontal: Margins.medium,

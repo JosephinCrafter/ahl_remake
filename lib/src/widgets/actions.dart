@@ -69,10 +69,9 @@ class ActionsLists {
             alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(vertical: Paddings.medium),
             child: Text(
-              AppLocalizations.of(context)!.aboutUs,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontFamily: 'Aileron',
-                    fontWeight: FontWeight.w900,
+              AppLocalizations.of(context)!.whoWeAre,
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    color: theme.AhlTheme.blueNight,
                   ),
             ),
           ),
@@ -91,9 +90,8 @@ class ActionsLists {
             padding: const EdgeInsets.symmetric(vertical: Paddings.medium),
             child: Text(
               AppLocalizations.of(context)!.prayers,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontFamily: 'Aileron',
-                    fontWeight: FontWeight.w900,
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    color: theme.AhlTheme.blueNight,
                   ),
             ),
           ),
@@ -112,9 +110,8 @@ class ActionsLists {
             padding: const EdgeInsets.symmetric(vertical: Paddings.medium),
             child: Text(
               AppLocalizations.of(context)!.ourProjects,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    fontFamily: 'Aileron',
-                    fontWeight: FontWeight.w900,
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    color: theme.AhlTheme.blueNight,
                   ),
             ),
           ),

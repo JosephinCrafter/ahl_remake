@@ -5,7 +5,8 @@
     "description": "The title of the application"
   },
   "longAppTitle": "Aujourd'hui l'avenir",
-  "heroTitle": "Aimer et servir",
+  "heroTitle": "\"Aimer et servir\"",
+  "slogan":"\"Amour et Service\"",
   "@heroTitle": {
     "description": "Le text d'invitation qui s'affiche dans le hero header"
   },
@@ -57,7 +58,7 @@
   "unknownError": "Erreur inconnue, Verifier votre connexion internet",
   "priesIntention": "Intentions de prière",
   "proverb": "\"Priez les uns les autres, afin que vous soyez guéris\"\nSt Jacques 5:16",
-  "priersInvitation": "Vos intetions seront porté dans nos prières quotidiens dans notre Communauté Catherine de Sienne à Saharoaloha, Madagascar.",
+  "priersInvitation": "Vos intetions seront porté dans nos prières quotidiens dans notre Communauté Sainte Catherine de Sienne à Saharoaloha, Madagascar.",
   "nameAndFirstName": "Nom et Prénom",
   "priers": "Prières",
   "sendPray": "Soumettre mon intention",
@@ -112,7 +113,13 @@
   "projectsSpaceSubtitle": "Aimons et servons.",
   "projectsSpaceIntroduction": "Nous sommes engagées dans de nombreux projets qui visent à promouvoir la dignité humaine, la justice sociale, l’éducation et la santé. Nous vous invitons à découvrir sur cette page les initiatives que nous menons.",
   "ourPartners": "Nos Partenaires",
+
   "inProgress": "Projets en cours",
+  "waitingBudget":"En attente de financement",
+  "done": "Términé",
+
+  "supportProject": "Soutenir un projet",
+
   "realized": "Réalisation",
   "initiative": "Initiative des soeurs",
   "projectSpaceTitle": "Nos projets",
@@ -133,6 +140,7 @@
   "whoWeAre": "Qui sommes nous?",
   "domSisters": "Les soeurs Dominicaines NDD",
   "allArticles": "Tous les articles",
+  "share" : "Partager",
   "todaysRosary": "Chapelet du jour",
   "rosarySlogan": "Mediter la vie de Jesus avec Marie",
   "getNotified": "Être notifier",

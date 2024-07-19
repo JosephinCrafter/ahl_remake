@@ -1,7 +1,9 @@
 import 'package:ahl/src/rosary/rosary.dart';
+import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gap/gap.dart';
 
 import '../ahl_barrel.dart';
 import '../widgets/widgets.dart';
@@ -75,6 +77,7 @@ class PrayerSpaceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> children = [
+      Gap(resolveSeparatorSize(context)),
       // title
       SectionTitle(
         title: AppLocalizations.of(context)!.priesSpace,

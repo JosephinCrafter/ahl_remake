@@ -72,14 +72,23 @@ class _PrayersIntentionRequestViewState
     );
     lottieController =
         AnimationController(vsync: this, duration: const Duration(seconds: 3))
-          ..addListener(() {
-            if (lottieController.status == AnimationStatus.completed) {
-              _controller.animateToPage(0,
-                  duration: duration, curve: Curves.easeIn);
-            }
-          });
+          ..addListener(
+            () {
+              if (lottieController.status == AnimationStatus.completed) {
+                _controller.jumpToPage(0);
+                // duration: duration, curve: Curves.easeIn);
+                lottieController.reset();
+              }
+            },
+          );
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    lottieController.dispose();
+    super.dispose();
   }
 
   // // todo: change to 0 after building dateView view
@@ -114,7 +123,7 @@ class _PrayersIntentionRequestViewState
       });
 
   // test to setup animation
-  final bool _isGoingForward = true;
+  // final bool _isGoingForward = true;
 
   @override
   Widget build(BuildContext context) {
@@ -162,8 +171,8 @@ class _PrayersIntentionRequestViewState
             maxWidth: MediaQuery.sizeOf(context).width,
             maxHeight:
                 (MediaQuery.of(context).size.width < ScreenSizes.extraLarge)
-                    ? 900
-                    : 657,
+                    ? 990
+                    : 747,
           ),
           child: PageView(
             controller: _controller,
@@ -237,7 +246,7 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
           direction: direction,
           children: [
             Flexible(
-              flex: 1,
+              flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -246,11 +255,11 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
                     child: prayerDecorationImage,
                   ),
                   Flexible(
-                    flex: 1,
+                    // flex: 1,
                     child: title,
                   ),
                   Flexible(
-                    flex: 1,
+                    // flex: 1,
                     child: Container(
                       alignment: Alignment.centerLeft,
                       height: 350,
@@ -262,136 +271,145 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
                     ),
                   ),
                   Flexible(
-                    flex: 1,
+                    // flex: 1,
                     child: DefaultTextStyle(
                       style: Theme.of(context).textTheme.labelLarge!,
-                      child: (context
+                      child: (context.read<PrayerRequestBloc>().state.request !=
+                              null)
+                          ? (context
+                                      .read<PrayerRequestBloc>()
+                                      .state
+                                      .request!
+                                      .name !=
+                                  null)
+                              ? Text(
+                                  AppLocalizations.of(context)!.priersOf(
+                                    context
+                                        .read<PrayerRequestBloc>()
+                                        .state
+                                        .request!
+                                        .name!,
+                                    context
+                                        .read<PrayerRequestBloc>()
+                                        .state
+                                        .request!
+                                        .email,
+                                  ),
+                                )
+                              : Text(context
                                   .read<PrayerRequestBloc>()
                                   .state
                                   .request!
-                                  .name !=
-                              null)
-                          ? Text(
-                              AppLocalizations.of(context)!.priersOf(
-                                context
-                                    .read<PrayerRequestBloc>()
-                                    .state
-                                    .request!
-                                    .name!,
-                                context
-                                    .read<PrayerRequestBloc>()
-                                    .state
-                                    .request!
-                                    .email,
-                              ),
-                            )
-                          : Text(context
-                              .read<PrayerRequestBloc>()
-                              .state
-                              .request!
-                              .email),
+                                  .email)
+                          : Container(),
                     ),
                   ),
                 ],
               ),
             ),
-            const Gap(Paddings.big),
+            // const Gap(Paddings.big),
             Flexible(
-              flex: (direction == Axis.vertical) ? 3 : 1,
+              flex: (direction == Axis.vertical) ? 3 : 2,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: Paddings.listSeparator),
-                    padding: //(constraints.maxWidth > ScreenSizes.mobile)
-                        // ?
+                  Flexible(
+                    child: Container(
+                      margin:
+                          const EdgeInsets.only(top: Paddings.listSeparator),
+                      padding: //(constraints.maxWidth > ScreenSizes.mobile)
+                          // ?
 
-                        const EdgeInsets.all(Margins.medium),
-                    //: const EdgeInsets.all(Margins.mobileSmall),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(BorderSizes.big),
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(
-                            bottom: Paddings.listSeparator,
+                          const EdgeInsets.all(Margins.medium),
+                      //: const EdgeInsets.all(Margins.mobileSmall),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(BorderSizes.big),
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.only(
+                              bottom: Paddings.listSeparator,
+                            ),
+                            child: Text(
+                              AppLocalizations.of(context)!.whenWePray,
+                              style: Theme.of(context).textTheme.headlineSmall,
+                            ),
                           ),
-                          child: Text(
-                            AppLocalizations.of(context)!.whenWePray,
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: Paddings.listSeparator,
-                          ),
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: SegmentedButton<PrayerType>(
-                              style: const ButtonStyle(
-                                visualDensity: VisualDensity.comfortable,
-                              ),
-                              onSelectionChanged: _onSelectionChange,
-                              showSelectedIcon: true,
-                              selected: selected,
-                              multiSelectionEnabled: false,
-                              selectedIcon: const Icon(Icons.done)
-                                  .animate()
-                                  .scale(
-                                    duration: AhlDurations.subtle,
-                                    alignment: Alignment.center,
-                                    curve: Curves.easeOut,
-                                    begin: const Offset(0.7, 0.7),
-                                    end: const Offset(1.0, 1.0),
-                                  )
-                                  .rotate(begin: 1.1, end: 1),
-                              segments: List.generate(
-                                _option.length,
-                                (index) => ButtonSegment(
-                                  label: Container(
-                                    alignment: Alignment.center,
-                                    width: 60,
-                                    child: Text(
-                                      _option[index].localizedToString(context),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: Paddings.listSeparator,
+                            ),
+                            child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: SegmentedButton<PrayerType>(
+                                style: const ButtonStyle(
+                                  visualDensity: VisualDensity.comfortable,
+                                ),
+                                onSelectionChanged: _onSelectionChange,
+                                showSelectedIcon: true,
+                                selected: selected,
+                                multiSelectionEnabled: false,
+                                selectedIcon: const Icon(Icons.done)
+                                    .animate()
+                                    .scale(
+                                      duration: AhlDurations.subtle,
+                                      alignment: Alignment.center,
+                                      curve: Curves.easeOut,
+                                      begin: const Offset(0.7, 0.7),
+                                      end: const Offset(1.0, 1.0),
+                                    )
+                                    .rotate(begin: 1.1, end: 1),
+                                segments: List.generate(
+                                  _option.length,
+                                  (index) => ButtonSegment(
+                                    label: Container(
+                                      alignment: Alignment.center,
+                                      width: 60,
+                                      child: Text(
+                                        _option[index]
+                                            .localizedToString(context),
+                                      ),
                                     ),
+                                    value: _option[index],
                                   ),
-                                  value: _option[index],
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(
-                            bottom: Paddings.listSeparator,
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.only(
+                              bottom: Paddings.listSeparator,
+                            ),
+                            child: const Text("Choisir la date:"),
                           ),
-                          child: const Text("Choisir la date:"),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.only(
-                            bottom: Paddings.listSeparator,
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.only(
+                                bottom: Paddings.listSeparator,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF7EFD4),
+                                borderRadius: BorderRadius.circular(
+                                    BorderSizes.big - Paddings.listSeparator),
+                              ),
+                              child: CalendarDatePicker(
+                                initialCalendarMode: DatePickerMode.day,
+                                currentDate: DateTime.now(),
+                                onDateChanged: (value) {
+                                  _date = value;
+                                },
+                                initialDate: _date,
+                                firstDate: firstDate,
+                                lastDate: lastDate,
+                              ),
+                            ),
                           ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFF7EFD4),
-                            borderRadius: BorderRadius.circular(
-                                BorderSizes.big - Paddings.listSeparator),
-                          ),
-                          child: CalendarDatePicker(
-                            initialCalendarMode: DatePickerMode.day,
-                            currentDate: DateTime.now(),
-                            onDateChanged: (value) {
-                              _date = value;
-                            },
-                            initialDate: _date,
-                            firstDate: firstDate,
-                            lastDate: lastDate,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                   Container(
@@ -492,28 +510,29 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
         direction: direction,
         children: [
           Flexible(
+            flex: 2,
             fit: FlexFit.tight,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(
-                  flex: 1,
+                  flex: 2,
                   child: prayerDecorationImage,
                 ),
                 Flexible(
-                  flex: 1,
+                  // flex: 1,
                   child: title,
                 ),
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(
-                      top: Paddings.big, bottom: Paddings.listSeparator),
+                  // padding: const EdgeInsets.only(
+                  // top: Paddings.big, bottom: Paddings.listSeparator),
                   child: Text(AppLocalizations.of(context)!.proverb,
                       style: Theme.of(context).textTheme.labelMedium),
                 ),
                 Flexible(
-                  flex: 1,
+                  // flex: 1,
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -525,15 +544,16 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
               ],
             ),
           ),
-          const Gap(Paddings.big),
+          // const Gap(Paddings.big),
           Flexible(
+            flex: 3,
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Expanded(
+                Flexible(
                   flex: 1,
                   child: Container(
-                    margin: const EdgeInsets.symmetric(vertical: Paddings.big),
+                    // margin: const EdgeInsets.symmetric(vertical: Paddings.big),
                     padding: const EdgeInsets.all(Paddings.medium),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
@@ -542,9 +562,13 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          AppLocalizations.of(context)!.prayerRequestInvitation,
-                          style: Theme.of(context).textTheme.titleSmall,
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            AppLocalizations.of(context)!
+                                .prayerRequestInvitation,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
                         ),
                         //name and First name
                         Padding(
@@ -610,6 +634,8 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                     ),
                   ),
                 ),
+
+                const Gap(45),
 
                 /// Buttons
                 Container(

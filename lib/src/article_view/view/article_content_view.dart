@@ -31,7 +31,7 @@ class ArticleContentPageState extends State<ArticleContentPage> {
           children: [
             ArticleContentView(
               collection: widget.collection,
-              article: widget.article,
+              article: widget.article!,
             ),
             const Gap(25),
             const NewsLetterPrompt(),
@@ -44,24 +44,28 @@ class ArticleContentPageState extends State<ArticleContentPage> {
 }
 
 class ArticleContentView extends StatefulWidget {
-  const ArticleContentView({
+  ArticleContentView({
     super.key,
     required this.article,
-    this.collection,
-  });
+    this.collection = "articles",
+  }) : articleUtils =
+            ArticleStorageUtils(article: article, collection: collection!);
 
-  final Article? article;
+  final Article article;
   final String? collection;
+
+  final ArticleStorageUtils articleUtils;
 
   @override
   State<ArticleContentView> createState() => _ArticleContentViewState();
 }
 
-class _ArticleContentViewState extends State<ArticleContentView> {
+class _ArticleContentViewState extends State<ArticleContentView>
+    with AutomaticKeepAliveClientMixin {
   Future<String> contentFetching() async {
     final bytes = await firebase.storage
         .child(
-            '${widget.collection}/${widget.article?.id}/${widget.article?.contentPath}')
+            '${widget.collection}/${widget.article.id}/${widget.article.contentPath}')
         .getData();
 
     String decodedString = utf8.decode(bytes!.toList());
@@ -72,15 +76,19 @@ class _ArticleContentViewState extends State<ArticleContentView> {
 
   late double screenWidth;
 
+  late String articleKey = 'article_${widget.article.title}';
+  late SessionStorage cache = SessionStorage();
+
   @override
   void initState() {
-    super.initState();
-
     content = contentFetching();
+    widget.articleUtils.getCoverImage();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     // Style for Markdown from Flutter_markdown
     // final styleSheet = MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
     //   p: AhlTheme.bodyMedium,
@@ -122,6 +130,7 @@ class _ArticleContentViewState extends State<ArticleContentView> {
     // ),
 
     screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: resolveForBreakPoint(
@@ -165,7 +174,9 @@ class _ArticleContentViewState extends State<ArticleContentView> {
         H2Config(
           style: const H2Config().style.copyWith(fontFamily: "Butler"),
         ),
-        PConfig(textStyle: PConfig().textStyle.copyWith(fontFamily: 'Poppins')),
+        PConfig(
+            textStyle:
+                const PConfig().textStyle.copyWith(fontFamily: 'Poppins')),
         LinkConfig(
           onTap: (url) {
             launchUrl(Uri.parse(url));
@@ -196,102 +207,152 @@ class _ArticleContentViewState extends State<ArticleContentView> {
         // ),
       ],
     );
-    String articleKey = "${widget.article!.contentPath}";
-    SessionStorage cache = SessionStorage();
 
-    if (cache[articleKey] == null) {
-      return FutureBuilder(
-        future: content,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              if (snapshot.hasData) {
-                cache[articleKey] = snapshot.data!;
-                return Card(
-                  color: const Color(0xFFFAFAFA),
-                  child: Container(
-                      padding: const EdgeInsets.all(Paddings.medium),
-                      child: Column(
-                        children: [
-                          MarkdownBlock(
-                            data: snapshot.data ?? 'Error loading article.',
-                            config: minimalisticCorporateConfig,
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: OutlinedButton.icon(
-                              onPressed: () {
-                                // todo: implement sharing mechanisme.
-                              },
-                              label: const Text('Partager'),
-                              icon: const Icon(Icons.share_outlined),
-                            ),
-                          ),
-                        ],
-                      )),
-                );
-              } else {
-                return Align(
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.warning_rounded,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                      Text('Error loading article content: ${snapshot.error}')
-                    ],
-                  ),
-                );
-              }
+    // share button
+    Widget shareButton = Builder(
+      builder: (context) => Align(
+        alignment: Alignment.centerLeft,
+        child: OutlinedButton.icon(
+          onPressed: () {
+            //todo: implement sharing mechanism
+          },
+          label: const Text('Partager'),
+          icon: const Icon(Icons.share_outlined),
+        ),
+      ),
+    );
 
-            default:
-              return const Align(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
-              );
-
-            // default:
-            //   return Align(
-            //     alignment: Alignment.center,
-            //     child: Icon(
-            //       Icons.warning_rounded,
-            //       color: Theme.of(context).colorScheme.error,
-            //     ),
-            //   );
-          }
-        },
-      );
-    } else {
-      return Card(
-        color: const Color(0xFFFAFAFA),
-        child: Container(
-          padding: const EdgeInsets.all(Paddings.medium),
-          child: Column(
-            children: [
-              MarkdownBlock(
-                data: cache[articleKey] ?? 'Error loading article.',
-                config: minimalisticCorporateConfig,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    //todo: implement sharing mechanism
-                  },
-                  label: const Text('Partager'),
-                  icon: const Icon(Icons.share_outlined),
+    return Card(
+      color: const Color(0xFFFAFAFA),
+      child: Container(
+        padding: const EdgeInsets.all(Paddings.medium),
+        child: Column(
+          children: [
+            // title
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.article.title ?? "",
+                style: resolveDisplayTextThemeForBreakPoints(
+                  MediaQuery.of(context).size.width,
+                  context,
                 ),
               ),
-            ],
-          ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                DateTimeUtils.localizedFromStringDate(
+                    dateString: widget.article.releaseDate, context: context),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium!
+                    .copyWith(color: Theme.of(context).primaryColor),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: Paddings.medium),
+              child: AhlDivider(
+                leading: 0,
+                trailing: 50,
+                thickness: 16,
+              ),
+            ),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(widget.article.relations?[0]['preview']),
+            ),
+            // share button
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: shareButton,
+            ),
+            (widget.articleUtils.coverImage != null)
+                ? Container(
+                    height: resolveForBreakPoint(
+                      screenWidth,
+                      other: 575,
+                      small: 300,
+                    ),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: MemoryImage(
+                          widget.articleUtils.coverImage!,
+                        ),
+                      ),
+                    ),
+                    child: InkWell(
+                      onTap: () => ImageViewer(
+                        child: Image.memory(widget.articleUtils.coverImage!),
+                      ),
+                      child: Container(),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+
+            // markdown content
+            (cache[articleKey] == null)
+                ? FutureBuilder(
+                    future: content,
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.done:
+                          if (snapshot.hasData) {
+                            cache[articleKey] = snapshot.data!;
+                            return MarkdownBlock(
+                              data: snapshot.data ?? 'Error loading article.',
+                              config: minimalisticCorporateConfig,
+                            );
+                          } else {
+                            return Align(
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.warning_rounded,
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                                  Text(
+                                      'Error loading article content: ${snapshot.error}')
+                                ],
+                              ),
+                            );
+                          }
+
+                        default:
+                          return Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.height - 50,
+                            child: const CircularProgressIndicator(),
+                          );
+
+                        // default:
+                        //   return Align(
+                        //     alignment: Alignment.center,
+                        //     child: Icon(
+                        //       Icons.warning_rounded,
+                        //       color: Theme.of(context).colorScheme.error,
+                        //     ),
+                        //   );
+                      }
+                    },
+                  )
+                : MarkdownBlock(
+                    data: cache[articleKey] ?? 'Error loading article.',
+                    config: minimalisticCorporateConfig,
+                  ),
+
+            shareButton,
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 
   @override
-  bool get wantKeepAlive => throw UnimplementedError();
+  bool get wantKeepAlive => cache[articleKey] != null;
 }
 
 class AhlImageViewer extends StatefulWidget {
