@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/article_view/view/article_view.dart';
 import 'package:ahl/src/newsletter/newsletter.dart';
@@ -7,10 +9,13 @@ import 'package:ahl/src/project_space/view.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../utils/breakpoint_resolver.dart';
 
 class ProjectPageView extends StatefulWidget {
   ProjectPageView({
@@ -60,34 +65,108 @@ class ProjectPageView extends StatefulWidget {
 class _ProjectPageViewState extends State<ProjectPageView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late ScrollController _descriptionScrollController;
+  late ScrollController _newsScrollController;
+  late bool needDisplayTitleInAppBar;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+
+    _descriptionScrollController = ScrollController();
+    _newsScrollController = ScrollController();
+
+    needDisplayTitleInAppBar = false;
+    _descriptionScrollController.addListener(updateNeedDisplayTitle);
+  }
+
+  void updateNeedDisplayTitle() {
+    if (_descriptionScrollController.offset >= 64) {
+      setState(() => needDisplayTitleInAppBar = true);
+    } else {
+      setState(() => needDisplayTitleInAppBar = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.sizeOf(context).width;
+    var title = widget.project.title;
+    var value = needDisplayTitleInAppBar ? 1.0 : 0.0;
     return Scaffold(
       appBar: AhlAppBar(
-        preferredSize: const Size.fromHeight(75 + 30),
+        preferredSize: //!needDisplayTitleInAppBar
+            // ? const Size.fromHeight(75 + 30)
+            const Size.fromHeight(75 + 64),
         bottomBar: Flexible(
+          flex: 1,
           child: Container(
             // constraints: BoxConstraints(
             //   maxWidth: ContentSize.maxWidth(
             //     MediaQuery.sizeOf(context).width,
             //   ),
             // ),
-            color: Theme.of(context).colorScheme.surface,
-            child: TabBar(
-              controller: _tabController,
-              tabs: const [
-                Tab(
-                  text: "Description",
+            // color: Theme.of(context).colorScheme.surface,
+            child: Column(
+              children: [
+                Container(
+                  constraints: const BoxConstraints(maxWidth: 1024),
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: resolveForBreakPoint(
+                      screenWidth,
+                      other: Margins.small,
+                      extraHuge: Margins.extraHuge,
+                      huge: Margins.huge,
+                      extraLarge: Margins.extraLarge,
+                      large: Margins.large,
+                    ),
+                  ),
+                  // padding: EdgeInsets.symmetric(
+                  //   horizontal: resolveForBreakPoint(
+                  //     screenWidth,
+                  //     small: Margins.small,
+                  //     medium: Margins.small,
+                  //     large: Margins.large,
+                  //     extraLarge: Margins.extraLarge,
+                  //     other: Margins.huge,
+                  //   ),
+                  // ),
+                  child: AnimatedCrossFade(
+                      firstChild: const SizedBox.shrink(),
+                      secondChild: Text(
+                        title!,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      crossFadeState: !needDisplayTitleInAppBar
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      duration: Durations.medium1),
                 ),
-                Tab(
-                  text: "Actualités",
+                // Container(
+                //         child: Visibility(
+                //             visible: needDisplayTitleInAppBar,
+                //             child: Text(
+                //               title!,
+                //               style: Theme.of(context).textTheme.titleLarge,
+                //             )))
+                //     .animate(
+                //       autoPlay: false,
+                //       target: needDisplayTitleInAppBar ? 1 : 0,
+                //     )
+                //     .fadeIn()
+                //     .slideY(begin: 1),
+                TabBar(
+                  controller: _tabController,
+                  tabs: const [
+                    Tab(
+                      text: "Description",
+                    ),
+                    Tab(
+                      text: "Actualités",
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -97,8 +176,14 @@ class _ProjectPageViewState extends State<ProjectPageView>
       body: TabBarView(
         controller: _tabController,
         children: [
-          ProjectDescriptionContentView(article: widget.project),
-          ProjectNewsView(relatedArticles: widget.relatedArticles),
+          ProjectDescriptionContentView(
+            article: widget.project,
+            scrollController: _descriptionScrollController,
+          ),
+          ProjectNewsView(
+            relatedArticles: widget.relatedArticles,
+            scrollController: _newsScrollController,
+          ),
         ],
       ),
     );
@@ -109,14 +194,17 @@ class ProjectDescriptionContentView extends StatelessWidget {
   const ProjectDescriptionContentView({
     super.key,
     required this.article,
+    this.scrollController,
   });
 
   final Article article;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     // List<Widget> suggestion = context.read<ProjectBloc>().state.articles?.map<Widget>((element)=>).toList();
     return ListView(
+      controller: scrollController,
       children: [
         ArticleContentView(
           article: article,
@@ -136,16 +224,18 @@ class ProjectNewsView extends StatelessWidget {
   const ProjectNewsView({
     super.key,
     required this.relatedArticles,
+    this.scrollController,
   });
 
   final List<Article> relatedArticles;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     // List<Widget> suggestion = context.read<ProjectBloc>().state.articles?.map<Widget>((element)=>).toList();
     return ListView(
+      controller: scrollController,
       children: [
-        //
         Container(
           alignment: Alignment.center,
           height: 500,

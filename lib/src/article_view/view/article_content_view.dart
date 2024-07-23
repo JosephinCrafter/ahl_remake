@@ -13,9 +13,12 @@ class ArticleContentPage extends StatefulWidget {
 }
 
 class ArticleContentPageState extends State<ArticleContentPage> {
+  late ScrollController scrollController;
   @override
   void initState() {
     super.initState();
+
+    scrollController = ScrollController(keepScrollOffset: true);
   }
 
   @override
@@ -27,11 +30,13 @@ class ArticleContentPageState extends State<ArticleContentPage> {
             : null,
         appBar: const AhlAppBar(),
         body: ListView(
+          controller: scrollController,
           addAutomaticKeepAlives: true,
           children: [
             ArticleContentView(
               collection: widget.collection,
               article: widget.article!,
+              controller: scrollController,
             ),
             const Gap(25),
             const NewsLetterPrompt(),
@@ -48,6 +53,7 @@ class ArticleContentView extends StatefulWidget {
     super.key,
     required this.article,
     this.collection = "articles",
+    this.controller,
   }) : articleUtils =
             ArticleStorageUtils(article: article, collection: collection!);
 
@@ -55,6 +61,7 @@ class ArticleContentView extends StatefulWidget {
   final String? collection;
 
   final ArticleStorageUtils articleUtils;
+  final ScrollController? controller;
 
   @override
   State<ArticleContentView> createState() => _ArticleContentViewState();
@@ -78,12 +85,15 @@ class _ArticleContentViewState extends State<ArticleContentView>
 
   late String articleKey = 'article_${widget.article.title}';
   late SessionStorage cache = SessionStorage();
+  late Uint8List? _coverImage;
 
   @override
   void initState() {
     content = contentFetching();
     widget.articleUtils.getCoverImage();
     super.initState();
+
+    _coverImage = widget.articleUtils.coverImage;
   }
 
   @override
@@ -167,6 +177,9 @@ class _ArticleContentViewState extends State<ArticleContentView>
             attributes: attribute,
           );
         }),
+
+        /// todo: implements styles
+        ///
         H1Config(
           style: const H1Config().style.copyWith(fontFamily: "Butler"),
         ),
@@ -224,76 +237,83 @@ class _ArticleContentViewState extends State<ArticleContentView>
 
     return Card(
       color: const Color(0xFFFAFAFA),
-      child: Container(
-        padding: const EdgeInsets.all(Paddings.medium),
-        child: Column(
-          children: [
-            // title
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                widget.article.title ?? "",
-                style: resolveDisplayTextThemeForBreakPoints(
-                  MediaQuery.of(context).size.width,
-                  context,
-                ),
+      child:
+          // padding: const EdgeInsets.all(Paddings.medium),
+          Column(
+        children: [
+          // title
+          Container(
+            padding: const EdgeInsets.all(Paddings.medium),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              widget.article.title ?? "",
+              style: resolveDisplayTextThemeForBreakPoints(
+                MediaQuery.of(context).size.width,
+                context,
               ),
             ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                DateTimeUtils.localizedFromStringDate(
-                    dateString: widget.article.releaseDate, context: context),
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium!
-                    .copyWith(color: Theme.of(context).primaryColor),
-              ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(Paddings.medium),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              DateTimeUtils.localizedFromStringDate(
+                  dateString: widget.article.releaseDate, context: context),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: Theme.of(context).primaryColor),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: Paddings.medium),
-              child: AhlDivider(
-                leading: 0,
-                trailing: 50,
-                thickness: 16,
-              ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: Paddings.medium),
+            child: AhlDivider(
+              leading: 0,
+              trailing: 50,
+              thickness: 16,
             ),
+          ),
 
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(widget.article.relations?[0]['preview']),
+          Container(
+            padding: const EdgeInsets.all(Paddings.medium),
+            alignment: Alignment.centerLeft,
+            child: Text(widget.article.relations?[0]['preview']),
+          ),
+          // share button
+          Container(
+            padding: const EdgeInsets.symmetric(
+                vertical: 10, horizontal: Paddings.medium),
+            child: shareButton,
+          ),
+          Container(
+            height: resolveForBreakPoint(
+              screenWidth,
+              other: 575,
+              small: 300,
             ),
-            // share button
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: shareButton,
-            ),
-            (widget.articleUtils.coverImage != null)
-                ? Container(
-                    height: resolveForBreakPoint(
-                      screenWidth,
-                      other: 575,
-                      small: 300,
-                    ),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: MemoryImage(
-                          widget.articleUtils.coverImage!,
-                        ),
-                      ),
-                    ),
-                    child: InkWell(
-                      onTap: () => ImageViewer(
-                        child: Image.memory(widget.articleUtils.coverImage!),
-                      ),
-                      child: Container(),
-                    ),
-                  )
-                : const SizedBox.shrink(),
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image:
+                      /*(widget.articleUtils.coverImage != null) ?*/
 
-            // markdown content
-            (cache[articleKey] == null)
+                      MemoryImage(
+                    _coverImage!,
+                  ) //: NetworkImage(widget.articleUtils.getCoverImageUrl()),
+                  ),
+            ),
+            child: InkWell(
+              onTap: () => ImageViewer(
+                child: Image.memory(widget.articleUtils.coverImage!),
+              ),
+              child: Container(),
+            ),
+          ),
+
+          // markdown content
+          Container(
+            padding: const EdgeInsets.all(Paddings.medium),
+            child: (cache[articleKey] == null)
                 ? FutureBuilder(
                     future: content,
                     builder: (context, snapshot) {
@@ -343,10 +363,12 @@ class _ArticleContentViewState extends State<ArticleContentView>
                     data: cache[articleKey] ?? 'Error loading article.',
                     config: minimalisticCorporateConfig,
                   ),
-
-            shareButton,
-          ],
-        ),
+          ),
+          Container(
+            padding: const EdgeInsets.all(Paddings.medium),
+            child: shareButton,
+          ),
+        ],
       ),
     );
   }

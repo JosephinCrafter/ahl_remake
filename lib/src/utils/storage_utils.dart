@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:firebase_article/firebase_article.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:session_storage/session_storage.dart';
 
@@ -102,7 +104,7 @@ final class ArticleStorageUtils {
       log('Image got: ${heroHeaderImageRef.name} ');
 
       // write data to cache
-      cache[coverImageDataKey] = encodeUint8ListToString(data!);
+      cache[coverImageDataKey] = await encodeUint8ListToString(data!);
 
       // update coverImage
     } catch (e) {
@@ -119,7 +121,7 @@ final class ArticleStorageUtils {
     // cache
     String? contentString = cache[contentDataKey];
     http.Response? response =
-        (contentString != null) ? decodeStringToResponse(contentString) : null;
+        (contentString != null) ? decodeStringToResponse(content) : null;
     if (response != null) {
       return response;
     }
