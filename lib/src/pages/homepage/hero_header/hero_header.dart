@@ -1,11 +1,13 @@
-import 'package:ahl/src/pages/prayers/prayers_page.dart';
-import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
-import 'package:ahl/src/theme/theme.dart';
-import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:gap/gap.dart';
 
+import '../../prayers/prayers_page.dart';
+import '../..//who_we_are/who_we_are.dart';
+import '../../../theme/theme.dart';
+import '../../../utils/breakpoint_resolver.dart';
 import '../../../ahl_barrel.dart';
 
 class HeroHeaderView extends StatelessWidget {
@@ -41,11 +43,16 @@ class _MobileHeroHeaderState extends State<MobileHeroHeader> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        AnimatedContainer(
+          duration: Durations.short1,
+          curve: Curves.easeOut,
+          color: AhlTheme.yellowLight,
           constraints: const BoxConstraints(
-            maxHeight: Sizes.mobileHeroHeaderImageHeight,
+            minHeight: Sizes.mobileHeroHeaderImageHeight,
           ),
-          child: const HeroImageView(isWithBorder: false),
+          child: Image.asset(
+            AhlAssets.heroBk,
+          ),
         ),
         Container(
           color: AhlTheme.yellowLight, //.withAlpha(0xB6),
@@ -185,21 +192,23 @@ class HeroImageView extends StatelessWidget {
   });
 
   final bool isWithBorder;
-  
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: isWithBorder
-            ? const BorderRadius.only(
-                bottomLeft: Radius.circular(BorderSizes.big),
-                bottomRight: Radius.circular(BorderSizes.big),
-              )
-            : null,
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage(AhlAssets.heroBk),
+      color: AhlTheme.yellowLight,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: isWithBorder
+              ? const BorderRadius.only(
+                  bottomLeft: Radius.circular(BorderSizes.big),
+                  bottomRight: Radius.circular(BorderSizes.big),
+                )
+              : null,
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage(AhlAssets.heroBk),
+          ),
         ),
       ),
     );

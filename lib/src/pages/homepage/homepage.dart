@@ -79,9 +79,7 @@ class _HomePageState extends State<HomePage> {
     widget.addListener(dispatchScrollNotification);
   }
 
-  void dispatchScrollNotification() {
-    
-  }
+  void dispatchScrollNotification() {}
 
   double _bottom = 0;
 
@@ -93,6 +91,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(AssetImage(AhlAssets.heroBk), context);
+
     return LayoutBuilder(
       key: const Key('main_scroll_view'),
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                       large: 925,
                     ),
                   ),
-                  child: const HeroImageView(),
+                  child: Image.asset(AhlAssets.heroBk),
                 ).animate().fadeIn(
                       curve: Curves.easeIn,
                       duration: Durations.long4,
