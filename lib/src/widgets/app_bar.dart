@@ -9,7 +9,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
         // separation: SizedBox.shrink(),
         ),
     this.backgroundColor,
-    this.actions = const [],
+    this.actions,
     this.ending,
     this.crossAxisAlignment,
     this.padding,
@@ -22,7 +22,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// The preferred size of this widget
   final Size _preferredSize;
   final Widget title;
-  final List<Widget> actions;
+  final List<Widget>? actions;
   final Widget? ending;
   final Color? backgroundColor;
   final CrossAxisAlignment? crossAxisAlignment;
@@ -44,7 +44,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
 
     /// background color of the app bar
-    var color = backgroundColor ?? Theme.of(context).colorScheme.surface;
+    var color = backgroundColor ?? theme.AhlTheme.yellowLight;
 
     /// constraints
     BoxConstraints computedConstraint = BoxConstraints.loose(
@@ -64,17 +64,20 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
         : TextBaseline.alphabetic;
 
     Widget leadingTitle0 = leadingTitle ??
-        Expanded(
+        Flexible(
+          flex: 5,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               if (Navigator.of(context).canPop())
                 IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(Icons.arrow_back_rounded)),
-              Expanded(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: const Icon(Icons.arrow_back_rounded))
+                    .animate()
+                    .moveX(begin: -50, end: 0),
+              Flexible(
                 child: title,
               ),
             ],
@@ -94,6 +97,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
             textBaseline: computedTextBaseLine,
             crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
             children: [
               leadingTitle0,
               ...?actions,
@@ -124,7 +128,9 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
           // Use the default web appBar
           return buildContentWidgets(
             context,
+            actions: actions ?? buildActions(context),
             ending: const SizedBox.shrink(),
+            bottomBar: bottomBar ?? const SizedBox.shrink(),
           );
           // return Container(
           //   constraints: computedConstraint,
@@ -153,6 +159,203 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
+  static List<Widget> buildActions(BuildContext context) {
+    List<Widget> actionsList = [];
+
+    String? currentRouteName = ModalRoute.of(context)?.settings.name;
+
+    TextStyle? resolveStyle(String routeName) {
+      return (routeName == currentRouteName)
+          ? Theme.of(context).textTheme.labelLarge!.copyWith(
+                fontWeight: FontWeight.bold,
+              )
+          : null;
+    }
+
+    TextStyle? resolveStyleIf(bool Function() test) {
+      return (test())
+          ? Theme.of(context).textTheme.labelLarge!.copyWith(
+                fontWeight: FontWeight.bold,
+              )
+          : null;
+    }
+
+    Map actions = {
+      AppLocalizations.of(context)!.homeText: HomePage.routeName,
+      AppLocalizations.of(context)!.priesSpace: PrayersPage.routeName,
+      AppLocalizations.of(context)!.projectsSpace: ProjectsPage.routeName,
+      AppLocalizations.of(context)!.whoWeAre: WhoWeArePage.routeName,
+      AppLocalizations.of(context)!.makeDonation: DonationPage.routeName,
+    };
+
+    Widget donationButton = Flexible(
+      flex: 2,
+      child: Container(
+        alignment: Alignment.centerRight,
+        child: OutlinedButton(
+          style: ButtonStyle(
+            foregroundColor: WidgetStateColor.resolveWith(
+              (states) => Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).pushNamed(DonationPage.routeName);
+          },
+          // child: FittedBox(
+          //   fit: BoxFit.contain,
+          child: Text(
+            actions.keys.lastOrNull,
+          ),
+          // ),
+        ),
+      ),
+    );
+    Widget homeButton = // Flexible(
+        //   //   flex: 1,
+        //   child:
+        Container(
+      child: TextButton(
+        style: ButtonStyle(
+          foregroundColor: WidgetStateColor.resolveWith(
+            (states) => Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+        onPressed: () {
+          Navigator.of(context).pushNamed(HomePage.routeName);
+        },
+        child: Text(
+          actions.keys.elementAtOrNull(0),
+          style: resolveStyleIf(
+            () {
+              return (currentRouteName == actions.values.elementAt(0) ||
+                  currentRouteName == "/");
+            },
+          ),
+        ),
+      ),
+      // ),
+
+      // ),
+    );
+
+    Widget projectsButton = TextButton(
+      style: ButtonStyle(
+        foregroundColor: WidgetStateColor.resolveWith(
+          (states) => Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      onPressed: () {
+        Navigator.of(context).pushNamed(ProjectsPage.routeName);
+      },
+      child: Text(
+        actions.keys.elementAtOrNull(2),
+        style: resolveStyle(actions.values.elementAt(2)),
+      ),
+
+      // PopupMenuButton(
+      /// This part of the code is defining a `PopupMenuButton` widget. The `child` property is setting
+      /// the text that will be displayed on the button. In this case, it is setting the text based on
+      /// the key at index 2 of the `actions` map.
+      // child: Text(actions.keys.elementAtOrNull(2)),
+
+      // itemBuilder: (context) => [
+      //   PopupMenuItem(
+      //     onTap: () {
+      //       Navigator.of(context).pushNamed(
+      //         ProjectsPage.routeName,
+      //       );
+      //     },
+      //     child: const Text('Projet En cours'),
+      //   ),
+      //   PopupMenuItem(
+      //     onTap: () {
+      //       Navigator.of(context).pushNamed(
+      //         ProjectsPage.routeName,
+      //       );
+      //     },
+      //     child: const Text('Initiative des soeurs'),
+      //   ),
+      //   PopupMenuItem(
+      //     onTap: () {
+      //       Navigator.of(context).pushNamed(
+      //         ProjectsPage.routeName,
+      //       );
+      //     },
+      //     child: const Text('Soutenir un projet'),
+      //   ),
+      // ],
+      // // style: ButtonStyle(
+      //   foregroundColor: WidgetStateColor.resolveWith(
+      //     (states) => Theme.of(context).colorScheme.onSurface,
+      //   ),
+      // ),
+      // onChanged: (value) => 1,
+      // onPressed: () {},
+      // child: Text(
+      //   actions.keys.elementAtOrNull(2),
+      //   style: resolveStyle(actions.values.elementAtOrNull(2)),
+      // ),
+
+      // ),
+    );
+    Widget aboutUsButton = // Flexible(
+        //   //   flex: 1,
+        //   child:
+        Container(
+      child: TextButton(
+        style: ButtonStyle(
+          foregroundColor: WidgetStateColor.resolveWith(
+            (states) => Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+        onPressed: () {
+          Navigator.of(context).pushNamed(
+            WhoWeArePage.routeName,
+          );
+        },
+        child: Text(
+          actions.keys.elementAtOrNull(3),
+          style: resolveStyle(actions.values.elementAtOrNull(3)),
+        ),
+      ),
+
+      // ),
+    );
+    Widget priersSpaceButton = // Flexible(
+        //   //   flex: 1,
+        //   child:
+        Container(
+      child: TextButton(
+        style: ButtonStyle(
+          foregroundColor: WidgetStateColor.resolveWith(
+            (states) => Theme.of(context).colorScheme.onSurface,
+          ),
+        ),
+        onPressed: () {
+          Navigator.of(context).pushNamed(PrayersPage.routeName);
+        },
+        child: Text(
+          actions.keys.elementAtOrNull(1),
+          style: resolveStyle(actions.values.elementAtOrNull(1)),
+        ),
+      ),
+
+      // ),
+    );
+
+    actionsList.addAll(
+      [
+        homeButton,
+        priersSpaceButton,
+        projectsButton,
+        aboutUsButton,
+        donationButton,
+      ],
+    );
+
+    return actionsList;
+  }
+
   @override
   Size get preferredSize => _preferredSize;
 }
@@ -167,10 +370,24 @@ class AhlMenuButton extends StatelessWidget {
     if (scaffoldHasEndDrawer) {
       return Hero(
         tag: 'menu_button_tag',
-        child: IconButton(
-          onPressed: () => scaffoldState.openEndDrawer(),
-          icon: const Icon(
-            Icons.menu,
+        child: Container(
+          alignment: Alignment.center,
+          width: 32,
+          height: 32,
+          // alignment: Alignment.center,
+          child: IconButton(
+            onPressed: () => scaffoldState.openEndDrawer(),
+            icon: Container(
+              alignment: Alignment.center,
+              child: const FittedBox(
+                fit: BoxFit.contain,
+                child: Icon(
+                  size: 24,
+                  MyFlutterIcons.menu,
+                  applyTextScaling: true,
+                ),
+              ),
+            ),
           ),
         ),
       );

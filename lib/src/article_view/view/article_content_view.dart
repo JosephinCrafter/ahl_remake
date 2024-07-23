@@ -2,14 +2,12 @@ part of 'article_view.dart';
 
 /// Article Page
 class ArticleContentPage extends StatefulWidget {
-  const ArticleContentPage({
-    super.key,
-    this.article,
-  });
+  const ArticleContentPage(
+      {super.key, this.article, this.collection = "/articles"});
 
   static const String routeName = '/articles';
   final Article? article;
-
+  final String? collection;
   @override
   State<ArticleContentPage> createState() => ArticleContentPageState();
 }
@@ -28,35 +26,69 @@ class ArticleContentPageState extends State<ArticleContentPage> {
             ? const AhlDrawer()
             : null,
         appBar: const AhlAppBar(),
-        body: ArticleContentView(
-          article: widget.article,
+        body: ListView(
+          addAutomaticKeepAlives: true,
+          children: [
+            ArticleContentView(
+              collection: widget.collection,
+              article: widget.article!,
+            ),
+            const Gap(25),
+            const NewsLetterPrompt(),
+            const AhlFooter(),
+          ],
         ),
       ),
     );
   }
 }
 
-class ArticleContentView extends StatelessWidget {
-  const ArticleContentView({
+class ArticleContentView extends StatefulWidget {
+  ArticleContentView({
     super.key,
     required this.article,
-  });
+    this.collection = "articles",
+  }) : articleUtils =
+            ArticleStorageUtils(article: article, collection: collection!);
 
-  final Article? article;
+  final Article article;
+  final String? collection;
 
-  Future<String> get content async {
+  final ArticleStorageUtils articleUtils;
+
+  @override
+  State<ArticleContentView> createState() => _ArticleContentViewState();
+}
+
+class _ArticleContentViewState extends State<ArticleContentView>
+    with AutomaticKeepAliveClientMixin {
+  Future<String> contentFetching() async {
     final bytes = await firebase.storage
-        .child('articles/${article?.id}/${article?.contentPath}')
+        .child(
+            '${widget.collection}/${widget.article.id}/${widget.article.contentPath}')
         .getData();
 
     String decodedString = utf8.decode(bytes!.toList());
     return decodedString;
   }
 
+  late Future content;
+
+  late double screenWidth;
+
+  late String articleKey = 'article_${widget.article.title}';
+  late SessionStorage cache = SessionStorage();
+
+  @override
+  void initState() {
+    content = contentFetching();
+    widget.articleUtils.getCoverImage();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-
+    super.build(context);
     // Style for Markdown from Flutter_markdown
     // final styleSheet = MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
     //   p: AhlTheme.bodyMedium,
@@ -97,11 +129,54 @@ class ArticleContentView extends StatelessWidget {
     //       .copyWith(fontStyle: FontStyle.italic),
     // ),
 
+    screenWidth = MediaQuery.of(context).size.width;
+
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: resolveForBreakPoint(
+          screenWidth,
+          other: Margins.small,
+          extraHuge: Margins.extraHuge,
+          huge: Margins.huge,
+          extraLarge: Margins.extraLarge,
+          large: Margins.large,
+        ),
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: resolveForBreakPoint(
+          screenWidth,
+          small: Margins.small,
+          medium: Margins.small,
+          large: Margins.large,
+          extraLarge: Margins.extraLarge,
+          other: Margins.huge,
+        ),
+      ),
+      constraints: const BoxConstraints(maxWidth: 1024),
+      child: buildMarkdownBlock(context),
+    );
+  }
+
+  Widget buildMarkdownBlock(BuildContext context) {
     MarkdownConfig minimalisticCorporateConfig = MarkdownConfig(
       configs: [
+        ImgConfig(builder: (String url, Map<String, String>? attribute) {
+          final Future future = firebase.storage.child(url).getData();
+          return AhlImageViewer.fromFuture(
+            future: future,
+            attributes: attribute,
+          );
+        }),
         H1Config(
-          style: resolveHeadlineTextThemeForBreakPoints(screenWidth, context)!,
+          style: const H1Config().style.copyWith(fontFamily: "Butler"),
         ),
+
+        H2Config(
+          style: const H2Config().style.copyWith(fontFamily: "Butler"),
+        ),
+        PConfig(
+            textStyle:
+                const PConfig().textStyle.copyWith(fontFamily: 'Poppins')),
         LinkConfig(
           onTap: (url) {
             launchUrl(Uri.parse(url));
@@ -132,64 +207,222 @@ class ArticleContentView extends StatelessWidget {
         // ),
       ],
     );
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: resolveForBreakPoint(
-          screenWidth,
-          other: Margins.small,
-          extraHuge: Margins.extraHuge,
-          huge: Margins.huge,
-          extraLarge: Margins.extraLarge,
-          large: Margins.large,
+
+    // share button
+    Widget shareButton = Builder(
+      builder: (context) => Align(
+        alignment: Alignment.centerLeft,
+        child: OutlinedButton.icon(
+          onPressed: () {
+            //todo: implement sharing mechanism
+          },
+          label: const Text('Partager'),
+          icon: const Icon(Icons.share_outlined),
         ),
       ),
-      constraints: BoxConstraints(
-        maxWidth: ContentSize.maxWidth(
-          screenWidth,
-        ),
-      ),
-      child: FutureBuilder(
-        future: content,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              if (snapshot.hasData) {
-                return MarkdownWidget(
-                  data: snapshot.data ?? 'Error loading article.',
-                  config: minimalisticCorporateConfig,
-                );
-              } else {
-                return Align(
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.warning_rounded,
-                        color: Theme.of(context).colorScheme.error,
+    );
+
+    return Card(
+      color: const Color(0xFFFAFAFA),
+      child: Container(
+        padding: const EdgeInsets.all(Paddings.medium),
+        child: Column(
+          children: [
+            // title
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                widget.article.title ?? "",
+                style: resolveDisplayTextThemeForBreakPoints(
+                  MediaQuery.of(context).size.width,
+                  context,
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                DateTimeUtils.localizedFromStringDate(
+                    dateString: widget.article.releaseDate, context: context),
+                style: Theme.of(context)
+                    .textTheme
+                    .labelMedium!
+                    .copyWith(color: Theme.of(context).primaryColor),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: Paddings.medium),
+              child: AhlDivider(
+                leading: 0,
+                trailing: 50,
+                thickness: 16,
+              ),
+            ),
+
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(widget.article.relations?[0]['preview']),
+            ),
+            // share button
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: shareButton,
+            ),
+            (widget.articleUtils.coverImage != null)
+                ? Container(
+                    height: resolveForBreakPoint(
+                      screenWidth,
+                      other: 575,
+                      small: 300,
+                    ),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: MemoryImage(
+                          widget.articleUtils.coverImage!,
+                        ),
                       ),
-                      Text('Error loading article content: ${snapshot.error}')
-                    ],
+                    ),
+                    child: InkWell(
+                      onTap: () => ImageViewer(
+                        child: Image.memory(widget.articleUtils.coverImage!),
+                      ),
+                      child: Container(),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+
+            // markdown content
+            (cache[articleKey] == null)
+                ? FutureBuilder(
+                    future: content,
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.done:
+                          if (snapshot.hasData) {
+                            cache[articleKey] = snapshot.data!;
+                            return MarkdownBlock(
+                              data: snapshot.data ?? 'Error loading article.',
+                              config: minimalisticCorporateConfig,
+                            );
+                          } else {
+                            return Align(
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  Icon(
+                                    Icons.warning_rounded,
+                                    color: Theme.of(context).colorScheme.error,
+                                  ),
+                                  Text(
+                                      'Error loading article content: ${snapshot.error}')
+                                ],
+                              ),
+                            );
+                          }
+
+                        default:
+                          return Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.height - 50,
+                            child: const CircularProgressIndicator(),
+                          );
+
+                        // default:
+                        //   return Align(
+                        //     alignment: Alignment.center,
+                        //     child: Icon(
+                        //       Icons.warning_rounded,
+                        //       color: Theme.of(context).colorScheme.error,
+                        //     ),
+                        //   );
+                      }
+                    },
+                  )
+                : MarkdownBlock(
+                    data: cache[articleKey] ?? 'Error loading article.',
+                    config: minimalisticCorporateConfig,
+                  ),
+
+            shareButton,
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => cache[articleKey] != null;
+}
+
+class AhlImageViewer extends StatefulWidget {
+  const AhlImageViewer({
+    super.key,
+    required this.url,
+    this.attributes,
+  }) : future = null;
+
+  const AhlImageViewer.fromFuture(
+      {super.key, required this.future, this.attributes})
+      : url = null;
+
+  final Future? future;
+  final String? url;
+  final Map<String, String>? attributes;
+
+  @override
+  State<AhlImageViewer> createState() => _AhlImageViewerState();
+}
+
+class _AhlImageViewerState extends State<AhlImageViewer> {
+  late Future imageFuture;
+
+  @override
+  void initState() {
+    developer.log("[AhlImageViewer] State is initialized.");
+    super.initState();
+
+    if (widget.url != null) {
+      imageFuture = firebase.storage.child(widget.url!).getData();
+    } else {
+      imageFuture = widget.future!;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: imageFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          try {
+            return InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  DialogRoute(
+                    context: context,
+                    builder: (context) => ImageViewer(
+                      child: Image.memory(snapshot.data!),
+                    ),
                   ),
                 );
-              }
-
-            default:
-              return const Align(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
-              );
-
-            // default:
-            //   return Align(
-            //     alignment: Alignment.center,
-            //     child: Icon(
-            //       Icons.warning_rounded,
-            //       color: Theme.of(context).colorScheme.error,
-            //     ),
-            //   );
+              },
+              child: Image.memory(
+                Uint8List.fromList(
+                  snapshot.data!,
+                ),
+              ),
+            );
+          } catch (e) {
+            return Container();
           }
-        },
-      ),
+        } else {
+          return Container(
+            alignment: Alignment.center,
+            child: const CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }

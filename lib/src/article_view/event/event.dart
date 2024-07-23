@@ -15,6 +15,8 @@ final class GetArticleByIdEvent extends ArticleEvent {
   final String id;
 }
 
+
+/// Request A list of article from the server.
 final class GetArticleListEvent extends ArticleEvent {
   const GetArticleListEvent({
     this.foldLength = 1,

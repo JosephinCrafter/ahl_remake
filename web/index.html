@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
   <head>
+    <!-- meta name="viewport" content="width=device-width, initial-scale=1.0"-->
     <!-- Google Tag Manager -->
     <script>
       (function (w, d, s, l, i) {
@@ -20,6 +21,8 @@
     <!-- End Google Tag Manager GTM-PRC72JP9 -->
     <!-- Load the loading spin before flutter load.-->
     <link rel="stylesheet" href="loader.css" />
+    <link rel="javascript" href="lottie.js" />
+    <link rel="stylesheet" href="style.css" />
 
     <!--
     If you are serving your web app in a path other than the root, change the
@@ -40,7 +43,7 @@
     <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
     <meta
       name="description"
-      content="Solidarité et Prière pour Madagascar. Découvrez nos missions auprès des enfants, rejoignez nos prières quotidiennes et partagez la vie de notre communauté."
+      content="Solidarité et Prière pour Madagascar avec les Soeurs Dominicaines Missionnaires de Notre Dame de la Délivrande. Découvrez nos missions auprès des enfants, rejoignez nos prières quotidiennes et partagez la vie de notre communauté."
     />
     <meta
       name="keywords"
@@ -61,10 +64,8 @@
     <link rel="icon" type="image/png" href="favicon.png" />
 
     <title>
-      Aujourd'hui l'avenir | Aimer et servire avec les Soeurs Dominicaines
-      Missionnaires de Notre Dame de la Délivrande
+      Aujourd'hui l'avenir | Soeurs de Notre Dame de la Délivrande Madagascar
     </title>
-    <link rel="manifest" href="manifest.json" />
   </head>
 
   <body>
@@ -77,15 +78,32 @@
         style="display: none; visibility: hidden"
       ></iframe
     ></noscript>
+
+    <script src="js/lottie.js" type="text/javascript"></script>
     <!-- End Google Tag Manager (noscript) -->
     <!-- Display text before the loader -->
     <div id="loader">
       <img id="loader-title" src="logo_form_typo_black.png" alt="Ahl Logo" />
-      <div class="lds-dual-ring">
-        <!-- Insert the loading shape -->
+      <!-- <div class="lds-dual-ring">
+         Insert the loading shape 
         <div class="lds-heart">
           <div></div>
         </div>
+      </div>-->
+      <div id="animationContainer" class="loader-div">
+        <script>
+          const animationContainer =
+            document.getElementById("animationContainer");
+          lottie
+            .loadAnimation({
+              container: animationContainer, // the dom element that will contain the animation
+              renderer: "svg",
+              loop: true,
+              autoplay: true,
+              path: "loading_rosary.json", // the path to the animation json
+            })
+            .play();
+        </script>
       </div>
     </div>
 

@@ -6,12 +6,11 @@ import 'package:provider/provider.dart';
 import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
-import 'src/firebase_constants.dart';
 // test on github auto deploy
 
 void main() async {
   // ensure flutter is initialized
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
 
   // Make the app url based
   usePathUrlStrategy();
@@ -22,7 +21,7 @@ void main() async {
 
   // Load the user's preferred theme while the splash screen is displayed.
   // This prevents a sudden theme change when the app is first displayed.
-  await settingsController.loadSettings();
+  settingsController.loadSettings();
 
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the
@@ -31,7 +30,6 @@ void main() async {
   // here we go with firebase setup.
   // It is better to await this flutter app, but when working offline, it makes
   // the app not loading.
-  firebaseApp;
 
   runApp(
     ChangeNotifierProvider.value(

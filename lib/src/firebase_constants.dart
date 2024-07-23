@@ -24,6 +24,9 @@ const String newsletterCollection = 'users';
 /// The name of the collection containing articles.
 const String articlesCollection = 'articles';
 
+/// The name of projects collection.
+const String projectsCollection = 'projects';
+
 /// PrayerRequest collection name
 const String prayerRequestCollection = 'prayer_requests';
 
@@ -81,6 +84,13 @@ bool get isInitialized => _isInitialized;
 /// internal initialization state.
 bool _isInitialized = false;
 
+/// we re initialize the firebase plugin.
+void initialize() {
+  if (_isInitialized == false) {
+    _initialize();
+  }
+}
+
 /// Perform firebase initialization.
 ///
 /// Typically, it setup firebase to work on emulator in debug mode.
@@ -115,12 +125,5 @@ Future<void> _initialize() async {
       _isInitialized = false;
       log('[Firebase Init] : Failed initializing firebase: e');
     }
-  }
-}
-
-/// we re initialize the firebase plugin.
-void initialize() {
-  if (_isInitialized == false) {
-    _initialize();
   }
 }

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/firebase_constants.dart';
+import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/utils/storage_utils.dart';
 import 'package:ahl/src/widgets/widgets.dart';
@@ -21,19 +22,21 @@ class WhoWeAreSpace extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
+      // padding: EdgeInsets.symmetric(vertical: Paddings.huge),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: Margins.large),
-            child: SectionTitle(
-              caretColor: Theme.of(context).primaryColor,
-              isUpperCase: false,
-              title: AppLocalizations.of(context)!.whoWeAre,
-              titleStyle: resolveHeadlineTextThemeForBreakPoints(
-                MediaQuery.of(context).size.width,
-                context,
-              ),
+          // Padding(
+          // padding: const EdgeInsets.symmetric(vertical: Margins.large),
+          // child:
+          SectionTitle(
+            caretColor: Theme.of(context).primaryColor,
+            isUpperCase: false,
+            title: AppLocalizations.of(context)!.whoWeAre,
+            titleStyle: resolveHeadlineTextThemeForBreakPoints(
+              MediaQuery.of(context).size.width,
+              context,
             ),
+            // ),
           ),
           const WhoWeAreTile(),
         ],
@@ -45,31 +48,31 @@ class WhoWeAreSpace extends StatelessWidget {
 class WhoWeAreTile extends StatefulWidget {
   const WhoWeAreTile({super.key});
 
-  static const String imagePath = 'statics/who_we_are/les_soeurs_ndd.png';
+  static const String imagePath = 'statics/who_we_are/les_soeurs_ndd.webp';
   static const String titlePath = 'statics/setup';
   static const String titleIndex = 'who_we_are_title';
 
   @override
-  State<WhoWeAreTile> createState() => _WhoWeAreTileState();
+  State<WhoWeAreTile> createState() => WhoWeAreTileState();
 }
 
-class _WhoWeAreTileState extends State<WhoWeAreTile>
+class WhoWeAreTileState extends State<WhoWeAreTile>
     with AutomaticKeepAliveClientMixin {
-  final String whoWeAreImageKey = 'who_we_are_image_key';
+  static const String whoWeAreImageKey = 'who_we_are_image_key';
 
-  final String whoWeAreTitleKey = 'who_we_are_title_key';
+  static const String whoWeAreTitleKey = 'who_we_are_title_key';
 
-  Uint8List? _data;
+  static Uint8List? data;
 
-  final SessionStorage cache = SessionStorage();
+  static SessionStorage cache = SessionStorage();
 
   String? _title;
-  Future<Uint8List?> getImage() async {
-    _data = await storage.child(WhoWeAreTile.imagePath).getData();
-    if (_data != null) {
-      cache[whoWeAreImageKey] = encodeUint8ListToString(_data!);
+  static Future<Uint8List?> getImage() async {
+    data = await storage.child(WhoWeAreTile.imagePath).getData();
+    if (data != null) {
+      cache[whoWeAreImageKey] = encodeUint8ListToString(data!);
     }
-    return _data;
+    return data;
   }
 
   Future<String?> getTitle() async {
@@ -92,7 +95,7 @@ class _WhoWeAreTileState extends State<WhoWeAreTile>
   @override
   bool get wantKeepAlive {
     if (cache[whoWeAreImageKey] != null && cache[whoWeAreTitleKey] != null) {
-      _data = decodeUint8ListFromString(cache[whoWeAreImageKey]!);
+      data = decodeUint8ListFromString(cache[whoWeAreImageKey]!);
       _title = cache[whoWeAreTitleKey];
 
       return true;
@@ -105,28 +108,33 @@ class _WhoWeAreTileState extends State<WhoWeAreTile>
   Widget build(BuildContext context) {
     super.build(context);
 
+    BoxConstraints constraints = BoxConstraints(
+      maxWidth: ContentSize.maxWidth(
+        MediaQuery.of(context).size.width,
+      ),
+      maxHeight: resolveForBreakPoint(
+        MediaQuery.of(context).size.width,
+        other: 500,
+        small: 300,
+        medium: 300,
+      ),
+    );
+
     if (wantKeepAlive) {
       return AhlCard(
-        constraints: BoxConstraints(
-          maxWidth: ContentSize.maxWidth(
-            MediaQuery.of(context).size.width,
-          ),
-          maxHeight: 500,
-        ),
-        image: Expanded(
-          flex: 2,
-          child: Container(
-            margin: const EdgeInsets.all(Margins.small),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: MemoryImage(
-                  _data!,
-                ),
+        callback: () => Navigator.pushNamed(context, WhoWeArePage.routeName),
+        constraints: constraints,
+        image: Container(
+          // margin: const EdgeInsets.all(Margins.small),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: MemoryImage(
+                data!,
               ),
-              borderRadius: BorderRadius.circular(
-                BorderSizes.small,
-              ),
+            ),
+            borderRadius: BorderRadius.circular(
+              BorderSizes.small,
             ),
           ),
         ),
@@ -142,60 +150,59 @@ class _WhoWeAreTileState extends State<WhoWeAreTile>
       );
     } else {
       return Container(
+        constraints: constraints,
         child: AhlCard(
+          callback: () => Navigator.pushNamed(context, WhoWeArePage.routeName),
           constraints: BoxConstraints(
             maxWidth: ContentSize.maxWidth(
               MediaQuery.of(context).size.width,
             ),
           ),
-          image: Expanded(
-            flex: 2,
-            child: FutureBuilder(
-              future: getImage(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Container(
-                    margin: const EdgeInsets.all(Margins.small),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: MemoryImage(
-                          snapshot.data!,
+          image: FutureBuilder(
+            future: getImage(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Container(
+                  // margin: const EdgeInsets.all(Margins.small),
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: MemoryImage(
+                        snapshot.data!,
+                      ),
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      BorderSizes.small,
+                    ),
+                  ),
+                );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container(
+                  constraints: constraints,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.all(Margins.small),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(
+                      BorderSizes.small,
+                    ),
+                  ),
+                  child: const CircularProgressIndicator(),
+                );
+              } else {
+                log('${snapshot.error}');
+                return Container(
+                  constraints: constraints,
+                  color: Theme.of(context).colorScheme.errorContainer,
+                  child: Text(
+                    "Error loading image: ${snapshot.error}",
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Theme.of(context).colorScheme.onErrorContainer,
                         ),
-                      ),
-                      borderRadius: BorderRadius.circular(
-                        BorderSizes.small,
-                      ),
-                    ),
-                  );
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.all(Margins.small),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.circular(
-                        BorderSizes.small,
-                      ),
-                    ),
-                    child: const CircularProgressIndicator(),
-                  );
-                } else {
-                  print('${snapshot.error}');
-                  return Container(
-                    color: Theme.of(context).colorScheme.errorContainer,
-                    child: Text(
-                      "Error loading image: ${snapshot.error}",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color:
-                                Theme.of(context).colorScheme.onErrorContainer,
-                          ),
-                    ),
-                  );
-                }
-              },
-            ),
+                  ),
+                );
+              }
+            },
           ),
           title: FutureBuilder(
             future: getTitle(),

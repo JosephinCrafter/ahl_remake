@@ -1,11 +1,12 @@
 import 'dart:developer';
 
 import 'package:ahl/src/article_view/bloc/bloc.dart';
+import 'package:ahl/src/pages/homepage/donation/donation_page.dart';
 import 'package:ahl/src/pages/prayers/prayers_page.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/pages/rosary/rosary_page.dart';
 import 'package:ahl/src/pages/saints/saints.dart';
-import 'package:ahl/src/pages/who_we_are/saints.dart';
+import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
 import 'package:ahl/src/project_space/bloc.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,9 @@ import 'theme/theme.dart';
 import 'sample_feature/sample_item_details_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
+import 'widgets/loading_page.dart';
 
-/// The Widget that configures your application.
+/// The route widget of the website.
 class MyApp extends StatefulWidget {
   const MyApp({
     super.key,
@@ -117,7 +119,6 @@ class _MyAppState extends State<MyApp> {
               theme: AhlTheme.lightTheme(
                 MediaQuery.maybeOf(context)!.size.width,
               ),
-
               darkTheme: ThemeData.dark(
                 useMaterial3: true,
               ),
@@ -125,32 +126,50 @@ class _MyAppState extends State<MyApp> {
               // Define a function to handle named routes in order to support
               // Flutter web url navigation and deep linking.
               onGenerateRoute: (RouteSettings routeSettings) {
+                log("Route settings is $routeSettings");
+
                 return MaterialPageRoute<void>(
                   settings: routeSettings,
                   builder: (BuildContext context) {
-                    switch (routeSettings.name) {
-                      case SettingsView.routeName:
-                        return SettingsView(controller: settingsController);
-                      case SampleItemDetailsView.routeName:
-                        return const SampleItemDetailsView();
-                      case HomePage.routeName:
-                        return const HomePage();
-                      case ProjectsPage.routeName:
-                        return const ProjectsPage();
-                      case PrayersPage.routeName:
-                        return const PrayersPage();
-                      case RosaryPage.routeName:
-                        return const RosaryPage();
-                      case SaintsPage.routeName:
-                        return const SaintsPage();
-                      case ArticlesPage.routeName:
-                        return const ArticlesPage();
-                        case WhoWeArePage.routeName:
-                        return const WhoWeArePage();
-                      // todo: add 40 not found page
-                      default:
-                        return widget.home ?? const HomePage();
-                    }
+                    return FutureBuilder(
+                      future: firebaseApp,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          switch (routeSettings.name) {
+                            case SettingsView.routeName:
+                              return SettingsView(
+                                  controller: settingsController);
+                            case SampleItemDetailsView.routeName:
+                              return const SampleItemDetailsView();
+                            case HomePage.routeName:
+                              return HomePage();
+                            case ProjectsPage.routeName:
+                              return const ProjectsPage();
+                            case PrayersPage.routeName:
+                              return const PrayersPage();
+                            case RosaryPage.routeName:
+                              return const RosaryPage();
+                            case SaintsPage.routeName:
+                              return const SaintsPage();
+                            case ArticlesPage.routeName:
+                              return const ArticlesPage();
+                            case WhoWeArePage.routeName:
+                              return const WhoWeArePage();
+                            case DonationPage.routeName:
+                              return const DonationPage();
+                            // todo: add 400 not found page
+                            default:
+                              return widget.home ?? HomePage();
+                          }
+                        } else {
+                          return Scaffold(
+                            body: LoadingView(
+                              work: firebaseApp,
+                            ),
+                          );
+                        }
+                      },
+                    );
                   },
                 );
               },

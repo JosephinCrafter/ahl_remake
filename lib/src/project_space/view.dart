@@ -1,11 +1,16 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:ahl/src/article_view/event/event.dart';
+import 'package:ahl/src/article_view/view/article_view.dart';
+import 'package:ahl/src/firebase_constants.dart';
+import 'package:ahl/src/pages/projects/project_page_view.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/project_space/bloc.dart';
 import 'package:ahl/src/utils/storage_utils.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,9 +18,9 @@ import 'package:session_storage/session_storage.dart';
 
 import '../ahl_barrel.dart';
 import '../article_view/state/state.dart';
-import '../pages/articles/articles_page.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';
+import 'model.dart';
 
 class ProjectsSpaceView extends StatefulWidget {
   const ProjectsSpaceView({super.key});
@@ -27,6 +32,7 @@ class ProjectsSpaceView extends StatefulWidget {
 class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
     with AutomaticKeepAliveClientMixin {
   List<ArticleStorageUtils>? storageUtils;
+  late List<Future> futureImageCovers;
 
   ArticleState<Article>? state;
 
@@ -42,17 +48,21 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
     final ProjectBloc bloc = context.read<ProjectBloc>();
 
     // Listen for state changes
-    bloc.stream.listen((incomingState) {
-      updateState(
-        incomingState,
-      );
-    });
+    bloc.stream.listen(
+      (incomingState) {
+        updateState(
+          incomingState,
+        );
+      },
+    );
 
     // Fetch the initial project list
     bloc.add(const GetArticleListEvent(foldLength: 3));
 
     // Initialize state
     state = bloc.state;
+
+    updateState(state!);
   }
 
   void updateState(ArticleState<Article> incomingState) {
@@ -68,6 +78,13 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
               ),
             )
             .toList();
+        if (storageUtils != null) {
+          futureImageCovers = storageUtils!
+              .map<Future>(
+                (element) => element.getCoverImage(),
+              )
+              .toList();
+        }
       },
     );
 
@@ -99,6 +116,7 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
 
     return SpaceView(
       useGradient: false,
+      // headerImage: AssetImage(AhlAssets.projectSpaceCover),
       children: [
         // Title
         SectionTitle(
@@ -128,8 +146,8 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
         Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 8.0,
-            vertical: Paddings.huge,
-          ),
+            // vertical: Paddings.huge,
+          ).copyWith(top: Paddings.huge),
           child: Wrap(
             alignment: WrapAlignment.center,
             crossAxisAlignment: WrapCrossAlignment.center,
@@ -142,7 +160,7 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
                 onPressed: () {
                   // Implement project found rising
                 },
-                child: const Text('Soutenir un projet'),
+                child: Text(AppLocalizations.of(context)!.supportProject),
               ),
               const SizedBox(width: Paddings.listSeparator),
               ElevatedButton(
@@ -164,21 +182,33 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
 
   Widget buildCard(BuildContext context, Uint8List imageData, Article project) {
     return AhlCard(
-      image: Expanded(
-        flex: 2,
-        child: Container(
-          margin: const EdgeInsets.all(Paddings.medium),
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: MemoryImage(imageData),
-              fit: BoxFit.cover,
+      callback: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProjectPageView(
+              collection: projectsCollection,
+              project: project,
             ),
-            borderRadius: BorderRadius.circular(BorderSizes.small),
           ),
+        );
+
+        log("${project.contentPath}");
+      },
+      image: Container(
+        // margin: const EdgeInsets.all(Paddings.medium),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: MemoryImage(imageData),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(BorderSizes.small),
         ),
       ),
       label: Text(
-        "${project.relations?[0]['status']}",
+        LocalizedProject.getProjectStatus(
+                context, "${project.relations?[0]['status']}") ??
+            "",
       ),
       title: Text(
         "${project.title}",
@@ -191,9 +221,10 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
     return (projects != null)
         ? projects.map<Widget>((project) {
             if (project != null) {
-              final storageUtil = storageUtils?[projects.indexOf(project)];
+              final futureImageCover =
+                  futureImageCovers[projects.indexOf(project)];
               return FutureBuilder(
-                future: storageUtil?.getCoverImage(),
+                future: futureImageCover,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     return buildCard(
@@ -201,18 +232,12 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
                       snapshot.data!,
                       project,
                     );
-                  } else if (snapshot.connectionState ==
-                      ConnectionState.waiting) {
-                    return const Align(
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(),
-                    );
                   } else {
-                    developer.log(
-                        '[ProjectSpace] Error getting cover image: ${snapshot.error}');
-                    return const Align(
+                    return Container(
+                      height: 250,
+                      width: 270,
                       alignment: Alignment.center,
-                      child: Icon(Icons.warning_rounded),
+                      child: const CircularProgressIndicator(),
                     );
                   }
                 },
@@ -404,6 +429,7 @@ class AhlCard extends StatefulWidget {
     this.label,
     this.description,
     this.content,
+    this.callback,
   });
 
   final BoxConstraints? constraints;
@@ -412,6 +438,7 @@ class AhlCard extends StatefulWidget {
   final Widget? title;
   final Widget? label;
   final Widget? description;
+  final VoidCallback? callback;
 
   /// if [content] is provided then [title], [label] and [description] is omitted.
   final Widget? content;
@@ -420,18 +447,31 @@ class AhlCard extends StatefulWidget {
   State<AhlCard> createState() => _AhlCardState();
 }
 
-class _AhlCardState extends State<AhlCard> {
+class _AhlCardState extends State<AhlCard> with SingleTickerProviderStateMixin {
   bool _isHovered = false;
+  late AnimationController animation;
 
   @override
   void initState() {
     super.initState();
+    animation = AnimationController(vsync: this);
   }
 
   void setHoveringTo(bool isHovered) {
     setState(
       () => _isHovered = isHovered,
     );
+    if (isHovered) {
+      animation.forward();
+    } else {
+      animation.reverse();
+    }
+  }
+
+  @override
+  void dispose() {
+    animation.dispose();
+    super.dispose();
   }
 
   @override
@@ -454,33 +494,54 @@ class _AhlCardState extends State<AhlCard> {
             },
             onTap: () {
               // Implement navigation to article view
+              if (widget.callback != null) widget.callback!();
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
               clipBehavior: Clip.hardEdge,
               constraints: widget.constraints ??
-                  const BoxConstraints.expand(
-                    height: 270,
-                    width: 278,
+                  const BoxConstraints(
+                    maxHeight: 270,
+                    maxWidth: 278,
                   ),
               decoration: widget.outerDecoration ??
                   BoxDecoration(
                     border: Border.all(
                       strokeAlign: BorderSide.strokeAlignInside,
-                      width: borderThickness,
+                      width: 3, //borderThickness,
                       color: _isHovered
-                          ? AhlTheme.yellowRelax
-                          : AhlTheme.blueNight,
+                          ? Theme.of(context).primaryColor
+                          : AhlTheme.lightGrey,
                       style: BorderStyle.solid,
                     ),
                     borderRadius: borderRadius,
                   ),
               child: ConstrainedBox(
-                constraints: const BoxConstraints.expand(),
+                constraints: const BoxConstraints(maxHeight: 770),
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    widget.image,
+                    Flexible(
+                      child: Container(
+                        margin: const EdgeInsets.all(Paddings.medium),
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          // image: DecorationImage(
+                          //   image: MemoryImage(snapshot.data!),
+                          //   fit: BoxFit.cover,
+                          // ),
+                          borderRadius:
+                              BorderRadius.circular(BorderSizes.small),
+                        ),
+                        child: widget.image
+                            .animate(controller: animation, autoPlay: false)
+                            .scale(
+                              begin: const Offset(1, 1),
+                              end: const Offset(1.25, 1.25),
+                            ),
+                      ),
+                    ),
                     widget.content ??
                         Container(
                           // constraints: const BoxConstraints.expand(height: 100),
@@ -489,6 +550,7 @@ class _AhlCardState extends State<AhlCard> {
                           ),
                           alignment: Alignment.centerLeft,
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

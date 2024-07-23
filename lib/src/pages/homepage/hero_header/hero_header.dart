@@ -1,8 +1,10 @@
 import 'package:ahl/src/pages/prayers/prayers_page.dart';
-import 'package:ahl/src/pages/who_we_are/saints.dart';
+import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
+import 'package:ahl/src/theme/theme.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gap/gap.dart';
 
 import '../../../ahl_barrel.dart';
 
@@ -16,9 +18,9 @@ class HeroHeaderView extends StatelessWidget {
         if (constraints.maxWidth <= ScreenSizes.large) {
           // HeroHeader fo mobile
 
-          return MobileHeroHeader();
+          return const MobileHeroHeader();
         } else {
-          return DefaultHeroHeader();
+          return const DefaultHeroHeader();
         }
       },
     );
@@ -37,7 +39,7 @@ class MobileHeroHeader extends StatefulWidget {
 class _MobileHeroHeaderState extends State<MobileHeroHeader> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: [
         Container(
           constraints: const BoxConstraints(
@@ -46,15 +48,14 @@ class _MobileHeroHeaderState extends State<MobileHeroHeader> {
           child: const HeroImageView(isWithBorder: false),
         ),
         Container(
-          margin:
-              const EdgeInsets.only(top: Sizes.mobileHeroHeaderImageHeight).add(
-            const EdgeInsets.symmetric(
-              horizontal: Paddings.big,
-            ),
+          color: AhlTheme.yellowLight, //.withAlpha(0xB6),
+          // margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.72),
+          padding: const EdgeInsets.symmetric(
+            horizontal: Paddings.big,
           ),
           child: const HeroTextView(
             needMargin: true,
-            margin: 50,
+            margin: 0,
           ),
         ),
       ],
@@ -87,8 +88,8 @@ class _HeroActionsState extends State<HeroActions> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 50),
+    return Container(
+      padding: const EdgeInsets.only(top: 30),
       child: Wrap(
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         // direction: ,
@@ -144,19 +145,31 @@ class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(
-        maxHeight: 700,
-        maxWidth: 1080,
+      key: const Key("HeroHeader_Container"),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 1.2,
+        maxWidth: ContentSize.maxWidth(
+          MediaQuery.of(context).size.width,
+        ),
       ),
       alignment: Alignment.center,
       child: Stack(
         children: [
-          const HeroImageView(),
-          Container(
-            margin: const EdgeInsets.only(left: Margins.extraLarge),
-            alignment: Alignment.centerLeft,
-            child: const HeroTextView(
-              alignment: Alignment.centerLeft,
+          // const HeroImageView(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              constraints: const BoxConstraints(maxHeight: 470),
+              color: AhlTheme.yellowLight.withAlpha(0xB2),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: Margins.extraLarge)
+                      .add(
+                const EdgeInsets.only(top: 45),
+              ),
+              alignment: Alignment.bottomCenter,
+              child: const HeroTextView(
+                alignment: Alignment.topCenter,
+              ),
             ),
           ),
         ],
@@ -172,14 +185,16 @@ class HeroImageView extends StatelessWidget {
   });
 
   final bool isWithBorder;
+  
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: isWithBorder
-            ? BorderRadius.circular(
-                BorderSizes.big,
+            ? const BorderRadius.only(
+                bottomLeft: Radius.circular(BorderSizes.big),
+                bottomRight: Radius.circular(BorderSizes.big),
               )
             : null,
         image: DecorationImage(
@@ -240,6 +255,7 @@ class HeroTextView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              const Gap(30),
               Padding(
                 padding: const EdgeInsets.only(bottom: 0),
                 child: Text(
@@ -248,14 +264,18 @@ class HeroTextView extends StatelessWidget {
                   style: titleTheme,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: Paddings.huge),
-                child: Text(
-                  AppLocalizations.of(context)!.heroHeaderSubtitle,
-                  textAlign: TextAlign.center,
-                  style: subtitleTheme,
-                ),
+
+              const Gap(20),
+              // Padding(
+              //   padding: const EdgeInsets.only(bottom: Paddings.huge),
+              //   child:
+              Text(
+                AppLocalizations.of(context)!.heroHeaderSubtitle,
+                textAlign: TextAlign.center,
+                style: subtitleTheme,
               ),
+              // ),
+              const Gap(20),
               Text(
                 AppLocalizations.of(context)!.heroExplanation,
                 textAlign: TextAlign.center,
@@ -267,5 +287,42 @@ class HeroTextView extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class ScrollIncitation extends StatefulWidget {
+  const ScrollIncitation({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ScrollIncitation();
+  }
+}
+
+class _ScrollIncitation extends State<ScrollIncitation>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      vsync: this,
+      duration: Durations.medium1,
+    )..repeat();
+
+    // controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        height: 500,
+        width: 10,
+        color: Theme.of(context).colorScheme.surface,
+      ),
+    );
   }
 }

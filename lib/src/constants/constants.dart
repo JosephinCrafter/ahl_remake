@@ -1,10 +1,13 @@
 part of '../ahl_barrel.dart';
 
 class BorderSizes {
-  //30
+  /// 45
+  static const double huge = 45;
+
+  /// 30
   static const double big = 30;
 
-  // 26
+  /// 26
   static const double medium = 26;
 
   /// 15
@@ -124,7 +127,7 @@ class HeroHeaderGeometry {
   HeroHeaderGeometry._();
 
   static const double heroHeaderExtrasHeight = 200;
-  static const double heroHeaderExtrasWidth = 450;
+  static const double heroHeaderExtrasWidth = 650;
 }
 
 class AhlDurations {

@@ -7,10 +7,12 @@ class AhlDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => Drawer(
+        clipBehavior: Clip.antiAlias,
         width: constraints.maxWidth,
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+          backgroundColor: theme.AhlTheme.yellowLight,
           appBar: AhlAppBar(
+            backgroundColor: theme.AhlTheme.yellowLight,
             padding: const EdgeInsets.only(left: Paddings.drawerAppBarPadding),
             crossAxisAlignment: CrossAxisAlignment.center,
             title: AhlLogo(
@@ -45,36 +47,42 @@ class AhlDrawer extends StatelessWidget {
                   // ),
                   margin: const EdgeInsets.only(left: Paddings.medium),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ...ActionsLists.actionsWidgets,
-                    ],
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...ActionsLists.actionsWidgets,
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              
               Positioned(
+                right: 20,
                 bottom: 50,
-                child: Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        LocaleUtils.changeLocale(
-                          context,
-                          const Locale('fr'),
-                        );
-                      },
-                      child: const Text('Français'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        LocaleUtils.changeLocale(
-                          context,
-                          const Locale('en'),
-                        );
-                      },
-                      child: const Text('English'),
-                    ),
-                  ],
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  color: theme.AhlTheme.yellowLight,
+                  child: Row(
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          LocaleUtils.changeLocale(
+                            context,
+                            const Locale('fr'),
+                          );
+                        },
+                        child: const Text('Français'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          LocaleUtils.changeLocale(
+                            context,
+                            const Locale('en'),
+                          );
+                        },
+                        child: const Text('English'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const DrawerFooter(),

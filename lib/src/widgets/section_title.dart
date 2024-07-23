@@ -20,13 +20,13 @@ class SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: Paddings.huge),
+    return Align(
+      // padding: const EdgeInsets.symmetric(vertical: Paddings.huge),
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: Paddings.actionSeparator,
+            padding: const EdgeInsets.only(
+              bottom: Paddings.actionSeparator,
             ),
             child: Text(
               (isUpperCase) ? title.toUpperCase() : title,

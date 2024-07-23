@@ -24,6 +24,14 @@ class FormsLayoutBase extends StatelessWidget {
       ),
 
       decoration: BoxDecoration(
+        image: DecorationImage(
+          opacity: 0.25,
+          scale: 10,
+          repeat: ImageRepeat.repeat,
+          image: AssetImage(
+            AhlAssets.requestMotif,
+          ),
+        ),
         color: Theme.of(context).colorScheme.secondaryContainer,
       ),
       padding: EdgeInsets.symmetric(
@@ -33,7 +41,8 @@ class FormsLayoutBase extends StatelessWidget {
             : Paddings.medium,
       ),
       alignment: Alignment.center,
-      child: Align(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: Paddings.huge),
         alignment: Alignment.center,
         child: Container(
           constraints: BoxConstraints(

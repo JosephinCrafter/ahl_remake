@@ -32,6 +32,7 @@ class AhlLogo extends StatelessWidget {
           maxWidth: 250,
         ),
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           textBaseline: TextBaseline.alphabetic,
           crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.center,
           children: [
@@ -52,12 +53,15 @@ class AhlLogo extends StatelessWidget {
                   width: 15,
                 ),
             title ??
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
+                Flexible(
+                  flex: 5,
+                  fit: FlexFit.tight,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.bottomLeft,
                     child: Text(
                       "Ajourd'hui l'avenir",
-                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                       style:
                           Theme.of(context).textTheme.headlineSmall!.copyWith(
                                 fontFamily: 'Butler',
@@ -65,6 +69,7 @@ class AhlLogo extends StatelessWidget {
                     ),
                   ),
                 ),
+            // ),
           ],
         ),
       ),

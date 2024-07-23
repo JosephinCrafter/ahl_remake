@@ -45,7 +45,8 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                       case ArticleStatus.failed:
                         developer.log('${state.error}');
                         return Container(
-                          color: Theme.of(context).colorScheme.onErrorContainer,
+                          padding: const EdgeInsets.all(4.0),
+                          // color: Theme.of(context).colorScheme.onErrorContainer,
                           margin: const EdgeInsets.symmetric(
                             horizontal: Margins.medium,
                           ),
@@ -60,13 +61,13 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
 
                         _cache[_highlightArticleStateKey] = 'true';
 
-                        String releaseMonth = DateTimeUtils.localMonth(
-                          DateTimeUtils.parseReleaseDate(
-                                  state.articles![0]!.releaseDate ??
-                                      '2024-04-28')
-                              .month,
-                          context,
-                        );
+                        // String releaseMonth = DateTimeUtils.localMonth(
+                        //   DateTimeUtils.parseReleaseDate(
+                        //           state.articles![0]!.releaseDate ??
+                        //               '2024-04-28')
+                        //       .month,
+                        //   context,
+                        // );
                         return Container(
                           margin: const EdgeInsets.symmetric(
                             horizontal: Margins.medium,
@@ -74,40 +75,46 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                monthTextResolve(
-                                  context,
-                                  releaseMonth,
-                                ).toUpperCase(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                              ),
-                              ArticleTile(article: state.articles![0]!),
-                              Container(
-                                margin: const EdgeInsets.symmetric(
-                                    vertical: Margins.medium),
-                                alignment: Alignment.centerRight,
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context)
-                                        .pushNamed(ArticlesPage.routeName);
-                                  },
-                                  child: Text(
-                                    AppLocalizations.of(context)!.allArticles,
-                                  ),
+                              // Text(
+                              //   monthTextResolve(
+                              //     context,
+                              //     releaseMonth,
+                              //   ).toUpperCase(),
+                              //   style: Theme.of(context)
+                              //       .textTheme
+                              //       .labelLarge!
+                              //       .copyWith(
+                              //         color:
+                              //             Theme.of(context).colorScheme.primary,
+                              //       ),
+                              // ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: CardArticleTile(
+                                  article: state.articles![0]!,
                                 ),
                               ),
+                              // Container(
+                              //   margin: const EdgeInsets.symmetric(
+                              //     vertical: Margins.medium,
+                              //   ),
+                              //   alignment: Alignment.centerRight,
+                              //   child: TextButton(
+                              //     onPressed: () {
+                              //       Navigator.of(context)
+                              //           .pushNamed(ArticlesPage.routeName);
+                              //     },
+                              //     child: Text(
+                              //       AppLocalizations.of(context)!.allArticles,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         );
                       default:
                         return Container(
-                          height: 310,
+                          height: 408,
                           margin: const EdgeInsets.symmetric(
                             horizontal: Margins.medium,
                           ),

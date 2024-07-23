@@ -82,8 +82,10 @@ final class ArticleStorageUtils {
     String? dataString = cache[coverImageDataKey];
     //cache check
     try {
-      data = (dataString != null) ? decodeUint8ListFromString(dataString) : null;
+      data =
+          (dataString != null) ? decodeUint8ListFromString(dataString) : null;
       if (data != null) {
+        coverImage = data;
         return data;
       }
     } catch (e) {
@@ -101,11 +103,14 @@ final class ArticleStorageUtils {
 
       // write data to cache
       cache[coverImageDataKey] = encodeUint8ListToString(data!);
+
+      // update coverImage
     } catch (e) {
       log('Error loading image: $e');
       data = Uint8List(0);
     }
 
+    coverImage = data;
     return data;
   }
 
@@ -208,7 +213,7 @@ String encodeUint8ListToString(Uint8List data) {
   return base64Encode(data);
 }
 
- Uint8List decodeUint8ListFromString(String encodedString) {
+Uint8List decodeUint8ListFromString(String encodedString) {
   // Use the built-in converter to decode the base64 string back into a Uint8List
   return base64Decode(encodedString);
 }

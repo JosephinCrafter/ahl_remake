@@ -14,9 +14,9 @@ class WelcomingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(
-        Margins.medium,
-      ).copyWith(bottom: 125),
+      margin: const EdgeInsets.symmetric(
+        horizontal: Margins.medium,
+      ).copyWith(bottom: 85),
       child: const _WelcomingContent(),
     );
   }
@@ -28,7 +28,7 @@ class _WelcomingContent extends StatelessWidget {
   Widget build(BuildContext context) {
     double avatarWidth = 174;
     double avatarHeight = 155;
-    GlobalKey containerKey = GlobalKey(debugLabel: 'welcoming_container');
+    // GlobalKey containerKey = GlobalKey(debugLabel: 'welcoming_container');
     return LayoutBuilder(
       builder: (context, constraints) {
         return Stack(
@@ -37,7 +37,7 @@ class _WelcomingContent extends StatelessWidget {
             Align(
               alignment: Alignment.center,
               child: Container(
-                key: containerKey,
+                // key: containerKey,
                 constraints: BoxConstraints(
                   minWidth: 342,
                   maxWidth:
@@ -78,7 +78,8 @@ class _WelcomingContent extends StatelessWidget {
                         right: resolveForBreakPoint<double>(
                           MediaQuery.of(context).size.width,
                           small: 0,
-                          other: avatarWidth / 2 + 70,
+                          other: avatarWidth / 2 + 140,
+                          medium: avatarWidth / 2 + 80,
                         ),
                       ),
                       alignment: resolveForBreakPoint<AlignmentGeometry>(
@@ -106,13 +107,21 @@ class _WelcomingContent extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: LogoNDD(),
             ),
-            //todo: change the image to Sr Michelle Image
             Positioned(
               bottom:
                   (-avatarHeight / 2) - 10, // avatarHeight is the image height
               left: resolveForBreakPoint<double>(
                 MediaQuery.of(context).size.width,
                 small: constraints.maxWidth / 2 - avatarWidth / 2,
+                medium: constraints.maxWidth / 2 +
+                    min(
+                          MediaQuery.of(context).size.width,
+                          ContentSize.maxWidth(
+                              MediaQuery.of(context).size.width),
+                        ) /
+                        2 -
+                    50 -
+                    avatarWidth,
                 other: constraints.maxWidth / 2 +
                     min(
                           MediaQuery.of(context).size.width,
@@ -120,7 +129,7 @@ class _WelcomingContent extends StatelessWidget {
                               MediaQuery.of(context).size.width),
                         ) /
                         2 -
-                    25 -
+                    100 -
                     avatarWidth,
               ),
               child: SizedBox(
@@ -160,14 +169,15 @@ class Signature extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-          text: '${AppLocalizations.of(context)!.sister} Michelle Marie, o.p',
-          style: AhlTheme.name,
-          children: [
-            TextSpan(
-              text: '\n${AppLocalizations.of(context)!.prior}',
-              style: AhlTheme.peopleTitle,
-            ),
-          ]),
+        text: '${AppLocalizations.of(context)!.sister} Michèle Marie, o.p',
+        style: AhlTheme.name,
+        children: [
+          TextSpan(
+            text: '\n${AppLocalizations.of(context)!.prior}',
+            style: AhlTheme.peopleTitle,
+          ),
+        ],
+      ),
     );
   }
 }

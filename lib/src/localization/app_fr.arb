@@ -1,10 +1,12 @@
-{"@@locale": "fr",
+{
+  "@@locale": "fr",
   "appTitle": "Aujourd'hui l'avenir",
   "@appTitle": {
     "description": "The title of the application"
   },
   "longAppTitle": "Aujourd'hui l'avenir",
-  "heroTitle": "Aimer et servir",
+  "heroTitle": "\"Aimer et servir\"",
+  "slogan":"\"Amour et Service\"",
   "@heroTitle": {
     "description": "Le text d'invitation qui s'affiche dans le hero header"
   },
@@ -23,13 +25,14 @@
   "news": "Actualités de la communauté",
   "makeDonation": "Nous soutenir",
   "articles": "Articles",
+  "read": "Lire",
   "contact": "Nous Contacter",
   "welcomingTitle": "Bienvenue!",
   "@welcomingTitle": {
     "description": "The title of the welcoming message."
   },
   "welcomingBody": "Bienvenu sur le site des Soeurs Dominicaines Missionnaires de Notre Dame de la Délivrande, Madagascar, Saharoaloha.\n\nEn tant que Sœur Supérieure, je vous accueille chaleureusement pour partager notre histoire, notre mission et notre engagement envers la foi.\n\nUnissez-vous à nous dans la prière, en explorant ce site dédié à cultiver ensemble une vie spirituelle enrichissante.",
-  "sister": "Sœurs",
+  "sister": "Sœur",
   "sisterDenomination": "Sœurs Dominicaines Missionnaires de Notre Dame de la Délivrande",
   "@sisterDenomination": {
     "description": "Text qui est utiliser dans le footer comme signiture du site internet"
@@ -53,53 +56,75 @@
   "invalidEmail": "Email non valide.",
   "cantBeEmpty": "Ne peut pas être vide",
   "unknownError": "Erreur inconnue, Verifier votre connexion internet",
-
-  "shareYourPriers": "Intentions de prière",
+  "priesIntention": "Intentions de prière",
   "proverb": "\"Priez les uns les autres, afin que vous soyez guéris\"\nSt Jacques 5:16",
-  "priersInvitation":"Vos intetions seront porté dans nos prières quotidiens dans notre Communauté Catherine de Sienne à Saharoaloha, Madagascar.",
+  "priersInvitation": "Vos intetions seront porté dans nos prières quotidiens dans notre Communauté Sainte Catherine de Sienne à Saharoaloha, Madagascar.",
   "nameAndFirstName": "Nom et Prénom",
-  "priers":"Prières",
+  "priers": "Prières",
   "sendPray": "Soumettre mon intention",
-  "optional" : "Facultatif",
-  "yourPrayer" : "Votre intention de prière",
-
-  
+  "optional": "Facultatif",
+  "yourPrayer": "Votre intention de prière",
+  "prayerRequestInvitation": "Unissons nous dans la prière. Confiez vos intentions à notre communauté.",
   "priesSpace": "Espace de Prière",
   "@priesSpace": {
     "description": "Titre pour espace de prières"
   },
   "whenWePray": "Quand pronnoncer votre prière?",
   "wePrayOn": "On prie pour vous le:",
-  "prayingDate" : "{date} à {hour}, pendant {prayerType}.",
-  "@prayingDate" : {
+  "prayingDate": "{date} à {hour}, pendant {prayerType}.",
+  "@prayingDate": {
     "description": "The message that shows the date when the prayer will be prayed",
     "placeholders": {
       "prayerType": {
-        "type" : "String",
+        "type": "String",
         "example": "Rosary"
       },
       "date": {
         "type": "DateTime",
         "format": "yMMMMEEEEd"
-      },"hour": {
+      },
+      "hour": {
         "type": "DateTime",
         "format": "jm"
       }
     }
   },
-  "mass" : "la Messe",
+  "priersOf": "Intention de prière de {name},\n{email}",
+  "@priersOf": {
+    "description": "Presentation of Prayer owner in Prayer Request",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "John Doe"
+      },
+      "email": {
+        "type": "String",
+        "example": "johndoe@example.com"
+      }
+    }
+  },
+  "mass": "la Messe",
   "rosary": "le Rosaire",
   "vesper": "le Vêpre",
-
-  "choiceMass" : "Messe",
+  "choiceMass": "Messe",
   "choiceRosary": "Rosaire",
   "choiceVesper": "Vêpre",
-
   "projectsSpace": "Nos projets",
   "projectsSpaceSubtitle": "Aimons et servons.",
   "projectsSpaceIntroduction": "Nous sommes engagées dans de nombreux projets qui visent à promouvoir la dignité humaine, la justice sociale, l’éducation et la santé. Nous vous invitons à découvrir sur cette page les initiatives que nous menons.",
   "ourPartners": "Nos Partenaires",
 
+  "inProgress": "Projets en cours",
+  "waitingBudget":"En attente de financement",
+  "done": "Términé",
+
+  "supportProject": "Soutenir un projet",
+
+  "realized": "Réalisation",
+  "initiative": "Initiative des soeurs",
+  "projectSpaceTitle": "Nos projets",
+  "projectLongTitle": "Nos projects et nos œuvres sociaux",
+  "projectSpaceDescription": "Découvrez les initiatives concrètes qui animent notre mission au service du peuple malgache et de l’eglise locale. Nous vous invitons à découvrir sur cette page les initiatives que nous menons.",
   "january": "Janvier",
   "february": "Fevrier",
   "march": "Mars",
@@ -112,11 +137,21 @@
   "october": "Octobre",
   "november": "Novembre",
   "december": "Decembre",
-  
-  "whoWeAre":  "Qui sommes nous?",
+  "whoWeAre": "Qui sommes nous?",
+  "domSisters": "Les soeurs Dominicaines NDD",
   "allArticles": "Tous les articles",
+  "share" : "Partager",
   "todaysRosary": "Chapelet du jour",
-  "rosarySlogan":"Mediter la vie de Jesus avec Marie",
+  "rosarySlogan": "Mediter la vie de Jesus avec Marie",
+  "getNotified": "Être notifier",
+  "allProjects": "Voir projets",
+  "devInProgress": "Bientôt disponible",
+  "prayerSpace": "Espace de prière",
+  "@prayerSpace": {
+    "description": "Title of the prayer space"
+  },
+  "todaySaint":"Saint du jour",
+  "office":"Vêpre du soir",
+  "availableSoon": "Bientôt Disponible"
 
-  "allProjects": "Voir tout les projet"
 }
