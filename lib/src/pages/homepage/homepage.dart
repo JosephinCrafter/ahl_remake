@@ -17,10 +17,10 @@ import '../../who_we_are/view.dart';
 
 /// Home page
 
-class HomePage extends StatefulWidget with ChangeNotifier {
+class HomePage extends StatefulWidget {
   static const String routeName = "/home";
 
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -73,20 +73,6 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
-
-    scrollController.addListener(updatePosition);
-
-    widget.addListener(dispatchScrollNotification);
-  }
-
-  void dispatchScrollNotification() {}
-
-  double _bottom = 0;
-
-  void updatePosition() {
-    setState(() {
-      _bottom = scrollController.offset * 0.3;
-    });
   }
 
   @override
