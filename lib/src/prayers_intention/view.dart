@@ -134,40 +134,9 @@ class _PrayersIntentionRequestViewState
         ),
       ),
       lazy: true,
-      // child: AnimatedSwitcher(
-      //   switchInCurve: curvesIn,
-      //   switchOutCurve: curvesOut,
-      //   layoutBuilder: (currentChild, previousChildren) => Stack(
-      //     alignment: Alignment.topCenter,
-      //     children: [
-      //       ...previousChildren,
-      //       if (currentChild != null) currentChild,
-      //     ],
-      //   ),
-      //   transitionBuilder: (child, animation) {
-      //     return (_isGoingForward)
-      //         ? child
-      //             .animate(
-      //               autoPlay: false,
-      //               target: 1,
-      //             )
-      //             .slideX(begin: 1, end: 0, duration: duration, curve: curvesIn)
-      //         : child.animate(autoPlay: false, target: 1).slideX(
-      //             begin: -1, end: 0, duration: duration, curve: curvesOut);
-      //   },
-      //   duration: duration,
-      //   child: views[_index],
-
-      // ),
       child: LayoutBuilder(
         builder: (context, constraints) => ConstrainedBox(
           constraints: BoxConstraints(
-            // Size.fromHeight(
-            //   min(
-            //     MediaQuery.of(context).size.height * 5 / 6,
-            //     1124,
-            //   ),
-            // ),
             maxWidth: MediaQuery.sizeOf(context).width,
             maxHeight:
                 (MediaQuery.of(context).size.width < ScreenSizes.extraLarge)

@@ -1,18 +1,13 @@
-import 'dart:developer';
 
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/article_view/view/article_view.dart';
 import 'package:ahl/src/newsletter/newsletter.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
-import 'package:ahl/src/project_space/bloc.dart';
-import 'package:ahl/src/project_space/view.dart';
 import 'package:ahl/src/widgets/widgets.dart';
+
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:responsive_builder/responsive_builder.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../utils/breakpoint_resolver.dart';
