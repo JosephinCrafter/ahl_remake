@@ -19,41 +19,11 @@ class ProjectPageView extends StatefulWidget {
     super.key,
     required this.project,
     this.collection = "projects",
-  }) : relatedArticles = buildRelatedArticle(
-          const Article(
-            id: 'id',
-          ),
-        ); // change this to the build relations
+  }); // change this to the build relations
 
   /// The current project to be displayed
   final Article project;
-  final List<Article> relatedArticles;
   final String collection;
-
-  static List<Article> buildRelatedArticle(Article article) {
-    List<Article> relatedArticles = [];
-
-    //  building articles;
-    //todo: replace with the real implementation
-    relatedArticles.addAll(
-      [
-        const Article(
-          id: 'Fête de fin d\'année',
-          releaseDate: '22/06/2024',
-          contentPath: 'fete_fin_d\'annee.md',
-          title: 'Fête de fin d\'année Cantine',
-        ),
-        const Article(
-          id: 'Rapport fin',
-          releaseDate: '17/07/2024',
-          contentPath: 'rapport.md',
-          title: 'Rapport Cantine 2023-2024',
-        ),
-      ],
-    );
-
-    return relatedArticles;
-  }
 
   @override
   State<StatefulWidget> createState() => _ProjectPageViewState();
@@ -94,6 +64,7 @@ class _ProjectPageViewState extends State<ProjectPageView>
     var title = widget.project.title;
     // var value = needDisplayTitleInAppBar ? 1.0 : 0.0;
     return Scaffold(
+      key: ValueKey(widget.project),
       appBar: AhlAppBar(
         preferredSize: const Size.fromHeight(75 + 64),
         bottomBar: Flexible(
@@ -184,11 +155,12 @@ class _ProjectPageViewState extends State<ProjectPageView>
         controller: _tabController,
         children: [
           ProjectDescriptionContentView(
+            key: ValueKey("${widget.project.id}_description"),
             article: widget.project,
             scrollController: _descriptionScrollController,
           ),
           ProjectNewsView(
-            relatedArticles: widget.relatedArticles,
+            key: ValueKey("${widget.project.id}_news"),
             scrollController: _newsScrollController,
           ),
         ],
@@ -218,6 +190,13 @@ class ProjectDescriptionContentView extends StatelessWidget {
   final Article article;
   final ScrollController? scrollController;
 
+  Widget buildSuggestions(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      height: 700,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // List<Widget> suggestion = context.read<ProjectBloc>().state.articles?.map<Widget>((element)=>).toList();
@@ -225,12 +204,13 @@ class ProjectDescriptionContentView extends StatelessWidget {
       controller: scrollController,
       children: [
         ArticleContentView(
+          isProject: true,
           article: article,
           collection: "/projects",
         ),
         const NewsLetterPrompt(),
         const AhlDivider(leading: 0, trailing: 0),
-        //  ...suggestion,
+        buildSuggestions(context),
         const AhlDivider(leading: 0, trailing: 0),
         const AhlFooter(),
       ],
@@ -241,12 +221,35 @@ class ProjectDescriptionContentView extends StatelessWidget {
 class ProjectNewsView extends StatelessWidget {
   const ProjectNewsView({
     super.key,
-    required this.relatedArticles,
     this.scrollController,
   });
 
-  final List<Article> relatedArticles;
   final ScrollController? scrollController;
+
+  static List<Article> buildRelatedArticle(Article article) {
+    List<Article> relatedArticles = [];
+
+    //  building articles;
+    //todo: replace with the real implementation
+    relatedArticles.addAll(
+      [
+        const Article(
+          id: 'Fête de fin d\'année',
+          releaseDate: '22/06/2024',
+          contentPath: 'fete_fin_d\'annee.md',
+          title: 'Fête de fin d\'année Cantine',
+        ),
+        const Article(
+          id: 'Rapport fin',
+          releaseDate: '17/07/2024',
+          contentPath: 'rapport.md',
+          title: 'Rapport Cantine 2023-2024',
+        ),
+      ],
+    );
+
+    return relatedArticles;
+  }
 
   @override
   Widget build(BuildContext context) {
