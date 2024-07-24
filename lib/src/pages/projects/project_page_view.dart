@@ -1,15 +1,17 @@
-
 import 'package:ahl/src/ahl_barrel.dart';
-import 'package:ahl/src/article_view/view/article_view.dart';
-import 'package:ahl/src/newsletter/newsletter.dart';
-import 'package:ahl/src/pages/projects/projects_page.dart';
-import 'package:ahl/src/widgets/widgets.dart';
-
-import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
+
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_article/firebase_article.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../article_view/view/article_view.dart';
+import '../../newsletter/newsletter.dart';
+import '../../pages/homepage/donation/donation_page.dart';
+import '../../pages/projects/projects_page.dart';
+import '../../widgets/widgets.dart';
 import '../../utils/breakpoint_resolver.dart';
 
 class ProjectPageView extends StatefulWidget {
@@ -78,8 +80,10 @@ class _ProjectPageViewState extends State<ProjectPageView>
 
   void updateNeedDisplayTitle() {
     if (_descriptionScrollController.offset >= 64) {
-      setState(() => needDisplayTitleInAppBar = true);
-    } else {
+      if (!needDisplayTitleInAppBar) {
+        setState(() => needDisplayTitleInAppBar = true);
+      }
+    } else if (needDisplayTitleInAppBar) {
       setState(() => needDisplayTitleInAppBar = false);
     }
   }
@@ -88,36 +92,30 @@ class _ProjectPageViewState extends State<ProjectPageView>
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.sizeOf(context).width;
     var title = widget.project.title;
-    var value = needDisplayTitleInAppBar ? 1.0 : 0.0;
+    // var value = needDisplayTitleInAppBar ? 1.0 : 0.0;
     return Scaffold(
       appBar: AhlAppBar(
-        preferredSize: //!needDisplayTitleInAppBar
-            // ? const Size.fromHeight(75 + 30)
-            const Size.fromHeight(75 + 64),
+        preferredSize: const Size.fromHeight(75 + 64),
         bottomBar: Flexible(
           flex: 1,
-          child: Container(
-            // constraints: BoxConstraints(
-            //   maxWidth: ContentSize.maxWidth(
-            //     MediaQuery.sizeOf(context).width,
-            //   ),
-            // ),
-            // color: Theme.of(context).colorScheme.surface,
-            child: Column(
-              children: [
-                Container(
-                  constraints: const BoxConstraints(maxWidth: 1024),
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.symmetric(
-                    horizontal: resolveForBreakPoint(
-                      screenWidth,
-                      other: Margins.small,
-                      extraHuge: Margins.extraHuge,
-                      huge: Margins.huge,
-                      extraLarge: Margins.extraLarge,
-                      large: Margins.large,
-                    ),
-                  ),
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  // constraints: const BoxConstraints(maxWidth: 1024),
+                  width: screenWidth / 2 - 20,
+                  alignment: Alignment.center,
+                  // margin: EdgeInsets.symmetric(
+                  //   horizontal: resolveForBreakPoint(
+                  //     screenWidth,
+                  //     other: Margins.small,
+                  //     extraHuge: Margins.extraHuge,
+                  //     huge: Margins.huge,
+                  //     extraLarge: Margins.extraLarge,
+                  //     large: Margins.large,
+                  //   ),
+                  // ),
                   // padding: EdgeInsets.symmetric(
                   //   horizontal: resolveForBreakPoint(
                   //     screenWidth,
@@ -129,42 +127,56 @@ class _ProjectPageViewState extends State<ProjectPageView>
                   //   ),
                   // ),
                   child: AnimatedCrossFade(
-                      firstChild: const SizedBox.shrink(),
-                      secondChild: Text(
-                        title!,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      crossFadeState: !needDisplayTitleInAppBar
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
-                      duration: Durations.medium1),
-                ),
-                // Container(
-                //         child: Visibility(
-                //             visible: needDisplayTitleInAppBar,
-                //             child: Text(
-                //               title!,
-                //               style: Theme.of(context).textTheme.titleLarge,
-                //             )))
-                //     .animate(
-                //       autoPlay: false,
-                //       target: needDisplayTitleInAppBar ? 1 : 0,
-                //     )
-                //     .fadeIn()
-                //     .slideY(begin: 1),
-                TabBar(
-                  controller: _tabController,
-                  tabs: const [
-                    Tab(
-                      text: "Description",
+                    firstChild: const SizedBox.shrink(),
+                    secondChild: Text(
+                      title!,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    Tab(
-                      text: "Actualités",
-                    ),
-                  ],
+                    crossFadeState: !needDisplayTitleInAppBar
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    duration: Durations.medium1,
+                    layoutBuilder:
+                        (topChild, topChildKey, bottomChild, bottomChildKey) {
+                      return Container(
+                        key: topChildKey,
+                        child: topChild
+                            .animate(
+                              autoPlay: false,
+                              target: needDisplayTitleInAppBar ? 1 : 0,
+                            )
+                            .fadeIn()
+                            .slideY(begin: 1),
+                      );
+                    },
+                  ),
                 ),
-              ],
-            ),
+              ),
+              // Container(
+              //         child: Visibility(
+              //             visible: needDisplayTitleInAppBar,
+              //             child: Text(
+              //               title!,
+              //               style: Theme.of(context).textTheme.titleLarge,
+              //             )))
+              //     .animate(
+              //       autoPlay: false,
+              //       target: needDisplayTitleInAppBar ? 1 : 0,
+              //     )
+              //     .fadeIn()
+              //     .slideY(begin: 1),
+              TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(
+                    text: "Description",
+                  ),
+                  Tab(
+                    text: "Actualités",
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),
@@ -180,6 +192,17 @@ class _ProjectPageViewState extends State<ProjectPageView>
             scrollController: _newsScrollController,
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.small(
+        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+        child: SizedBox.square(
+          dimension: IconSizes.medium,
+          child: SvgPicture.asset('images/SVG/dons_alt.svg'),
+        ),
+        onPressed: () {
+          Navigator.pushNamed(context, DonationPage.routeName,
+              arguments: widget.project);
+        },
       ),
     );
   }

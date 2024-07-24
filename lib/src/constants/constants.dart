@@ -111,8 +111,13 @@ class Sizes {
 class IconSizes {
   IconSizes._();
 
+  /// 24
   static const double medium = 24;
+
+  /// 48
   static const double large = medium * 2;
+
+  /// 12
   static const double small = medium / 2;
 }
 

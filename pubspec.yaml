@@ -52,6 +52,7 @@ dependencies:
   share_plus: ^9.0.0
   dotlottie_loader: ^0.0.4
   responsive_builder: ^0.7.1
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:

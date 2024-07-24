@@ -286,29 +286,14 @@ class _ArticleContentViewState extends State<ArticleContentView>
             child: shareButton,
           ),
           Container(
-            height: resolveForBreakPoint(
-              screenWidth,
-              other: 575,
-              small: 300,
-            ),
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image:
-                      /*(widget.articleUtils.coverImage != null) ?*/
-
-                      MemoryImage(
-                    _coverImage!,
-                  ) //: NetworkImage(widget.articleUtils.getCoverImageUrl()),
-                  ),
-            ),
-            child: InkWell(
-              onTap: () => ImageViewer(
-                child: Image.memory(widget.articleUtils.coverImage!),
+              height: resolveForBreakPoint(
+                screenWidth,
+                other: 575,
+                small: 300,
               ),
-              child: Container(),
-            ),
-          ),
+              child: AhlImageViewer.fromFuture(
+                future: Future.value(_coverImage),
+              )),
 
           // markdown content
           Container(
