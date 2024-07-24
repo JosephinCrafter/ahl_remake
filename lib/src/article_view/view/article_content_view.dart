@@ -50,6 +50,7 @@ class ArticleContentPageState extends State<ArticleContentPage> {
 
 class ArticleContentView extends StatefulWidget {
   ArticleContentView({
+    this.isProject = false,
     super.key,
     required this.article,
     this.collection = "articles",
@@ -62,6 +63,7 @@ class ArticleContentView extends StatefulWidget {
 
   final ArticleStorageUtils articleUtils;
   final ScrollController? controller;
+  final bool isProject;
 
   @override
   State<ArticleContentView> createState() => _ArticleContentViewState();
@@ -235,6 +237,26 @@ class _ArticleContentViewState extends State<ArticleContentView>
       ),
     );
 
+    // share button
+    Widget supportProjectButton = Builder(
+      builder: (context) => ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Theme.of(context).primaryColor,
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        ),
+        onPressed: () => Navigator.of(context).pushNamed(
+          DonationPage.routeName,
+          arguments: widget.article,
+        ),
+        label: Text(AppLocalizations.of(context)!.supportProject),
+        icon: SvgPicture.asset(
+          'images/SVG/dons.svg',
+          width: IconSizes.small,
+          height: IconSizes.small,
+        ),
+      ),
+    );
+
     return Card(
       color: const Color(0xFFFAFAFA),
       child:
@@ -353,6 +375,13 @@ class _ArticleContentViewState extends State<ArticleContentView>
             padding: const EdgeInsets.all(Paddings.medium),
             child: shareButton,
           ),
+
+          if (widget.isProject)
+            Container(
+              padding: const EdgeInsets.all(Paddings.medium),
+              alignment: Alignment.center,
+              child: supportProjectButton,
+            ),
         ],
       ),
     );
