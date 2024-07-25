@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:provider/provider.dart';
 
 import 'src/app.dart';
+import 'src/firebase_constants.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
+import 'src/theme/theme.dart';
 // test on github auto deploy
 
 void main() async {
@@ -34,8 +37,22 @@ void main() async {
   runApp(
     ChangeNotifierProvider.value(
       value: settingsController,
-      child: MyApp(
-        settingsController: settingsController,
+      child: FutureBuilder(
+        future: firebaseApp,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return MyApp(
+              settingsController: settingsController,
+            );
+          } else {
+            return Container(
+              color: AhlTheme.background,
+              child: LottieBuilder.asset(
+              'animations/loading.json',
+              repeat: true,),
+            );
+          }
+        },
       ),
     ),
   );

@@ -17,7 +17,6 @@ class ProjectBloc extends Bloc<ArticleEvent, ArticleState<Article>> {
         ),
         super(
           const ArticleState<Article>(
-            articles: null,
             status: ArticleStatus.initial,
             error: null,
           ),
@@ -38,7 +37,6 @@ class ProjectBloc extends Bloc<ArticleEvent, ArticleState<Article>> {
     emit(
       state.copyWith(
         status: ArticleStatus.initial,
-        articles: null,
         error: null,
       ),
     );
@@ -47,8 +45,11 @@ class ProjectBloc extends Bloc<ArticleEvent, ArticleState<Article>> {
   void _onGetArticleById(GetArticleByIdEvent event, Emitter emit) async {
     Object? error;
     Article? result;
+    emit(
+      state.copyWith(status: ArticleStatus.initial,)
+    );
     try {
-      result = await _repo.getArticleById(articleId: event.id) as Article;
+      result = await _repo.getArticleById(articleId: event.id!) as Article;
     } catch (e) {
       error = e;
     }
@@ -56,7 +57,7 @@ class ProjectBloc extends Bloc<ArticleEvent, ArticleState<Article>> {
       emit(
         state.copyWith(
           status: ArticleStatus.succeed,
-          articles: [result],
+          articles: {event.id!: result},
           error: null,
         ),
       );
@@ -83,7 +84,10 @@ class ProjectBloc extends Bloc<ArticleEvent, ArticleState<Article>> {
         emit(
           state.copyWith(
             status: ArticleStatus.succeed,
-            articles: [result],
+            articles: {
+              "highLight": result,
+              result.id: result,
+            },
             error: null,
             highlightArticle: result,
           ),
@@ -112,15 +116,18 @@ class ProjectBloc extends Bloc<ArticleEvent, ArticleState<Article>> {
             await _repo.getArticlesSubListByIds(event.ids!) as List<Article>;
       }
       if (event.foldLength != null) {
-        
         developer.log('[ProjectBlocEvent] : ${event.foldLength}');
         articles = await _repo.getArticlesSubListByLength(event.foldLength!)
             as List<Article>;
       }
 
+      // build map articles
+      Map<String, Article>? mapArticles = (articles != null)
+          ? {for (var article in articles) article.id: article}
+          : null;
       emit(
         state.copyWith(
-            articles: articles, status: ArticleStatus.succeed, error: null),
+            articles: mapArticles, status: ArticleStatus.succeed, error: null),
       );
     } catch (e) {
       developer.log('[ProjectBloc] Error getting article list: $e');

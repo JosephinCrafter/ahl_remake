@@ -14,7 +14,7 @@ import '../projects/projects_page.dart';
 class PrayersPage extends StatefulWidget {
   const PrayersPage({super.key});
 
-  static const String routeName = '/prayers';
+  static const String routeName = 'prayers';
 
   @override
   State<PrayersPage> createState() => _PrayersPageState();

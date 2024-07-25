@@ -9,10 +9,7 @@ final class GetHighlightArticleEvent extends ArticleEvent {
 }
 
 final class GetArticleByIdEvent extends ArticleEvent {
-  const GetArticleByIdEvent(this.id);
-
-  @override
-  final String id;
+  const GetArticleByIdEvent({required super.id});
 }
 
 

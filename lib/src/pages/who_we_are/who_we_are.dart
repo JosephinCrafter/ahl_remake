@@ -13,7 +13,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 class WhoWeArePage extends StatefulWidget {
   const WhoWeArePage({super.key});
 
-  static const String routeName = '/whoWeAre';
+  static const String routeName = 'whoWeAre';
 
   @override
   State<WhoWeArePage> createState() => _WhoWeArePageState();

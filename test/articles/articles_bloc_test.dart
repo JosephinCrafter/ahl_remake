@@ -7,10 +7,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:bloc_test/bloc_test.dart';
 
-
 void main() {
-
-  ArticlesRepository mockRepo = ArticlesRepository(firestoreInstance: firestore);
+  ArticlesRepository mockRepo =
+      ArticlesRepository(firestoreInstance: firestore);
   String highlightId = 'highlight';
   group(
     'Article bloc test',
@@ -50,7 +49,7 @@ void main() {
           ),
           ArticleState(
             status: ArticleStatus.succeed,
-            articles: [article],
+            articles: {article.id: article},
           ),
         ],
       );
@@ -59,7 +58,7 @@ void main() {
         'getting an id given article',
         build: () => ArticleBloc(repo: mockRepo),
         act: (bloc) => bloc.add(
-          GetArticleByIdEvent(highlightId),
+          GetArticleByIdEvent(id: highlightId),
         ),
         expect: () => [
           const ArticleState(
@@ -68,7 +67,7 @@ void main() {
           ),
           ArticleState(
             status: ArticleStatus.succeed,
-            articles: [article],
+            articles: {article.id: article},
           ),
         ],
       );

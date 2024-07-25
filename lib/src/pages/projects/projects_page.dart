@@ -32,7 +32,7 @@ import '../../article_view/view/article_view.dart';
 class ProjectsPage extends StatefulWidget {
   const ProjectsPage({super.key});
 
-  static const String routeName = '/projects';
+  static const String routeName = 'projects';
   static ScrollController controller = ScrollController();
 
   @override
@@ -391,16 +391,16 @@ class _AllArticleViewState extends State<AllArticleView> {
     return BlocConsumer<ProjectBloc, ArticleState<Article>>(
       builder: (BuildContext context, ArticleState<Article> state) {
         List<Article?>? projectInProgress = state.articles
-            ?.where(
-                (article) => article?.relations?[0]['status'] == 'inProgress')
+            ?.values.where(
+                (article) => article.relations?[0]['status'] == 'inProgress')
             .toList();
         List<Article?>? projectWaiting = state.articles
-            ?.where((article) =>
-                article?.relations?[0]['status'] == 'waitingBudget')
+            ?.values.where((article) =>
+                article.relations?[0]['status'] == 'waitingBudget')
             .toList();
 
         List<Article?>? projectDone = state.articles
-            ?.where((article) => article?.relations?[0]['status'] == 'done')
+            ?.values.where((article) => article.relations?[0]['status'] == 'done')
             .toList();
 
         switch (state.status) {

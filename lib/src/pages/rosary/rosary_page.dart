@@ -10,7 +10,7 @@ import '../../ahl_barrel.dart';
 class RosaryPage extends StatefulWidget {
   const RosaryPage({super.key});
 
-  static const String routeName = '/rosary';
+  static const String routeName = 'rosary';
 
   @override
   State<RosaryPage> createState() => _RosaryPageState();

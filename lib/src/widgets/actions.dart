@@ -63,7 +63,7 @@ class ActionsLists {
         padding: const EdgeInsets.symmetric(vertical: Paddings.small),
         child: TextButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(WhoWeArePage.routeName);
+            context.goNamed(WhoWeArePage.routeName);
           },
           child: Container(
             alignment: Alignment.centerLeft,
@@ -83,7 +83,7 @@ class ActionsLists {
         padding: const EdgeInsets.symmetric(vertical: Paddings.small),
         child: TextButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(PrayersPage.routeName);
+            context.goNamed(PrayersPage.routeName);
           },
           child: Container(
             alignment: Alignment.centerLeft,
@@ -103,7 +103,7 @@ class ActionsLists {
         padding: const EdgeInsets.symmetric(vertical: Paddings.small),
         child: TextButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(ProjectsPage.routeName);
+            context.goNamed(ProjectsPage.routeName);
           },
           child: Container(
             alignment: Alignment.centerLeft,
@@ -123,7 +123,7 @@ class ActionsLists {
     //     padding: const EdgeInsets.symmetric(vertical: Paddings.small),
     //     child: TextButton(
     //       onPressed: () {
-    //         Navigator.of(context).pushNamed(ArticleContentPage.routeName);
+    //         context.goNamed(ArticleContentPage.routeName);
     //       },
     //       child: Container(
     //         alignment: Alignment.centerLeft,
@@ -144,7 +144,7 @@ class ActionsLists {
         margin: const EdgeInsets.only(top: 64),
         child: ElevatedButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(DonationPage.routeName);
+            context.goNamed(DonationPage.routeName);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).primaryColor,

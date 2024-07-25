@@ -199,7 +199,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           onPressed: () {
-            Navigator.of(context).pushNamed(DonationPage.routeName);
+            context.goNamed(DonationPage.routeName);
           },
           // child: FittedBox(
           //   fit: BoxFit.contain,
@@ -221,7 +221,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         onPressed: () {
-          Navigator.of(context).pushNamed(HomePage.routeName);
+          context.goNamed(HomePage.routeName);
         },
         child: Text(
           actions.keys.elementAtOrNull(0),
@@ -245,7 +245,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       onPressed: () {
-        Navigator.of(context).pushNamed(ProjectsPage.routeName);
+        context.goNamed(ProjectsPage.routeName);
       },
       child: Text(
         actions.keys.elementAtOrNull(2),
@@ -261,7 +261,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
       // itemBuilder: (context) => [
       //   PopupMenuItem(
       //     onTap: () {
-      //       Navigator.of(context).pushNamed(
+      //       context.goNamed(
       //         ProjectsPage.routeName,
       //       );
       //     },
@@ -269,7 +269,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
       //   ),
       //   PopupMenuItem(
       //     onTap: () {
-      //       Navigator.of(context).pushNamed(
+      //       context.goNamed(
       //         ProjectsPage.routeName,
       //       );
       //     },
@@ -277,7 +277,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
       //   ),
       //   PopupMenuItem(
       //     onTap: () {
-      //       Navigator.of(context).pushNamed(
+      //       context.goNamed(
       //         ProjectsPage.routeName,
       //       );
       //     },
@@ -309,7 +309,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         onPressed: () {
-          Navigator.of(context).pushNamed(
+          context.goNamed(
             WhoWeArePage.routeName,
           );
         },
@@ -332,7 +332,7 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         onPressed: () {
-          Navigator.of(context).pushNamed(PrayersPage.routeName);
+          context.goNamed(PrayersPage.routeName);
         },
         child: Text(
           actions.keys.elementAtOrNull(1),

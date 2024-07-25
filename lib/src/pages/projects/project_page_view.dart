@@ -1,35 +1,102 @@
 import 'package:ahl/src/ahl_barrel.dart';
+import 'package:ahl/src/article_view/event/event.dart';
+import 'package:ahl/src/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 
+import '../../article_view/state/state.dart';
 import '../../article_view/view/article_view.dart';
 import '../../newsletter/newsletter.dart';
 import '../../pages/homepage/donation/donation_page.dart';
 import '../../pages/projects/projects_page.dart';
+import '../../project_space/bloc.dart';
 import '../../widgets/widgets.dart';
-import '../../utils/breakpoint_resolver.dart';
 
-class ProjectPageView extends StatefulWidget {
-  ProjectPageView({
+class ProjectPageView extends StatelessWidget {
+  const ProjectPageView({
+    super.key,
+    this.project,
+    this.collection = "projects",
+    this.projectId,
+  }) : assert(project != null || projectId != null,
+            "On the project or projectId must be supplied"); // change this to the build relations
+
+  /// The current project to be displayed
+  final Article? project;
+  final String collection;
+  final String? projectId;
+
+  @override
+  Widget build(BuildContext context) {
+    if (project != null) {
+      return _ProjectPageContentView(project: project);
+    }
+    // When no project is provided but instead, a projectId
+    return BlocBuilder<ProjectBloc, ArticleState<Article>>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        context.read<ProjectBloc>().add(GetArticleByIdEvent(id: projectId));
+        // get project
+        var project = state.articles?[projectId!];
+
+        // Make decision based on UI
+
+        // 1 case: every thing works fine:
+        //    - a real project is returned by project bloc
+        if (project != null) {
+          return _ProjectPageContentView(
+            project: project,
+            collection: collection,
+          );
+        } else if (state.status == ArticleStatus.initial) {
+          return Container(
+            color: AhlTheme.background,
+            child: Center(
+              child: LottieBuilder.asset(
+                'animations/loading.json',
+                repeat: true,
+              ),
+            ),
+          );
+        } else {
+          return Container(
+            color: AhlTheme.background,
+            child: Center(
+              child: LottieBuilder.asset(
+                'animations/loading.json',
+                repeat: true,
+              ),
+            ),
+          );
+        }
+      },
+    );
+  }
+}
+
+class _ProjectPageContentView extends StatefulWidget {
+  const _ProjectPageContentView({
     super.key,
     required this.project,
     this.collection = "projects",
-  }); // change this to the build relations
-
-  /// The current project to be displayed
-  final Article project;
+  });
+  final Article? project;
   final String collection;
 
   @override
-  State<StatefulWidget> createState() => _ProjectPageViewState();
+  State<_ProjectPageContentView> createState() =>
+      _ProjectPageContentViewState();
 }
 
-class _ProjectPageViewState extends State<ProjectPageView>
+class _ProjectPageContentViewState extends State<_ProjectPageContentView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _descriptionScrollController;
@@ -61,7 +128,7 @@ class _ProjectPageViewState extends State<ProjectPageView>
   @override
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.sizeOf(context).width;
-    var title = widget.project.title;
+    var title = widget.project?.title;
     // var value = needDisplayTitleInAppBar ? 1.0 : 0.0;
     return Scaffold(
       key: ValueKey(widget.project),
@@ -151,20 +218,58 @@ class _ProjectPageViewState extends State<ProjectPageView>
           ),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          ProjectDescriptionContentView(
-            key: ValueKey("${widget.project.id}_description"),
-            article: widget.project,
-            scrollController: _descriptionScrollController,
-          ),
-          ProjectNewsView(
-            key: ValueKey("${widget.project.id}_news"),
-            scrollController: _newsScrollController,
-          ),
-        ],
-      ),
+      body: (widget.project != null)
+          ? TabBarView(
+              controller: _tabController,
+              children: [
+                ProjectDescriptionContentView(
+                  key: ValueKey("${widget.project?.id}_description"),
+                  article: widget.project!,
+                  scrollController: _descriptionScrollController,
+                ),
+                ProjectNewsView(
+                  key: ValueKey("${widget.project?.id}_news"),
+                  scrollController: _newsScrollController,
+                ),
+              ],
+            )
+          : Builder(
+              builder: (context) {
+                ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                  SnackBar(
+                    content: Container(
+                      color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                      child: DefaultTextStyle(
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelMedium!
+                            .copyWith(
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                        child: Row(
+                          children: [
+                            const Text(
+                              "Le contenu est introuvable.",
+                            ),
+                            IconButton(
+                              onPressed: () => context.pop(),
+                              icon: Icon(
+                                Icons.close_rounded,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+                context.goNamed(ProjectsPage.routeName);
+                return const Center(
+                  child: Text("Project non disponible."),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton.small(
         backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
         child: SizedBox.square(

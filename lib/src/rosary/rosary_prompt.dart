@@ -13,7 +13,7 @@ class RosaryPrompt extends StatelessWidget {
     // var image = imageRef.getData();
 
     return PromptCard(
-      callback: () => Navigator.of(context).pushNamed(RosaryPage.routeName),
+      callback: () => context.goNamed(RosaryPage.routeName),
       backgroundImage: AssetImage(
         AhlAssets.rosaryHeroHeader,
       ),

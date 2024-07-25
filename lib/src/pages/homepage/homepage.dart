@@ -18,7 +18,7 @@ import '../../who_we_are/view.dart';
 /// Home page
 
 class HomePage extends StatefulWidget {
-  static const String routeName = "/home";
+  static const String routeName = "home";
 
   const HomePage({super.key});
 

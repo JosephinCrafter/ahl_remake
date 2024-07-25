@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_article/firebase_article.dart' as fire_art;
+import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'dart:developer' as developer;
@@ -55,7 +56,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
     Object? error;
     fire_art.Article? result;
     try {
-      result = await _repo.getArticleById(articleId: event.id);
+      result = await _repo.getArticleById(articleId: event.id!);
     } catch (e) {
       error = e;
     }
@@ -63,7 +64,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
       emit(
         state.copyWith(
           status: ArticleStatus.succeed,
-          articles: [result],
+          articles: {result.id: result},
           error: null,
         ),
       );
@@ -89,7 +90,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
         emit(
           state.copyWith(
             status: ArticleStatus.succeed,
-            articles: [result],
+            articles: {result.id: result},
             error: null,
             highlightArticle: result,
           ),
@@ -122,9 +123,11 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
                 as List<fire_art.Article>);
       }
 
+      // build map articles
+      Map<String, Article>? mapArticles = (articles != null)? { for (var article in articles) article.id : article }:null;
       emit(
         state.copyWith(
-            articles: articles, status: ArticleStatus.succeed, error: null),
+            articles: mapArticles, status: ArticleStatus.succeed, error: null),
       );
     } catch (e) {
       developer.log('[Article Bloc] Error getting article list: $e');

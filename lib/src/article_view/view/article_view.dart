@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:developer' as developer;
@@ -11,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import "package:firebase_article/firebase_article.dart";
 import 'package:url_launcher/url_launcher.dart';
@@ -657,31 +659,36 @@ class _ArticleCoverImageState extends State<ArticleCoverImage> {
               builder: (context, snapshot) {
                 // switch (snapshot.connectionState) {
                 //   case ConnectionState.done:
-                if (snapshot.hasData) {
-                  cache[coverImageCacheKey] =
-                      encodeUint8ListToString(snapshot.data!);
-                  return ClipPath(
-                    clipper: resolveForBreakPoint(
-                      MediaQuery.of(context).size.width,
-                      other: LargeArticleClipper(),
-                      small: MobileArticleClipper(),
-                      medium: MobileArticleClipper(),
-                    ),
-                    child: Container(
-                      // constraints: const BoxConstraints(
-                      //   // maxHeight: 135,
-                      //   // maxWidth: 185,
-                      //   // minWidth: 107,
-                      // ),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: MemoryImage(snapshot.data!),
-                        ),
+                try {
+                  if (snapshot.hasData) {
+                    cache[coverImageCacheKey] =
+                        encodeUint8ListToString(snapshot.data!);
+                    return ClipPath(
+                      clipper: resolveForBreakPoint(
+                        MediaQuery.of(context).size.width,
+                        other: LargeArticleClipper(),
+                        small: MobileArticleClipper(),
+                        medium: MobileArticleClipper(),
                       ),
-                    ).animate().fadeIn(),
-                  );
-                } else {
+                      child: Container(
+                        // constraints: const BoxConstraints(
+                        //   // maxHeight: 135,
+                        //   // maxWidth: 185,
+                        //   // minWidth: 107,
+                        // ),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: MemoryImage(snapshot.data!),
+                          ),
+                        ),
+                      ).animate().fadeIn(),
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                } catch (e) {
+                  log("Error getting HighLight Article");
                   return const SizedBox.shrink();
                 }
                 //      else {

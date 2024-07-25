@@ -1,28 +1,28 @@
 import 'dart:developer';
 
-import 'package:ahl/src/article_view/bloc/bloc.dart';
-import 'package:ahl/src/pages/homepage/donation/donation_page.dart';
-import 'package:ahl/src/pages/prayers/prayers_page.dart';
-import 'package:ahl/src/pages/projects/projects_page.dart';
-import 'package:ahl/src/pages/rosary/rosary_page.dart';
-import 'package:ahl/src/pages/saints/saints.dart';
-import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
-import 'package:ahl/src/project_space/bloc.dart';
-import 'package:firebase_article/firebase_article.dart';
+import 'package:ahl/src/article_view/event/event.dart';
+import 'package:ahl/src/pages/projects/project_page_view.dart';
+import 'package:ahl/src/project_space/view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
+import 'package:ahl/src/pages/homepage/donation/donation_page.dart';
+import 'package:ahl/src/pages/prayers/prayers_page.dart';
+import 'package:ahl/src/pages/projects/projects_page.dart';
+import 'package:ahl/src/pages/rosary/rosary_page.dart';
+import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
+import 'package:ahl/src/project_space/bloc.dart';
+import 'package:ahl/src/article_view/bloc/bloc.dart';
+import 'article_view/state/state.dart';
 import 'firebase_constants.dart';
-import 'pages/articles/articles_page.dart';
 import 'pages/homepage/homepage.dart';
 import 'theme/theme.dart';
-import 'sample_feature/sample_item_details_view.dart';
 import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart';
-import 'widgets/loading_page.dart';
 
 /// The route widget of the website.
 class MyApp extends StatefulWidget {
@@ -47,6 +47,83 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Locale? _locale = const Locale('fr', 'FR');
   late SettingsController settingsController;
+
+  final GoRouter router = GoRouter(
+    routes: [
+      GoRoute(
+        path: '/',
+        name: HomePage.routeName,
+        builder: (_, __) => const HomePage(),
+        routes: [
+          GoRoute(
+            path: ProjectsPage.routeName,
+            name: ProjectsPage.routeName,
+            builder: (_, __) => const ProjectsPage(),
+          ),
+          GoRoute(
+            path: "${ProjectsPage.routeName}/:projectId",
+            // name: ProjectsPage.routeName,
+            builder: (context, state) {
+              // get article id from path
+              String? projectId = state.pathParameters["projectId"];
+
+              //? Not working
+              // when no project isn't specified, go to the all project.
+              // if (state.pathParameters.isEmpty || articleId == null) {
+              //   return const ProjectsPage();
+              // } else {
+              //   context.read<ProjectBloc>().add(
+              //         GetArticleByIdEvent(id: articleId),
+              //       );
+
+              //   return BlocBuilder<ProjectBloc, ArticleState<Article>>(
+              //     builder: (context, state) {
+              //       // get project
+              //       var project = state.articles?[articleId];
+
+              //       if (project == null) {
+
+              //         return const ProjectsPage();
+              //       } else {
+              //         return ProjectPageView(project: project);
+              //       }
+              //     },
+              //   );
+              // }
+
+              // Passing the article name to ProjectPageView instead
+              if (projectId != null) {
+                return ProjectPageView(
+                  projectId: projectId,
+                );
+              } else {
+                return const ProjectsPage();
+              }
+            },
+          ),
+          GoRoute(
+            path: PrayersPage.routeName,
+            name: PrayersPage.routeName,
+            builder: (_, __) => const PrayersPage(),
+          ),
+          GoRoute(
+            path: RosaryPage.routeName,
+            name: RosaryPage.routeName,
+            builder: (_, __) => const RosaryPage(),
+          ),
+          GoRoute(
+            path: WhoWeArePage.routeName,
+            name: WhoWeArePage.routeName,
+            builder: (_, __) => const WhoWeArePage(),
+          ),
+          GoRoute(
+              path: DonationPage.routeName,
+              name: DonationPage.routeName,
+              builder: (_, __) => const DonationPage()),
+        ],
+      ),
+    ],
+  );
 
   void changeLanguage(Locale locale) {
     setState(
@@ -86,7 +163,7 @@ class _MyAppState extends State<MyApp> {
         listenable: settingsController,
         builder: (BuildContext context, Widget? child) {
           return LayoutBuilder(
-            builder: (context, constraints) => MaterialApp(
+            builder: (context, constraints) => MaterialApp.router(
               // Providing a restorationScopeId allows the Navigator built by the
               // MaterialApp to restore the navigation stack when a user leaves and
               // returns to the app after it has been killed while running in the
@@ -123,56 +200,59 @@ class _MyAppState extends State<MyApp> {
                 useMaterial3: true,
               ),
               themeMode: settingsController.themeMode,
+
               // Define a function to handle named routes in order to support
               // Flutter web url navigation and deep linking.
-              onGenerateRoute: (RouteSettings routeSettings) {
-                log("Route settings is $routeSettings");
+              // onGenerateRoute: (RouteSettings routeSettings) {
+              //   log("Route settings is $routeSettings");
 
-                return MaterialPageRoute<void>(
-                  settings: routeSettings,
-                  builder: (BuildContext context) {
-                    return FutureBuilder(
-                      future: firebaseApp,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          switch (routeSettings.name) {
-                            case SettingsView.routeName:
-                              return SettingsView(
-                                  controller: settingsController);
-                            case SampleItemDetailsView.routeName:
-                              return const SampleItemDetailsView();
-                            case HomePage.routeName:
-                              return HomePage();
-                            case ProjectsPage.routeName:
-                              return const ProjectsPage();
-                            case PrayersPage.routeName:
-                              return const PrayersPage();
-                            case RosaryPage.routeName:
-                              return const RosaryPage();
-                            case SaintsPage.routeName:
-                              return const SaintsPage();
-                            case ArticlesPage.routeName:
-                              return const ArticlesPage();
-                            case WhoWeArePage.routeName:
-                              return const WhoWeArePage();
-                            case DonationPage.routeName:
-                              return const DonationPage();
-                            // todo: add 400 not found page
-                            default:
-                              return widget.home ?? HomePage();
-                          }
-                        } else {
-                          return Scaffold(
-                            body: LoadingView(
-                              work: firebaseApp,
-                            ),
-                          );
-                        }
-                      },
-                    );
-                  },
-                );
-              },
+              //   return MaterialPageRoute<void>(
+              //     settings: routeSettings,
+              //     builder: (BuildContext context) {
+              //       return FutureBuilder(
+              //         future: firebaseApp,
+              //         builder: (context, snapshot) {
+              //           if (snapshot.hasData) {
+              //             switch (routeSettings.name) {
+              //               case SettingsView.routeName:
+              //                 return SettingsView(
+              //                     controller: settingsController);
+              //               case SampleItemDetailsView.routeName:
+              //                 return const SampleItemDetailsView();
+              //               case HomePage.routeName:
+              //                 return HomePage();
+              //               case ProjectsPage.routeName:
+              //                 return const ProjectsPage();
+              //               case PrayersPage.routeName:
+              //                 return const PrayersPage();
+              //               case RosaryPage.routeName:
+              //                 return const RosaryPage();
+              //               case SaintsPage.routeName:
+              //                 return const SaintsPage();
+              //               case ArticlesPage.routeName:
+              //                 return const ArticlesPage();
+              //               case WhoWeArePage.routeName:
+              //                 return const WhoWeArePage();
+              //               case DonationPage.routeName:
+              //                 return const DonationPage();
+              //               // todo: add 400 not found page
+              //               default:
+              //                 return widget.home ?? HomePage();
+              //             }
+              //           } else {
+              //             return Scaffold(
+              //               body: LoadingView(
+              //                 work: firebaseApp,
+              //               ),
+              //             );
+              //           }
+              //         },
+              //       );
+              //     },
+              //   );
+              // },
+
+              routerConfig: router,
             ),
           );
         },

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../prayers/prayers_page.dart';
 import '../..//who_we_are/who_we_are.dart';
@@ -86,11 +87,11 @@ class HeroActions extends StatefulWidget {
 
 class _HeroActionsState extends State<HeroActions> {
   void primaryAction() {
-    Navigator.pushNamed(context, PrayersPage.routeName);
+    context.goNamed(PrayersPage.routeName);
   }
 
   void secondaryAction() {
-    Navigator.pushNamed(context, WhoWeArePage.routeName);
+    context.goNamed( WhoWeArePage.routeName);
   }
 
   @override

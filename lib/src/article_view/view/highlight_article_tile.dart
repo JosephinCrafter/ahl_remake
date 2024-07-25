@@ -90,9 +90,12 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                               // ),
                               Align(
                                 alignment: Alignment.center,
-                                child: CardArticleTile(
-                                  article: state.articles![0]!,
-                                ),
+                                child: (state.highlightArticle != null)
+                                    ? CardArticleTile(
+                                        article: state.highlightArticle!,
+                                      )
+                                    : const Text(
+                                        "[HighLightArticleTile] Error: HighLightArticle is null"),
                               ),
                               // Container(
                               //   margin: const EdgeInsets.symmetric(

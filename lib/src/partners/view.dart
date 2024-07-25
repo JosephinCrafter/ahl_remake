@@ -1,13 +1,17 @@
-import "package:ahl/src/ahl_barrel.dart";
-import "package:ahl/src/firebase_constants.dart";
-import "package:ahl/src/theme/theme.dart";
-import "package:ahl/src/utils/breakpoint_resolver.dart";
+import 'dart:developer';
+
+import "package:flutter/material.dart";
+
 import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
-import "package:flutter/material.dart";
 import "package:gap/gap.dart";
+
+import "package:ahl/src/ahl_barrel.dart";
+import "package:ahl/src/firebase_constants.dart";
+import "package:ahl/src/theme/theme.dart";
+import "package:ahl/src/utils/breakpoint_resolver.dart";
 
 import "package:session_storage/session_storage.dart";
 
@@ -32,30 +36,16 @@ class _PartnersViewState extends State<PartnersView>
 
     List<Uint8List> partnersLogo = [];
 
-    //todo: setup caching
-    // if (cache[partnersLogoCacheKey] != null) {
-    //   final cached = cache[partnersLogoCacheKey]!;
-
-    //   /// Prepare string to conversion.
-    //   /// remove '[[' and "]]" at the beginning and end of the String,
-    //   /// then split it using "],[" pattern. Then, transform to UInt8List.
-    //   cached
-    //       .substring(2, cached.length - 2)
-    //       .split('],[')
-    //       .map((element) => "[$element]")
-    //       .forEach(
-    //         (data) => partnersLogo.add(decodeUint8ListFromString(data)),
-    //       );
-
-    //   // return partnersLogo;
-    // }
-
     ListResult? results;
-
-    await storage.child('/partners').list().then((value) {
-      results = value;
-    });
-
+    try {
+      await storage.child('/partners').list().then(
+        (value) {
+          results = value;
+        },
+      );
+    } catch (e) {
+      log('[Partners]: Error loading partners logo: $e');
+    }
     if (results != null) {
       for (Reference ref in results!.items) {
         final Uint8List? data = await ref.getData();

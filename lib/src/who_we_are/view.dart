@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:session_storage/session_storage.dart';
 
 import '../project_space/view.dart';
@@ -122,7 +123,7 @@ class WhoWeAreTileState extends State<WhoWeAreTile>
 
     if (wantKeepAlive) {
       return AhlCard(
-        callback: () => Navigator.pushNamed(context, WhoWeArePage.routeName),
+        callback: () => context.goNamed(WhoWeArePage.routeName),
         constraints: constraints,
         image: Container(
           // margin: const EdgeInsets.all(Margins.small),
@@ -152,7 +153,7 @@ class WhoWeAreTileState extends State<WhoWeAreTile>
       return Container(
         constraints: constraints,
         child: AhlCard(
-          callback: () => Navigator.pushNamed(context, WhoWeArePage.routeName),
+          callback: () => context.goNamed(WhoWeArePage.routeName),
           constraints: BoxConstraints(
             maxWidth: ContentSize.maxWidth(
               MediaQuery.of(context).size.width,

@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/view/article_view.dart';
 import 'package:ahl/src/firebase_constants.dart';
+import 'package:ahl/src/pages/homepage/donation/donation_page.dart';
 import 'package:ahl/src/pages/projects/project_page_view.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/project_space/bloc.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:developer' as developer;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 import 'package:session_storage/session_storage.dart';
 
 import '../ahl_barrel.dart';
@@ -31,12 +33,12 @@ class ProjectsSpaceView extends StatefulWidget {
 
 class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
     with AutomaticKeepAliveClientMixin {
-  List<ArticleStorageUtils>? storageUtils;
+  List<ArticleStorageUtils> storageUtils = [];
   late List<Future> futureImageCovers;
 
   ArticleState<Article>? state;
 
-  List<Article?>? projects;
+  Map<String, Article?>? projects;
 
   final SessionStorage _cache = SessionStorage();
   final String _projectsCardsKey = '_ProjectCardsKey';
@@ -70,16 +72,20 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
       () {
         state = incomingState;
         projects = state?.articles;
-        storageUtils = projects
-            ?.map<ArticleStorageUtils>(
-              (element) => ArticleStorageUtils(
-                article: element!,
-                collection: 'projects',
-              ),
-            )
-            .toList();
-        if (storageUtils != null) {
-          futureImageCovers = storageUtils!
+
+        /// Build firebase storage utils for each project.
+        if (projects != null) {
+          for (var project in projects!.values) {
+            storageUtils.add(ArticleStorageUtils(
+              article: project!,
+              collection: 'projects',
+            ),);
+          }
+        }
+        
+        /// Launch get image for each of the Storage utils.
+        if (storageUtils.isNotEmpty) {
+          futureImageCovers = storageUtils
               .map<Future>(
                 (element) => element.getCoverImage(),
               )
@@ -112,7 +118,7 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
       );
     }
     // Transform project list into widgets
-    final projectCards = buildProjectCards(state?.articles);
+    final projectCards = buildProjectCards(state?.articles?.values.toList());
 
     return SpaceView(
       useGradient: false,
@@ -158,7 +164,9 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
             children: [
               TextButton(
                 onPressed: () {
-                  // Implement project found rising
+                  context.goNamed(
+                    DonationPage.routeName,
+                  );
                 },
                 child: Text(AppLocalizations.of(context)!.supportProject),
               ),
@@ -169,7 +177,7 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
                   foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(ProjectsPage.routeName);
+                  context.goNamed(ProjectsPage.routeName);
                 },
                 child: Text(AppLocalizations.of(context)!.allProjects),
               ),
@@ -218,6 +226,7 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
 
   List<Widget> buildProjectCards(List<Article?>? projects) {
     _cache[_projectsCardsKey] = "true";
+
     return (projects != null)
         ? projects.map<Widget>((project) {
             if (project != null) {

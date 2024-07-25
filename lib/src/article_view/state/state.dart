@@ -10,7 +10,7 @@ enum ArticleStatus {
   /// when a request has be done successfully
   failed,
 
-  /// when a request failed
+  /// when a request
 }
 
 class ArticleState<T extends Article> extends Equatable {
@@ -22,22 +22,32 @@ class ArticleState<T extends Article> extends Equatable {
   });
 
   final ArticleStatus status;
-  final List<T?>? articles;
+  final Map<String, T>? articles;
   final Object? error;
   final T? highlightArticle;
 
   ArticleState<T> copyWith({
     ArticleStatus? status,
-    List<T>? articles,
+    Map<String, T>? articles,
     Object? error,
     T? highlightArticle,
-  }) =>
-      ArticleState<T>(
-        status: status ?? this.status,
-        articles: articles ?? this.articles,
-        error: error ?? this.error,
-        highlightArticle: highlightArticle ?? this.highlightArticle,
-      );
+  }) {
+    Map<String, T> newArticles = {};
+
+    if (articles != null) {
+      newArticles.addAll(articles);
+    }
+    if (this.articles != null) {
+      newArticles.addAll(this.articles!);
+    }
+
+    return ArticleState<T>(
+      status: status ?? this.status,
+      articles: newArticles,
+      error: error ?? this.error,
+      highlightArticle: highlightArticle ?? this.highlightArticle,
+    );
+  }
 
   @override
   List<Object?> get props => [
