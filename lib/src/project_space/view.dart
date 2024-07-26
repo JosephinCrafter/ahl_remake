@@ -76,13 +76,15 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
         /// Build firebase storage utils for each project.
         if (projects != null) {
           for (var project in projects!.values) {
-            storageUtils.add(ArticleStorageUtils(
-              article: project!,
-              collection: 'projects',
-            ),);
+            storageUtils.add(
+              ArticleStorageUtils(
+                article: project!,
+                collection: 'projects',
+              ),
+            );
           }
         }
-        
+
         /// Launch get image for each of the Storage utils.
         if (storageUtils.isNotEmpty) {
           futureImageCovers = storageUtils
@@ -191,14 +193,18 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
   Widget buildCard(BuildContext context, Uint8List imageData, Article project) {
     return AhlCard(
       callback: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProjectPageView(
-              collection: projectsCollection,
-              project: project,
-            ),
-          ),
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => ProjectPageView(
+        //       collection: projectsCollection,
+        //       project: project,
+        //     ),
+        //   ),
+        // );
+        context.goNamed(
+          ProjectsPage.routeName,
+          pathParameters: {"projectId": project.id},
         );
 
         log("${project.contentPath}");

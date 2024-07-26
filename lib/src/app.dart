@@ -55,14 +55,14 @@ class _MyAppState extends State<MyApp> {
         name: HomePage.routeName,
         builder: (_, __) => const HomePage(),
         routes: [
-          GoRoute(
-            path: ProjectsPage.routeName,
-            name: ProjectsPage.routeName,
-            builder: (_, __) => const ProjectsPage(),
-          ),
+          // GoRoute(
+          //   path: ProjectsPage.routeName,
+          //   name: ProjectsPage.routeName,
+          //   builder: (_, __) => const ProjectsPage(),
+          // ),
           GoRoute(
             path: "${ProjectsPage.routeName}/:projectId",
-            // name: ProjectsPage.routeName,
+            name: ProjectsPage.routeName,
             builder: (context, state) {
               // get article id from path
               String? projectId = state.pathParameters["projectId"];
@@ -92,7 +92,7 @@ class _MyAppState extends State<MyApp> {
               // }
 
               // Passing the article name to ProjectPageView instead
-              if (projectId != null) {
+              if (projectId != null && projectId.trim() != "") {
                 return ProjectPageView(
                   projectId: projectId,
                 );
@@ -105,11 +105,13 @@ class _MyAppState extends State<MyApp> {
             path: PrayersPage.routeName,
             name: PrayersPage.routeName,
             builder: (_, __) => const PrayersPage(),
-          ),
-          GoRoute(
-            path: RosaryPage.routeName,
-            name: RosaryPage.routeName,
-            builder: (_, __) => const RosaryPage(),
+            routes: [
+              GoRoute(
+                path: RosaryPage.routeName,
+                name: RosaryPage.routeName,
+                builder: (_, __) => const RosaryPage(),
+              ),
+            ],
           ),
           GoRoute(
             path: WhoWeArePage.routeName,

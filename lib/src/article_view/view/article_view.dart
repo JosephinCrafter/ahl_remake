@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:web/web.dart' as web;
 
 import 'package:gap/gap.dart';
 import 'package:flutter_animate/flutter_animate.dart';

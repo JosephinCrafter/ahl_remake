@@ -229,7 +229,9 @@ class _ArticleContentViewState extends State<ArticleContentView>
         alignment: Alignment.centerLeft,
         child: OutlinedButton.icon(
           onPressed: () {
-            //todo: implement sharing mechanism
+            var router = GoRouter.of(context);
+            String location = router.routeInformationProvider.value.uri.path;
+            Share.share("https://aujourdhiulavenir.org$location");
           },
           label: const Text('Partager'),
           icon: const Icon(Icons.share_outlined),
