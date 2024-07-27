@@ -100,24 +100,35 @@ class _ArticleContentViewState
 
     minimalisticCorporateConfig = MarkdownConfig(
       configs: [
-        ImgConfig(builder: (String url, Map<String, String>? attribute) {
-          try {
-            log(url);
-            final Future future = firebase.storage.child(url).getData();
-            return AhlImageViewer.fromFuture(
-              key: ValueKey(url),
-              future: future,
-              attributes: attribute,
-            );
-            // return Container();
-          } catch (e) {
-            log("[ArticleContentViewState] Error getting image: $e");
-            return Container(
-              alignment: Alignment.center,
-              child: const Icon(Icons.warning),
-            );
-          }
-        }),
+        ImgConfig(
+          builder: (String url, Map<String, String>? attribute) {
+            try {
+              log(url);
+              final Future future = firebase.storage.child(url).getData();
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: resolveForBreakPoint(
+                    screenWidth,
+                    other: 575,
+                    small: 300,
+                  ),
+                ),
+                child: AhlImageViewer.fromFuture(
+                  key: ValueKey(url),
+                  future: future,
+                  attributes: attribute,
+                ),
+              );
+              // return Container();
+            } catch (e) {
+              log("[ArticleContentViewState] Error getting image: $e");
+              return Container(
+                alignment: Alignment.center,
+                child: const Icon(Icons.warning),
+              );
+            }
+          },
+        ),
 
         /// todo: implements styles
         ///
@@ -164,30 +175,35 @@ class _ArticleContentViewState
   Widget build(BuildContext context) {
     screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      key: ValueKey(widget.article.title),
-      margin: EdgeInsets.symmetric(
-        horizontal: resolveForBreakPoint(
-          screenWidth,
-          other: Margins.small,
-          extraHuge: Margins.extraHuge,
-          huge: Margins.huge,
-          extraLarge: Margins.extraLarge,
-          large: Margins.large,
+    return Center(
+      child: Container(
+        key: ValueKey(widget.article.title),
+        constraints:
+            BoxConstraints(maxWidth: ContentSize.maxWidth(screenWidth)),
+        // constraints: const BoxConstraints(maxWidth: 1024),
+        margin: EdgeInsets.symmetric(
+          horizontal: resolveForBreakPoint(
+            screenWidth,
+            other: Margins.small / 2,
+            // extraHuge: Margins.extraHuge,
+            // huge: Margins.huge,
+            // extraLarge: Margins.extraLarge,
+            // large: Margins.large,
+          ),
         ),
+        // padding: EdgeInsets.symmetric(
+        //   horizontal: resolveForBreakPoint(
+        //     screenWidth,
+        //     small: Margins.small,
+        //     medium: Margins.small,
+        //     large: Margins.large,
+        //     extraLarge: Margins.extraLarge,
+        //     other: Margins.huge,
+        //   ),
+        // ),
+
+        child: buildMarkdownBlock(context),
       ),
-      padding: EdgeInsets.symmetric(
-        horizontal: resolveForBreakPoint(
-          screenWidth,
-          small: Margins.small,
-          medium: Margins.small,
-          large: Margins.large,
-          extraLarge: Margins.extraLarge,
-          other: Margins.huge,
-        ),
-      ),
-      constraints: const BoxConstraints(maxWidth: 1024),
-      child: buildMarkdownBlock(context),
     );
   }
 
@@ -270,12 +286,16 @@ class _ArticleContentViewState
           Container(
             padding: const EdgeInsets.all(Paddings.medium),
             alignment: Alignment.centerLeft,
-            child: Text(widget.article.relations?[0]['preview']),
+            child: Text(
+              widget.article.relations?[0]['preview'],
+            ),
           ),
           // share button
           Container(
             padding: const EdgeInsets.symmetric(
-                vertical: 10, horizontal: Paddings.medium),
+              vertical: 20,
+              horizontal: Paddings.medium,
+            ),
             child: shareButton,
           ),
           Container(
@@ -290,7 +310,14 @@ class _ArticleContentViewState
 
           // markdown content
           Container(
-            padding: const EdgeInsets.all(Paddings.medium),
+            padding: EdgeInsets.all(
+              resolveForBreakPoint(
+                screenWidth,
+                other: Paddings.big,
+                small: 10,
+                medium: 10,
+              ),
+            ),
             child: (cache[articleKey] == null)
                 ? FutureBuilder(
                     future: content,
@@ -343,7 +370,8 @@ class _ArticleContentViewState
                   ),
           ),
           Container(
-            padding: const EdgeInsets.all(Paddings.medium),
+            padding: const EdgeInsets.symmetric(
+                vertical: 20, horizontal: Paddings.medium),
             child: shareButton,
           ),
 
@@ -357,9 +385,6 @@ class _ArticleContentViewState
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => cache[articleKey] != null;
 }
 
 class AhlImageViewer extends StatefulWidget {

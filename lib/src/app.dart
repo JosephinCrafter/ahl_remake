@@ -55,51 +55,50 @@ class _MyAppState extends State<MyApp> {
         name: HomePage.routeName,
         builder: (_, __) => const HomePage(),
         routes: [
-          // GoRoute(
-          //   path: ProjectsPage.routeName,
-          //   name: ProjectsPage.routeName,
-          //   builder: (_, __) => const ProjectsPage(),
-          // ),
           GoRoute(
-            path: "${ProjectsPage.routeName}/:projectId",
+            path: ProjectsPage.routeName,
             name: ProjectsPage.routeName,
-            builder: (context, state) {
-              // get article id from path
-              String? projectId = state.pathParameters["projectId"];
+            builder: (_, __) => const ProjectsPage(),
+            routes: [
+              GoRoute(
+                path: ":projectId",
+                // name: ProjectsPage.routeName,
+                builder: (context, state) {
+                  // get article id from path
+                  String? projectId = state.pathParameters["projectId"];
 
-              //? Not working
-              // when no project isn't specified, go to the all project.
-              // if (state.pathParameters.isEmpty || articleId == null) {
-              //   return const ProjectsPage();
-              // } else {
-              //   context.read<ProjectBloc>().add(
-              //         GetArticleByIdEvent(id: articleId),
-              //       );
+                  //? Not working
+                  // when no project isn't specified, go to the all project.
+                  // if (state.pathParameters.isEmpty || articleId == null) {
+                  //   return const ProjectsPage();
+                  // } else {
+                  //   context.read<ProjectBloc>().add(
+                  //         GetArticleByIdEvent(id: articleId),
+                  //       );
+                  //   return BlocBuilder<ProjectBloc, ArticleState<Article>>(
+                  //     builder: (context, state) {
+                  //       // get project
+                  //       var project = state.articles?[articleId];
+                  //       if (project == null) {
+                  //         return const ProjectsPage();
+                  //       } else {
+                  //         return ProjectPageView(project: project);
+                  //       }
+                  //     },
+                  //   );
+                  // }
 
-              //   return BlocBuilder<ProjectBloc, ArticleState<Article>>(
-              //     builder: (context, state) {
-              //       // get project
-              //       var project = state.articles?[articleId];
-
-              //       if (project == null) {
-
-              //         return const ProjectsPage();
-              //       } else {
-              //         return ProjectPageView(project: project);
-              //       }
-              //     },
-              //   );
-              // }
-
-              // Passing the article name to ProjectPageView instead
-              if (projectId != null && projectId.trim() != "") {
-                return ProjectPageView(
-                  projectId: projectId,
-                );
-              } else {
-                return const ProjectsPage();
-              }
-            },
+                  // Passing the article name to ProjectPageView instead
+                  if (projectId != null && projectId.trim() != "") {
+                    return ProjectPageView(
+                      projectId: projectId,
+                    );
+                  } else {
+                    return const ProjectsPage();
+                  }
+                },
+              ),
+            ],
           ),
           GoRoute(
             path: PrayersPage.routeName,

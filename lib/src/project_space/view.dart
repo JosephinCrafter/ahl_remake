@@ -202,9 +202,8 @@ class _ProjectsSpaceViewState extends State<ProjectsSpaceView>
         //     ),
         //   ),
         // );
-        context.goNamed(
-          ProjectsPage.routeName,
-          pathParameters: {"projectId": project.id},
+        context.go(
+          "/${ProjectsPage.routeName}/${project.id}",
         );
 
         log("${project.contentPath}");

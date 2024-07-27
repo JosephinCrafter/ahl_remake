@@ -32,6 +32,7 @@ import '../../article_view/view/article_view.dart';
 class ProjectsPage extends StatefulWidget {
   const ProjectsPage({super.key});
 
+  /// projects
   static const String routeName = 'projects';
   static ScrollController controller = ScrollController();
 

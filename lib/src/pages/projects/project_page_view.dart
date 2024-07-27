@@ -1,6 +1,7 @@
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/theme/theme.dart';
+import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,6 +10,7 @@ import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
@@ -322,6 +324,9 @@ class ProjectDescriptionContentView extends StatelessWidget {
           isProject: true,
           article: article,
           collection: "/projects",
+        ),
+        Gap(
+          resolveSeparatorSize(context),
         ),
         const NewsLetterPrompt(),
         const AhlDivider(leading: 0, trailing: 0),
