@@ -69,8 +69,8 @@ class ArticleContentView extends StatefulWidget {
   State<ArticleContentView> createState() => _ArticleContentViewState();
 }
 
-class _ArticleContentViewState extends State<ArticleContentView>
-    with AutomaticKeepAliveClientMixin {
+class _ArticleContentViewState
+    extends State<ArticleContentView> /*with AutomaticKeepAliveClientMixin*/ {
   Future<String> contentFetching() async {
     final bytes = await firebase.storage
         .child(
@@ -88,6 +88,7 @@ class _ArticleContentViewState extends State<ArticleContentView>
   late String articleKey = 'article_${widget.article.title}';
   late SessionStorage cache = SessionStorage();
   late Uint8List? _coverImage;
+  late MarkdownConfig minimalisticCorporateConfig;
 
   @override
   void initState() {
@@ -96,54 +97,75 @@ class _ArticleContentViewState extends State<ArticleContentView>
     super.initState();
 
     _coverImage = widget.articleUtils.coverImage;
+
+    minimalisticCorporateConfig = MarkdownConfig(
+      configs: [
+        ImgConfig(builder: (String url, Map<String, String>? attribute) {
+          try {
+            log(url);
+            final Future future = firebase.storage.child(url).getData();
+            return AhlImageViewer.fromFuture(
+              key: ValueKey(url),
+              future: future,
+              attributes: attribute,
+            );
+            // return Container();
+          } catch (e) {
+            log("[ArticleContentViewState] Error getting image: $e");
+            return Container(
+              alignment: Alignment.center,
+              child: const Icon(Icons.warning),
+            );
+          }
+        }),
+
+        /// todo: implements styles
+        ///
+        H1Config(
+          style: const H1Config().style.copyWith(fontFamily: "Butler"),
+        ),
+
+        H2Config(
+          style: const H2Config().style.copyWith(fontFamily: "Butler"),
+        ),
+        PConfig(
+            textStyle:
+                const PConfig().textStyle.copyWith(fontFamily: 'Poppins')),
+        LinkConfig(
+          onTap: (url) {
+            launchUrl(Uri.parse(url));
+          },
+        ),
+        // ImgConfig(
+        //   builder: (url, attributes) {
+        //     return Column(
+        //       children: [
+        //         Container(
+        //           constraints: BoxConstraints(
+        //             minWidth: 320,
+        //             maxWidth: ContentSize.maxWidth(screenWidth),
+        //           ),
+        //           decoration: BoxDecoration(
+        //             image: DecorationImage(image: NetworkImage(url)),
+        //             borderRadius: BorderRadius.circular(BorderSizes.medium),
+        //           ),
+        //           clipBehavior: Clip.hardEdge,
+        //         ),
+        //         if (attributes['name'] != null) Text('${attributes["name"]}'),
+        //       ],
+        //     );
+        //   },
+        // ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    // Style for Markdown from Flutter_markdown
-    // final styleSheet = MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-    //   p: AhlTheme.bodyMedium,
-    //   h1: AhlTheme.headlineLarge,
-    //   h2: AhlTheme.headlineMedium,
-    //   h3: AhlTheme.headlineSmall,
-    //   h4: AhlTheme.titleLarge,
-    //   h5: AhlTheme.titleMedium,
-    //   h6: AhlTheme.titleSmall,
-    //   a: AhlTheme.label.copyWith(color: AhlTheme.primaryColor),
-    //   code: AhlTheme.bodySmall.copyWith(color: AhlTheme.blackCharcoal),
-    //   blockquote: AhlTheme.bodyMedium.copyWith(
-    //     color: AhlTheme.blackCharcoal,
-    //     fontStyle: FontStyle.italic,
-    //   ),
-    //   strong: AhlTheme.bodyMedium.copyWith(fontWeight: FontWeight.bold),
-    //   em: AhlTheme.bodyMedium.copyWith(fontStyle: FontStyle.italic),
-    // );
-    // styleSheet:
-    //     MarkdownStyleSheet.fromTheme(Theme.of(context)).copyWith(
-    //   p: AhlTheme.bodyMedium,
-    //   h1: AhlTheme.headlineLarge,
-    //   h2: AhlTheme.headlineMedium,
-    //   h3: AhlTheme.headlineSmall,
-    //   h4: AhlTheme.titleLarge,
-    //   h5: AhlTheme.titleMedium,
-    //   h6: AhlTheme.titleSmall,
-    //   a: AhlTheme.label.copyWith(color: AhlTheme.primaryColor),
-    //   code: AhlTheme.bodySmall
-    //       .copyWith(color: AhlTheme.blackCharcoal),
-    //   blockquote: AhlTheme.bodyMedium.copyWith(
-    //     color: AhlTheme.blackCharcoal,
-    //     fontStyle: FontStyle.italic,
-    //   ),
-    //   strong: AhlTheme.bodyMedium
-    //       .copyWith(fontWeight: FontWeight.bold),
-    //   em: AhlTheme.bodyMedium
-    //       .copyWith(fontStyle: FontStyle.italic),
-    // ),
-
     screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
+      key: ValueKey(widget.article.title),
       margin: EdgeInsets.symmetric(
         horizontal: resolveForBreakPoint(
           screenWidth,
@@ -170,59 +192,6 @@ class _ArticleContentViewState extends State<ArticleContentView>
   }
 
   Widget buildMarkdownBlock(BuildContext context) {
-    MarkdownConfig minimalisticCorporateConfig = MarkdownConfig(
-      configs: [
-        ImgConfig(builder: (String url, Map<String, String>? attribute) {
-          final Future future = firebase.storage.child(url).getData();
-          return AhlImageViewer.fromFuture(
-            future: future,
-            attributes: attribute,
-          );
-        }),
-
-        /// todo: implements styles
-        ///
-        H1Config(
-          style: const H1Config().style.copyWith(fontFamily: "Butler"),
-        ),
-
-        H2Config(
-          style: const H2Config().style.copyWith(fontFamily: "Butler"),
-        ),
-        PConfig(
-            textStyle:
-                const PConfig().textStyle.copyWith(fontFamily: 'Poppins')),
-        LinkConfig(
-          onTap: (url) {
-            launchUrl(Uri.parse(url));
-          },
-          style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                color: Colors.blue,
-              ),
-        ),
-        // ImgConfig(
-        //   builder: (url, attributes) {
-        //     return Column(
-        //       children: [
-        //         Container(
-        //           constraints: BoxConstraints(
-        //             minWidth: 320,
-        //             maxWidth: ContentSize.maxWidth(screenWidth),
-        //           ),
-        //           decoration: BoxDecoration(
-        //             image: DecorationImage(image: NetworkImage(url)),
-        //             borderRadius: BorderRadius.circular(BorderSizes.medium),
-        //           ),
-        //           clipBehavior: Clip.hardEdge,
-        //         ),
-        //         if (attributes['name'] != null) Text('${attributes["name"]}'),
-        //       ],
-        //     );
-        //   },
-        // ),
-      ],
-    );
-
     // share button
     Widget shareButton = Builder(
       builder: (context) => Align(

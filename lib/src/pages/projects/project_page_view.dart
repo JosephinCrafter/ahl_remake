@@ -41,7 +41,17 @@ class ProjectPageView extends StatelessWidget {
     }
     // When no project is provided but instead, a projectId
     return BlocBuilder<ProjectBloc, ArticleState<Article>>(
-      buildWhen: (previous, current) => previous.status != current.status,
+      buildWhen: (previous, current) {
+        bool needCallBuilder = true;
+
+        if (previous.articles == null) {
+          needCallBuilder = true;
+        } else {
+          needCallBuilder = !previous.articles!.keys.contains(projectId);
+        }
+
+        return needCallBuilder;
+      },
       builder: (context, state) {
         context.read<ProjectBloc>().add(GetArticleByIdEvent(id: projectId));
         // get project
