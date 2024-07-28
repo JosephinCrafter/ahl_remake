@@ -245,7 +245,7 @@ class _ArticleContentViewState
     );
 
     return Card(
-      color: const Color(0xFFFAFAFA),
+      color: Theme.of(context).colorScheme.surface,
       child:
           // padding: const EdgeInsets.all(Paddings.medium),
           Column(

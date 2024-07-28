@@ -1,5 +1,8 @@
 part of '../ahl_barrel.dart';
 
+/// Maximum number of suggestions in Article Based architecture.
+const int maxSuggestionArticle = 10;
+
 class BorderSizes {
   /// 45
   static const double huge = 45;

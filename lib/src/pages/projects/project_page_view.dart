@@ -1,4 +1,5 @@
 import 'package:ahl/src/ahl_barrel.dart';
+
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/theme/theme.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
@@ -21,6 +22,7 @@ import '../../pages/homepage/donation/donation_page.dart';
 import '../../pages/projects/projects_page.dart';
 import '../../project_space/bloc.dart';
 import '../../widgets/widgets.dart';
+import '../../ahl_barrel.dart';
 
 class ProjectPageView extends StatelessWidget {
   const ProjectPageView({
@@ -145,7 +147,9 @@ class _ProjectPageContentViewState extends State<_ProjectPageContentView>
     return Scaffold(
       key: ValueKey(widget.project),
       appBar: AhlAppBar(
-        preferredSize: const Size.fromHeight(75 + 64),
+        preferredSize: Size.fromHeight(
+          (needDisplayTitleInAppBar) ? 75 + 64 : 75 + 29,
+        ),
         bottomBar: Flexible(
           flex: 1,
           child: Column(
@@ -300,17 +304,51 @@ class _ProjectPageContentViewState extends State<_ProjectPageContentView>
 class ProjectDescriptionContentView extends StatelessWidget {
   const ProjectDescriptionContentView({
     super.key,
-    required this.article,
+    required Article article,
     this.scrollController,
-  });
+  }) : _currentArticle = article;
 
-  final Article article;
+  final Article _currentArticle;
   final ScrollController? scrollController;
 
+  Article get currentArticle => _currentArticle;
+
   Widget buildSuggestions(BuildContext context) {
-    return Container(
-      color: Theme.of(context).colorScheme.surfaceContainer,
-      height: 700,
+    return BlocBuilder<ProjectBloc, ArticleState<Article>>(
+      key: ValueKey("suggestion_${currentArticle.id}"),
+      buildWhen: (previous, currentArticle) {
+        bool isUnique = false;
+        bool isCorrectlyCharged = false;
+        if (previous.status == ArticleStatus.succeed) {
+          if (previous.articles!.keys.length <= 1) {
+            isUnique = true;
+          } else {
+            isCorrectlyCharged = true;
+          }
+        }
+
+        return !isUnique || !isCorrectlyCharged;
+      },
+      builder: (context, state) {
+        context.read<ProjectBloc>().add(
+              const GetArticleListEvent(
+                foldLength: maxSuggestionArticle,
+              ),
+            );
+        Map<String, Article>? otherArticles =
+            context.read<ProjectBloc>().state.articles;
+        List<Widget> projectCards = [];
+        if (otherArticles != null || otherArticles!.keys.isNotEmpty) {
+          for (String articleId in otherArticles.keys) {
+            if (articleId != currentArticle.id) {
+              projectCards.add(
+                ProjectCard(article: otherArticles[articleId]!),
+              );
+            }
+          }
+        }
+        return Wrap(children: projectCards);
+      },
     );
   }
 
@@ -320,18 +358,36 @@ class ProjectDescriptionContentView extends StatelessWidget {
     return ListView(
       controller: scrollController,
       children: [
-        ArticleContentView(
-          isProject: true,
-          article: article,
-          collection: "/projects",
-        ),
-        Gap(
-          resolveSeparatorSize(context),
+        Container(
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
+          child: Column(
+            children: [
+              ArticleContentView(
+                isProject: true,
+                article: currentArticle,
+                collection: "/projects",
+              ),
+              Gap(
+                resolveSeparatorSize(context),
+              ),
+            ],
+          ),
         ),
         const NewsLetterPrompt(),
+        Gap(resolveSeparatorSize(context)),
         const AhlDivider(leading: 0, trailing: 0),
-        buildSuggestions(context),
+        Gap(resolveSeparatorSize(context)),
+        Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: ContentSize.maxWidth(MediaQuery.sizeOf(context).width),
+            ),
+            child: buildSuggestions(context),
+          ),
+        ),
+        Gap(resolveSeparatorSize(context)),
         const AhlDivider(leading: 0, trailing: 0),
+        Gap(resolveSeparatorSize(context)),
         const AhlFooter(),
       ],
     );

@@ -25,6 +25,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/widgets/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'package:session_storage/session_storage.dart';
 
 import '../../article_view/view/article_view.dart';
@@ -391,17 +392,16 @@ class _AllArticleViewState extends State<AllArticleView> {
   Widget build(BuildContext context) {
     return BlocConsumer<ProjectBloc, ArticleState<Article>>(
       builder: (BuildContext context, ArticleState<Article> state) {
-        List<Article?>? projectInProgress = state.articles
-            ?.values.where(
-                (article) => article.relations?[0]['status'] == 'inProgress')
+        List<Article?>? projectInProgress = state.articles?.values
+            .where((article) => article.relations?[0]['status'] == 'inProgress')
             .toList();
-        List<Article?>? projectWaiting = state.articles
-            ?.values.where((article) =>
-                article.relations?[0]['status'] == 'waitingBudget')
+        List<Article?>? projectWaiting = state.articles?.values
+            .where(
+                (article) => article.relations?[0]['status'] == 'waitingBudget')
             .toList();
 
-        List<Article?>? projectDone = state.articles
-            ?.values.where((article) => article.relations?[0]['status'] == 'done')
+        List<Article?>? projectDone = state.articles?.values
+            .where((article) => article.relations?[0]['status'] == 'done')
             .toList();
 
         switch (state.status) {
@@ -468,11 +468,11 @@ class ProjectsView extends StatefulWidget {
 
   @override
   State<ProjectsView> createState() {
-    return _ProjectsViewState();
+    return ProjectsViewState();
   }
 }
 
-class _ProjectsViewState extends State<ProjectsView> {
+class ProjectsViewState extends State<ProjectsView> {
   final ScrollController _controller = ScrollController();
 
   List<Widget> buildProjectWidget(BuildContext context) {
@@ -480,62 +480,13 @@ class _ProjectsViewState extends State<ProjectsView> {
     for (Article? article in widget.articles) {
       if (article != null) {
         projectWidgets.add(
-          buildCard(
-            context,
-            article,
+          ProjectCard(
+            article: article,
           ),
         );
       }
     }
     return projectWidgets;
-  }
-
-  Widget buildCard(BuildContext context, Article article) {
-    return AhlCard(
-      callback: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProjectPageView(
-              collection: projectsCollection,
-              project: article,
-            ),
-          ),
-        );
-
-        log("${article.contentPath}");
-      },
-      image: FutureBuilder(
-          future: ArticleStorageUtils(
-            article: article,
-            collection: projectsCollection,
-          ).getCoverImage(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Container(
-                // margin: const EdgeInsets.all(Paddings.medium),
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: MemoryImage(snapshot.data!),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.circular(BorderSizes.small),
-                ),
-              );
-            } else {
-              return Container(
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
-              );
-            }
-          }),
-      // label: Text(
-      //   "${article.relations?[0]['status']}",
-      // ),
-      title: Text(
-        "${article.title}",
-      ),
-    ).animate().fadeIn(curve: Curves.easeIn).slideY(begin: 0.125, end: 0);
   }
 
   @override
@@ -630,5 +581,63 @@ class _ProjectsViewState extends State<ProjectsView> {
         ],
       ),
     );
+  }
+}
+
+/// A widget that build the project cards.
+class ProjectCard extends StatelessWidget {
+  const ProjectCard({
+    super.key,
+    required this.article,
+  });
+
+  final Article article;
+
+  @override
+  Widget build(BuildContext context) {
+    return AhlCard(
+      callback: () {
+        context.go("/${ProjectsPage.routeName}/${article.id}"
+            // MaterialPageRoute(
+            //   builder: (context) => ProjectPageView(
+            //     collection: projectsCollection,
+            //     project: article,
+            //   ),
+            // ),
+            );
+
+        log("${article.contentPath}");
+      },
+      image: FutureBuilder(
+          future: ArticleStorageUtils(
+            article: article,
+            collection: projectsCollection,
+          ).getCoverImage(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Container(
+                // margin: const EdgeInsets.all(Paddings.medium),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: MemoryImage(snapshot.data!),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(BorderSizes.small),
+                ),
+              );
+            } else {
+              return Container(
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(),
+              );
+            }
+          }),
+      // label: Text(
+      //   "${article.relations?[0]['status']}",
+      // ),
+      title: Text(
+        "${article.title}",
+      ),
+    ).animate().fadeIn(curve: Curves.easeIn).slideY(begin: 0.125, end: 0);
   }
 }
