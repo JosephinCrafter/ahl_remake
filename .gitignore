@@ -9,6 +9,9 @@
 .history
 .svn/
 migrate_working_dir/
+functions/venv/
+.vscode/
+functions/venv/Scripts/
 
 # IntelliJ related
 *.iml

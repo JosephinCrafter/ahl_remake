@@ -8,7 +8,7 @@
             "name": "ahl_remake",
             "request": "launch",
             "type": "dart"
-        },
+        },  
         {
             "name": "ahl_remake (profile mode)",
             "request": "launch",
