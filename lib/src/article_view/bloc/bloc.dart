@@ -21,6 +21,8 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
     on<GetArticleListEvent>(_onGetArticleListEvent);
     on<InitializeArticleBlocEvent>(_onInitializeArticleBlocEvent);
     add(InitializeArticleBlocEvent());
+    on<GetHighlightPathEvent>(_onGetHighlightPath);
+    on<GetHighlightCollectionEvent>(_onGetHighlightCollection);
   }
 
   ArticleBloc.inCollection(
@@ -40,6 +42,41 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
   }
 
   final fire_art.ArticlesRepository<fire_art.Article> _repo;
+
+  void _onGetHighlightPath(GetHighlightPathEvent event, Emitter emit) async {
+    emit(
+      state.copyWith(
+        status: ArticleStatus.initial,
+      ),
+    );
+
+    var highlightPath = await _repo.getHighlightedPath();
+
+    emit(
+      state.copyWith(
+        status: ArticleStatus.succeed,
+        highlightPath: highlightPath,
+      ),
+    );
+  }
+
+  void _onGetHighlightCollection(
+      GetHighlightCollectionEvent event, Emitter emit) async {
+    emit(
+      state.copyWith(
+        status: ArticleStatus.initial,
+      ),
+    );
+
+    var highlightCollection = await _repo.getHighlightedCollection();
+
+    emit(
+      state.copyWith(
+        status: ArticleStatus.succeed,
+        highlightCollection: highlightCollection,
+      ),
+    );
+  }
 
   void _onInitializeArticleBlocEvent(
     InitializeArticleBlocEvent event,
@@ -84,6 +121,13 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
     Object? error;
     fire_art.Article? result;
 
+    emit(
+      state.copyWith(
+        status: ArticleStatus.initial,
+        
+      )
+    );
+
     try {
       result = await _repo.getHighlighted();
       if (result != null) {
@@ -107,7 +151,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
           // highlightArticle: null,
         ));
       }
-    } finally {}
+    }
   }
 
   void _onGetArticleListEvent(GetArticleListEvent event, Emitter emit) async {
@@ -124,7 +168,9 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
       }
 
       // build map articles
-      Map<String, Article>? mapArticles = (articles != null)? { for (var article in articles) article.id : article }:null;
+      Map<String, Article>? mapArticles = (articles != null)
+          ? {for (var article in articles) article.id: article}
+          : null;
       emit(
         state.copyWith(
             articles: mapArticles, status: ArticleStatus.succeed, error: null),

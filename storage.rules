@@ -27,5 +27,8 @@ service firebase.storage {
     match /prayers/{allPaths=**} {
       allow read;
     }
+    match /novena/{allPaths=**}{
+      allow read;
+    }
   }
 }

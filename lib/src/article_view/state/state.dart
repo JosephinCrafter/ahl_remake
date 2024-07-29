@@ -19,18 +19,24 @@ class ArticleState<T extends Article> extends Equatable {
     this.articles,
     this.error,
     this.highlightArticle,
+    this.highlightCollection,
+    this.highlightPath,
   });
 
   final ArticleStatus status;
   final Map<String, T>? articles;
   final Object? error;
   final T? highlightArticle;
+  final String? highlightPath;
+  final String? highlightCollection;
 
   ArticleState<T> copyWith({
     ArticleStatus? status,
     Map<String, T>? articles,
     Object? error,
     T? highlightArticle,
+    String? highlightPath,
+    String? highlightCollection,
   }) {
     Map<String, T> newArticles = {};
 
@@ -46,6 +52,8 @@ class ArticleState<T extends Article> extends Equatable {
       articles: newArticles,
       error: error ?? this.error,
       highlightArticle: highlightArticle ?? this.highlightArticle,
+      highlightCollection: highlightCollection ?? this.highlightCollection,
+      highlightPath: highlightPath ?? this.highlightPath,
     );
   }
 
@@ -55,5 +63,7 @@ class ArticleState<T extends Article> extends Equatable {
         articles,
         error,
         highlightArticle,
+        highlightPath,
+        highlightCollection,
       ];
 }

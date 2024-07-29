@@ -77,6 +77,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    /// Optimize hero header image.
     precacheImage(AssetImage(AhlAssets.heroBk), context);
 
     return LayoutBuilder(
@@ -123,25 +124,27 @@ class _HomePageState extends State<HomePage> {
               //   bottom: _bottom,
 
               //   child:
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  height: 700,
-                  constraints: BoxConstraints(
-                    maxWidth: resolveForBreakPoint(
-                      MediaQuery.of(context).size.width,
-                      // other: 1483,
-                      other: 1325,
-                      large: 925,
-                    ),
-                  ),
-                  child: Image.asset(AhlAssets.heroBk),
-                ).animate().fadeIn(
-                      curve: Curves.easeIn,
-                      duration: Durations.long4,
-                    ),
-                // ),
-              ),
+              (constraints.maxWidth > ScreenSizes.large)
+                  ? Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        height: 700,
+                        constraints: BoxConstraints(
+                          maxWidth: resolveForBreakPoint(
+                            MediaQuery.of(context).size.width,
+                            // other: 1483,
+                            other: 1325,
+                            large: 925,
+                          ),
+                        ),
+                        child: Image.asset(AhlAssets.heroBk),
+                      ).animate().fadeIn(
+                            curve: Curves.easeIn,
+                            duration: Durations.long4,
+                          ),
+                      // ),
+                    )
+                  : const SizedBox.shrink(),
               Scrollbar(
                 controller: scrollController,
                 // thumbVisibility: true,

@@ -12,13 +12,22 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
   final SessionStorage _cache = SessionStorage();
 
   final String _highlightArticleStateKey = 'isHighlightArticleReady';
+  late Future computation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    computation = firebase.firebaseApp;
+  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     return FutureBuilder(
       key: const Key('Highlight Article'),
-      future: firebase.firebaseApp,
+      future: computation,
       builder: (context, snapshot) {
         // if firebase is correctly initialized
         if (snapshot.hasData) {
@@ -26,11 +35,13 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
             create: (BuildContext context) => ArticleBloc(
               repo: ArticlesRepository(
                 firestoreInstance: firebase.firestore,
-                collection: 'articles',
+                // collection: 'articles',
               ),
-            )..add(
+            )
+              ..add(
                 const GetHighlightArticleEvent(),
-              ),
+              )
+              ..add(const GetHighlightCollectionEvent()),
             child: Align(
               alignment: Alignment.center,
               child: Container(
@@ -40,8 +51,12 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                   ),
                 ),
                 child: BlocBuilder<ArticleBloc, ArticleState<Article>>(
+                  // buildWhen: (previous, current) =>
+                  //     current.highlightCollection == null || current.articles == null || current.articles!.isEmpty,
                   builder: (context, state) {
+                    String? highlightCollection = state.highlightCollection;
                     switch (state.status) {
+                      /// failed to trigger state
                       case ArticleStatus.failed:
                         developer.log('${state.error}');
                         return Container(
@@ -56,6 +71,8 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                             color: Theme.of(context).colorScheme.error,
                           ),
                         );
+
+                      /// case done;
                       case ArticleStatus.succeed:
                         // update caching info
 
@@ -93,6 +110,8 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                                 child: (state.highlightArticle != null)
                                     ? CardArticleTile(
                                         article: state.highlightArticle!,
+                                        collection:
+                                            highlightCollection ?? 'articles',
                                       )
                                     : const Text(
                                         "[HighLightArticleTile] Error: HighLightArticle is null"),
@@ -115,15 +134,29 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                             ],
                           ),
                         );
+
+                      /// while waiting
                       default:
                         return Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest,
+                            borderRadius:
+                                BorderRadius.circular(BorderSizes.medium),
+                          ),
+
                           height: 408,
                           margin: const EdgeInsets.symmetric(
                             horizontal: Margins.medium,
                           ),
                           alignment: Alignment.center,
-                          child: const CircularProgressIndicator(),
-                        );
+                          // child: const CircularProgressIndicator(),
+                        )
+                            .animate(
+                              onPlay: (controller) => controller.repeat(),
+                            )
+                            .shimmer();
                     }
                   },
                 ),

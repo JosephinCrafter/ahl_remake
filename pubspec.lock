@@ -301,10 +301,10 @@ packages:
     dependency: "direct dev"
     description:
       name: fake_cloud_firestore
-      sha256: "2a3754f074d3993a4a62240b4b9b71f1d0c1290cb63a0fa76b57aa1779d37aa8"
+      sha256: "59dfb28913a6f3234033698833f55b6fbe73dfefe56794ae7e35e18f658ef9be"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "3.0.2"
   fake_firebase_security_rules:
     dependency: transitive
     description:
@@ -334,10 +334,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: fb109b70cd6afe62b20067a2344fc543eec37b28
+      resolved-ref: "2e6736cfbedfd479b12b1187b66a6014675b8509"
       url: "https://github.com/Josephincrafter/firebase_article.git"
     source: git
-    version: "0.1.1"
+    version: "1.1.1"
   firebase_core:
     dependency: "direct main"
     description:
@@ -530,10 +530,10 @@ packages:
     dependency: transitive
     description:
       name: graphs
-      sha256: aedc5a15e78fc65a6e23bcd927f24c64dd995062bcd1ca6eda65a3cff92a4d19
+      sha256: "741bbf84165310a68ff28fe9e727332eef1407342fca52759cb21ad8177bb8d0"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.1"
+    version: "2.3.2"
   highlight:
     dependency: transitive
     description:
@@ -546,10 +546,10 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
+      sha256: b9c29a161230ee03d3ccf545097fccd9b87a5264228c5d348202e0f0c28f9010
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.2"
   http_multi_server:
     dependency: transitive
     description:
@@ -642,10 +642,10 @@ packages:
     dependency: transitive
     description:
       name: logger
-      sha256: af05cc8714f356fd1f3888fb6741cbe9fbe25cdb6eedbab80e1a6db21047d4a4
+      sha256: "697d067c60c20999686a0add96cf6aba723b3aa1f83ecf806a8097231529ec32"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "2.4.0"
   logging:
     dependency: transitive
     description:
@@ -810,10 +810,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "30c5aa827a6ae95ce2853cdc5fe3971daaac00f6f081c419c013f7f57bff2f5e"
+      sha256: e84c8a53fe1510ef4582f118c7b4bdf15b03002b51d7c2b66983c65843d61193
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.7"
+    version: "2.2.8"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -978,10 +978,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "93d0ec9dd902d85f326068e6a899487d1f65ffcd5798721a95330b26c8131577"
+      sha256: "3d4571b3c5eb58ce52a419d86e655493d0bc3020672da79f72fa0c16ca3a8ec1"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.2.4"
   shared_preferences_foundation:
     dependency: transitive
     description:
@@ -1002,10 +1002,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_platform_interface
-      sha256: "22e2ecac9419b4246d7c22bfbbda589e3acf5c0351137d87dd2939d984d37c3b"
+      sha256: "034650b71e73629ca08a0bd789fd1d83cc63c2d1e405946f7cef7bc37432f93a"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.2"
+    version: "2.4.0"
   shared_preferences_web:
     dependency: transitive
     description:
@@ -1215,10 +1215,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_android
-      sha256: ceb2625f0c24ade6ef6778d1de0b2e44f2db71fded235eb52295247feba8c5cf
+      sha256: c24484594a8dea685610569ab0f2547de9c7a1907500a9bc5e37e4c9a3cbfb23
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.3"
+    version: "6.3.6"
   url_launcher_ios:
     dependency: transitive
     description:
@@ -1263,10 +1263,10 @@ packages:
     dependency: transitive
     description:
       name: url_launcher_windows
-      sha256: ecf9725510600aa2bb6d7ddabe16357691b6d2805f66216a97d1b881e21beff7
+      sha256: "49c10f879746271804767cb45551ec5592cdab00ee105c06dddde1a98f73b185"
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.1"
+    version: "3.1.2"
   uuid:
     dependency: transitive
     description:

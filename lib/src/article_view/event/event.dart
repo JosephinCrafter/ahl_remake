@@ -12,6 +12,13 @@ final class GetArticleByIdEvent extends ArticleEvent {
   const GetArticleByIdEvent({required super.id});
 }
 
+final class GetHighlightPathEvent extends ArticleEvent {
+  const GetHighlightPathEvent();
+}
+
+final class GetHighlightCollectionEvent extends ArticleEvent {
+  const GetHighlightCollectionEvent();
+}
 
 /// Request A list of article from the server.
 final class GetArticleListEvent extends ArticleEvent {

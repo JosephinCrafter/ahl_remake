@@ -91,7 +91,7 @@ class _HeroActionsState extends State<HeroActions> {
   }
 
   void secondaryAction() {
-    context.goNamed( WhoWeArePage.routeName);
+    context.goNamed(WhoWeArePage.routeName);
   }
 
   @override
@@ -152,6 +152,7 @@ class DefaultHeroHeader extends StatefulWidget {
 class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.sizeOf(context).width;
     return Container(
       key: const Key("HeroHeader_Container"),
       constraints: BoxConstraints(
@@ -161,27 +162,29 @@ class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
         ),
       ),
       alignment: Alignment.center,
-      child: Stack(
-        children: [
-          // const HeroImageView(),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              constraints: const BoxConstraints(maxHeight: 470),
-              color: AhlTheme.yellowLight.withAlpha(0xB2),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: Margins.extraLarge)
-                      .add(
-                const EdgeInsets.only(top: 45),
-              ),
-              alignment: Alignment.bottomCenter,
-              child: const HeroTextView(
-                alignment: Alignment.topCenter,
-              ),
-            ),
-          ),
-        ],
-      ),
+      child: 
+           Stack(
+              children: [
+                // const HeroImageView(),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    constraints: const BoxConstraints(maxHeight: 470),
+                    color: AhlTheme.yellowLight.withAlpha(0xB2),
+                    padding: const EdgeInsets.symmetric(
+                            horizontal: Margins.extraLarge)
+                        .add(
+                      const EdgeInsets.only(top: 45),
+                    ),
+                    alignment: Alignment.bottomCenter,
+                    child: const HeroTextView(
+                      alignment: Alignment.topCenter,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ,
     );
   }
 }
