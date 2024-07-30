@@ -32,6 +32,16 @@ T resolveForBreakPoint<T>(
   }
 }
 
+TextStyle? resolveLabelTextThemeForBreakPoints(
+    double constraints, BuildContext context) {
+  return resolveForBreakPoint<TextStyle?>(
+    constraints,
+    small: Theme.of(context).textTheme.labelSmall,
+    medium: Theme.of(context).textTheme.labelMedium,
+    other: Theme.of(context).textTheme.labelLarge,
+  );
+}
+
 TextStyle? resolveBodyTextThemeForBreakPoints(
     double constraints, BuildContext context) {
   return resolveForBreakPoint<TextStyle?>(
@@ -51,7 +61,6 @@ TextStyle? resolveTitleTextThemeForBreakPoints(
     other: Theme.of(context).textTheme.titleLarge,
   );
 }
-
 
 TextStyle? resolveHeadlineTextThemeForBreakPoints(
     double constraints, BuildContext context) {
@@ -73,9 +82,7 @@ TextStyle? resolveDisplayTextThemeForBreakPoints(
   );
 }
 
-double resolveSeparatorSize(
-  BuildContext context
-){
+double resolveSeparatorSize(BuildContext context) {
   return resolveForBreakPoint<double>(
     MediaQuery.of(context).size.width,
     small: 45,

@@ -3,11 +3,14 @@ import 'dart:typed_data';
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'package:ahl/src/pages/homepage/donation/donation_page.dart';
+import 'package:ahl/src/utils/firebase_utils.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:web/web.dart' as web;
 
@@ -16,10 +19,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:markdown_widget/markdown_widget.dart';
-import "package:firebase_article/firebase_article.dart";
 import 'package:url_launcher/url_launcher.dart';
 import 'package:session_storage/session_storage.dart';
 
+import 'package:ahl/src/pages/homepage/donation/donation_page.dart';
+import 'package:ahl/src/pages/homepage/homepage.dart';
+import 'package:ahl/src/pages/novena_page/novena_page.dart';
 import 'package:ahl/src/newsletter/newsletter.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/article_view/bloc/bloc.dart';
@@ -36,6 +41,8 @@ import '../../utils/storage_utils.dart';
 
 part 'article_content_view.dart';
 part 'highlight_article_tile.dart';
+
+// part 'highlightarticle_tile.dart';
 
 // import 'package:markdown_widget/markdown_widget.dart';
 
@@ -61,21 +68,21 @@ class ArticleTile extends StatefulWidget {
   final Article article;
 
   @override
-  State<ArticleTile> createState() => _ArticleTileState();
+  State<ArticleTile> createState() => articleTileState();
 }
 
-class _ArticleTileState extends State<ArticleTile> {
+class articleTileState extends State<ArticleTile> {
   // article of the tile
-  late Article _article;
+  late Article article;
 
   late ArticleStorageUtils articleStorageUtils;
 
   @override
   void initState() {
-    _article = widget.article;
+    article = widget.article;
 
     articleStorageUtils =
-        ArticleStorageUtils(article: _article, collection: 'articles');
+        ArticleStorageUtils(article: article, collection: 'articles');
     super.initState();
   }
 
@@ -84,7 +91,7 @@ class _ArticleTileState extends State<ArticleTile> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return ArticleContentPage(article: _article);
+          return ArticleContentPage(article: article);
         },
       ),
     );
@@ -118,12 +125,12 @@ class _ArticleTileState extends State<ArticleTile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_article.title != null)
+                  if (article.title != null)
                     Padding(
                       padding: const EdgeInsets.only(
                           bottom: Paddings.big, top: Paddings.small),
                       child: Text(
-                        _article.title!,
+                        article.title!,
                         style: titleTheme,
                       ),
                     ),
@@ -140,7 +147,7 @@ class _ArticleTileState extends State<ArticleTile> {
                               minHeight: 135,
                               maxHeight: 232,
                             ),
-                            child: (_article.relations
+                            child: (article.relations
                                         ?.first[RepoSetUp.coverImageKey] !=
                                     null)
                                 ? FutureBuilder(
@@ -266,7 +273,7 @@ class _ArticleTileState extends State<ArticleTile> {
                                     Expanded(
                                       flex: 1,
                                       child: FutureBuilder(
-                                        future: Future.value(_article.relations
+                                        future: Future.value(article.relations
                                                 ?.first[RepoSetUp.previewKey]
                                             as String),
                                         builder: (context, snapshot) {
@@ -372,10 +379,29 @@ class CardArticleTile extends StatefulWidget {
     super.key,
     required this.article,
     this.collection = 'articles',
-  });
+    this.callback,
+    this.direction,
+    this.maxHeight,
+    this.label,
+  }) : articleId = null;
 
-  final Article article;
+  const CardArticleTile.fromId({
+    super.key,
+    required this.articleId,
+    this.collection = 'articles',
+    this.callback,
+    this.direction,
+    this.maxHeight,
+    this.label,
+  }) : article = null;
+
+  final Article? article;
   final String collection;
+  final VoidCallback? callback;
+  final String? articleId;
+  final Axis? direction;
+  final double? maxHeight;
+  final String? label;
 
   @override
   State<CardArticleTile> createState() => _CardArticleTileState();
@@ -384,38 +410,62 @@ class CardArticleTile extends StatefulWidget {
 class _CardArticleTileState extends State<CardArticleTile>
     with AutomaticKeepAliveClientMixin {
   // article of the tile
-  late Article _article;
+  late Article? article;
 
-  late ArticleStorageUtils articleStorageUtils;
+  late ArticleStorageUtils? articleStorageUtils;
 
+  /// The collection where to search the article image. This also the name of
+  /// firestore collection of the article.
   late String collection;
 
   late double elevation;
 
+  late double _maxHeight;
+
   @override
   void initState() {
-    _article = widget.article;
+    collection = getCollection(widget.articleId ?? "") ?? widget.collection;
+    elevation = 0.0;
+    _maxHeight = (widget.direction == Axis.vertical) ? 400 : 300;
 
-    collection = widget.collection;
-    elevation = 5.0;
+    /// Make article transaction
+    ///
+    /// Use from widget if it is not null. Trigger a request article event if not.
+    if (widget.article != null) {
+      article = widget.article!;
+      articleStorageUtils =
+          ArticleStorageUtils(article: article!, collection: collection);
+    } else {
+      article = null;
+      articleStorageUtils = null;
+      context.read<ArticleBloc>().add(
+            GetArticleByPathEvent.fromCollection(
+              id: widget.articleId!,
+              collection: collection,
+            ),
+          );
+    }
 
-    articleStorageUtils =
-        ArticleStorageUtils(article: _article, collection: collection);
     super.initState();
   }
 
+  /// Default callback.
+  ///
+  /// Called when the the card is clicked.
   void goToReadingPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return ArticleContentPage(article: _article);
-        },
-      ),
+    String articleId = widget.article?.id ?? widget.articleId!;
+    if (collection.startsWith('/')) {
+      collection = collection.substring(1);
+    }
+    context.go(
+      '/$collection/$articleId',
+      extra: article,
     );
-    collection = widget.collection;
   }
 
+  /// on Hover callback.
+  ///
+  /// It is mainly used in the ui update.
   void _onHover(bool isHovered) {
     if (isHovered) {
       setState(() {
@@ -431,6 +481,49 @@ class _CardArticleTileState extends State<CardArticleTile>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    if (article != null) {
+      return buildTile(context, article!);
+    } else {
+      return BlocBuilder<ArticleBloc, ArticleState<Article>>(
+        buildWhen: (previous, current) =>
+            previous.articles == null ||
+            !previous.articles!.containsKey(widget.articleId),
+        builder: (context, state) {
+          article = state.articles?[widget.articleId];
+
+          if (article != null) {
+            articleStorageUtils =
+                ArticleStorageUtils(article: article!, collection: collection);
+            return buildTile(context, article!);
+          }
+          if (state.error != null) {
+            log("[CardArticleTile]: Error getting article: ${widget.articleId}. ${state.error}");
+            return const SizedBox.shrink();
+          } else {
+            return Align(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(BorderSizes.medium),
+                ),
+                width: 330,
+                height: 400,
+              )
+                  .animate(
+                    onPlay: (controller) => controller.repeat(),
+                  )
+                  .then(delay: Durations.long1)
+                  .shimmer(),
+            );
+          }
+        },
+      );
+    }
+  }
+
+  Widget buildTile(BuildContext context, Article article) {
+    super.build(context);
     TextStyle? titleTheme = Theme.of(context).textTheme.headlineSmall;
     // resolveHeadlineTextThemeForBreakPoints(
     //   MediaQuery.of(context).size.width,
@@ -438,7 +531,7 @@ class _CardArticleTileState extends State<CardArticleTile>
     // );
 
     DateTime releaseDate =
-        DateTimeUtils.parseReleaseDate(_article.releaseDate ?? "");
+        DateTimeUtils.parseReleaseDate(article.releaseDate ?? "");
     return Card(
       color: Colors.white,
       elevation: elevation,
@@ -449,7 +542,7 @@ class _CardArticleTileState extends State<CardArticleTile>
       ),
       child: InkWell(
         onHover: _onHover,
-        onTap: goToReadingPage,
+        onTap: widget.callback ?? goToReadingPage,
         child: Container(
           // padding: const EdgeInsets.all(Paddings.medium),
           constraints: BoxConstraints(
@@ -460,31 +553,33 @@ class _CardArticleTileState extends State<CardArticleTile>
               other: ContentSize.maxWidth(MediaQuery.of(context).size.width),
             ),
             minWidth: 330,
-            maxHeight: resolveForBreakPoint(
-              MediaQuery.of(context).size.width,
-              other: 300,
-              small: 400,
-              medium: 400,
-            ),
+            maxHeight: widget.maxHeight ?? _maxHeight,
           ),
           child: Flex(
-            direction: resolveForBreakPoint(
-              MediaQuery.of(context).size.width,
-              other: Axis.horizontal,
-              small: Axis.vertical,
-              medium: Axis.vertical,
-            ),
+            direction: widget.direction ??
+                resolveForBreakPoint(
+                  MediaQuery.of(context).size.width,
+                  other: Axis.horizontal,
+                  small: Axis.vertical,
+                  medium: Axis.vertical,
+                ),
             children: [
-              Expanded(
+              Flexible(
                 child: Container(
                   alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.all(Paddings.big),
+                  padding: (widget.direction == Axis.horizontal)
+                      ? const EdgeInsets.all(Paddings.big)
+                      : const EdgeInsets.symmetric(
+                          horizontal: Paddings.medium,
+                          vertical: Paddings.big,
+                        ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "${releaseDate.day} ${DateTimeUtils.localMonth(releaseDate.month, context)} ${releaseDate.year}",
+                        widget.label ??
+                            "${releaseDate.day} ${DateTimeUtils.localMonth(releaseDate.month, context)} ${releaseDate.year}",
                         style: Theme.of(context)
                             .textTheme
                             .labelMedium!
@@ -492,29 +587,34 @@ class _CardArticleTileState extends State<CardArticleTile>
                       ),
 
                       //title
-                      if (_article.title != null)
+                      if (article.title != null)
                         Padding(
                           padding: const EdgeInsets.only(
                               bottom: Paddings.small, top: Paddings.small),
                           child: Text(
-                            _article.title!,
+                            article.title!,
                             style: titleTheme,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
+
                       // separator
-                      Container(
-                        margin: const EdgeInsets.symmetric(
-                          vertical: Paddings.small,
-                        ),
-                        color: AhlTheme.yellowRelax,
-                        constraints: const BoxConstraints.expand(
-                          width: 100,
-                          height: 16,
+                      Flexible(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            vertical: Paddings.small,
+                          ),
+                          color: AhlTheme.yellowRelax,
+                          constraints: const BoxConstraints.expand(
+                            width: 100,
+                            height: 16,
+                          ),
                         ),
                       ),
                       Expanded(
                         child: ArticlePreviewTextView(
-                          article: _article,
+                          article: article,
                           collection: collection,
                           callback: goToReadingPage,
                         ),
@@ -547,7 +647,8 @@ class _CardArticleTileState extends State<CardArticleTile>
               //       ),
               Expanded(
                 child: ArticleCoverImage(
-                  article: _article,
+                  direction: widget.direction,
+                  article: article,
                   collection: collection,
                 ),
               ),
@@ -559,7 +660,7 @@ class _CardArticleTileState extends State<CardArticleTile>
   }
 
   @override
-  bool get wantKeepAlive => articleStorageUtils.coverImage != null;
+  bool get wantKeepAlive => articleStorageUtils?.coverImage != null;
 
   @override
   void updateKeepAlive() {
@@ -611,19 +712,21 @@ class ArticleCoverImage extends StatefulWidget {
   const ArticleCoverImage({
     super.key,
     required this.article,
+    this.direction,
     this.collection = 'articles',
   });
   final String collection;
   final Article article;
+  final Axis? direction;
 
   @override
-  State<ArticleCoverImage> createState() => _ArticleCoverImageState();
+  State<ArticleCoverImage> createState() => ArticleCoverImageState();
 }
 
-class _ArticleCoverImageState extends State<ArticleCoverImage> {
+class ArticleCoverImageState extends State<ArticleCoverImage> {
   late ArticleStorageUtils articleStorageUtils;
   late Future articleCoverImage;
-  late Article _article;
+  late Article article;
 
   final SessionStorage cache = SessionStorage();
 
@@ -635,9 +738,9 @@ class _ArticleCoverImageState extends State<ArticleCoverImage> {
       article: widget.article,
       collection: widget.collection,
     );
-    _article = widget.article;
+    article = widget.article;
 
-    coverImageCacheKey = "${_article.id}_cover_image";
+    coverImageCacheKey = "${article.id}_cover_image";
 
     articleCoverImage =
         articleStorageUtils.getCoverImage(); //getHeroHeaderImage()
@@ -645,6 +748,13 @@ class _ArticleCoverImageState extends State<ArticleCoverImage> {
 
   @override
   Widget build(BuildContext context) {
+    Axis direction = widget.direction ??
+        resolveForBreakPoint<Axis>(
+          MediaQuery.of(context).size.width,
+          other: Axis.horizontal,
+          small: Axis.vertical,
+          medium: Axis.vertical,
+        );
     return
         // (cache[coverImageCacheKey] == null)
         //     ?
@@ -654,7 +764,7 @@ class _ArticleCoverImageState extends State<ArticleCoverImage> {
                 // maxHeight: 232,
                 ),
             child:
-                // (_article.relations?.first[RepoSetUp.coverImageKey] != null)
+                // (article.relations?.first[RepoSetUp.coverImageKey] != null)
                 //     ?
                 FutureBuilder(
               future: articleCoverImage,
@@ -666,12 +776,9 @@ class _ArticleCoverImageState extends State<ArticleCoverImage> {
                     cache[coverImageCacheKey] =
                         encodeUint8ListToString(snapshot.data!);
                     return ClipPath(
-                      clipper: resolveForBreakPoint(
-                        MediaQuery.of(context).size.width,
-                        other: LargeArticleClipper(),
-                        small: MobileArticleClipper(),
-                        medium: MobileArticleClipper(),
-                      ),
+                      clipper: (direction == Axis.vertical)
+                          ? MobileArticleClipper()
+                          : LargeArticleClipper(),
                       child: Container(
                         // constraints: const BoxConstraints(
                         //   // maxHeight: 135,
@@ -801,16 +908,16 @@ class ArticlePreviewTextView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _ArticlePreviewViewState();
+    return articlePreviewViewState();
   }
 }
 
-class _ArticlePreviewViewState extends State<ArticlePreviewTextView> {
-  // late ArticleStorageUtils _articleStorageUtils;
+class articlePreviewViewState extends State<ArticlePreviewTextView> {
+  // late ArticleStorageUtils articleStorageUtils;
 
   @override
   void initState() {
-    // _articleStorageUtils = ArticleStorageUtils(
+    // articleStorageUtils = ArticleStorageUtils(
     //     article: widget.article, collection: widget.collection);
 
     super.initState();

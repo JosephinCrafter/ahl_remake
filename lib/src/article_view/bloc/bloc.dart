@@ -17,6 +17,7 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
           error: null,
         )) {
     on<GetArticleByIdEvent>(_onGetArticleById);
+    on<GetArticleByPathEvent>(_onGetArticleByPath);
     on<GetHighlightArticleEvent>(_onGetHighlightedArticle);
     on<GetArticleListEvent>(_onGetArticleListEvent);
     on<InitializeArticleBlocEvent>(_onInitializeArticleBlocEvent);
@@ -35,9 +36,12 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
           error: null,
         )) {
     on<GetArticleByIdEvent>(_onGetArticleById);
+    on<GetArticleByPathEvent>(_onGetArticleByPath);
     on<GetHighlightArticleEvent>(_onGetHighlightedArticle);
     on<GetArticleListEvent>(_onGetArticleListEvent);
     on<InitializeArticleBlocEvent>(_onInitializeArticleBlocEvent);
+    on<GetHighlightPathEvent>(_onGetHighlightPath);
+    on<GetHighlightCollectionEvent>(_onGetHighlightCollection);
     add(InitializeArticleBlocEvent());
   }
 
@@ -93,7 +97,49 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
     Object? error;
     fire_art.Article? result;
     try {
-      result = await _repo.getArticleById(articleId: event.id!);
+      if (event.collection == null) {
+        result = await _repo.getArticleById(articleId: event.id!);
+      } else {
+        result = await _repo.getArticleByPath(
+            path: "/${event.collection}/${event.id}");
+      }
+    } catch (e) {
+      error = e;
+    }
+    if (result != null) {
+      emit(
+        state.copyWith(
+          status: ArticleStatus.succeed,
+          articles: {result.id: result},
+          error: null,
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          status: ArticleStatus.failed,
+          articles: null,
+          error: error,
+        ),
+      );
+    }
+  }
+
+  void _onGetArticleByPath(GetArticleByPathEvent event, Emitter emit) async {
+    Object? error;
+    fire_art.Article? result;
+
+    try {
+      if (event.collection == null) {
+        if (event.path == null) {
+          result = await _repo.getArticleById(articleId: event.id!);
+        } else {
+          result = await _repo.getArticleByPath(path: event.path!);
+        }
+      } else {
+        result = await _repo.getArticleByPath(
+            path: "/${event.collection}/${event.id}");
+      }
     } catch (e) {
       error = e;
     }
@@ -121,12 +167,9 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
     Object? error;
     fire_art.Article? result;
 
-    emit(
-      state.copyWith(
-        status: ArticleStatus.initial,
-        
-      )
-    );
+    emit(state.copyWith(
+      status: ArticleStatus.initial,
+    ));
 
     try {
       result = await _repo.getHighlighted();

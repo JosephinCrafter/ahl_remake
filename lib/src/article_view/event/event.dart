@@ -9,7 +9,23 @@ final class GetHighlightArticleEvent extends ArticleEvent {
 }
 
 final class GetArticleByIdEvent extends ArticleEvent {
-  const GetArticleByIdEvent({required super.id});
+  const GetArticleByIdEvent({
+    required super.id,
+    this.collection,
+  });
+  final String? collection;
+}
+
+final class GetArticleByPathEvent extends ArticleEvent {
+  const GetArticleByPathEvent.fromCollection({
+    required super.id,
+    this.collection,
+  }): path = null;
+  const GetArticleByPathEvent({required this.path}):collection = null;
+
+  final String? path;
+
+  final String? collection;
 }
 
 final class GetHighlightPathEvent extends ArticleEvent {

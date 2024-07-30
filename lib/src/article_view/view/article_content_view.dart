@@ -2,48 +2,93 @@ part of 'article_view.dart';
 
 /// Article Page
 class ArticleContentPage extends StatefulWidget {
-  const ArticleContentPage(
-      {super.key, this.article, this.collection = "/articles"});
+  const ArticleContentPage({
+    super.key,
+    required this.article,
+    this.collection = "/articles",
+  }) : articleId = null;
 
-  static const String routeName = '/articles';
+  const ArticleContentPage.fromId({
+    super.key,
+    this.collection = "/articles",
+    required this.articleId,
+  }) : article = null;
+
+  static const String routeName = 'articles';
   final Article? article;
   final String? collection;
+  final String? articleId;
   @override
   State<ArticleContentPage> createState() => ArticleContentPageState();
 }
 
 class ArticleContentPageState extends State<ArticleContentPage> {
   late ScrollController scrollController;
+  late Article? article;
   @override
   void initState() {
     super.initState();
 
     scrollController = ScrollController(keepScrollOffset: true);
+
+    article = widget.article;
+    if (article == null) {
+      context.read<ArticleBloc>().add(
+            GetArticleByIdEvent(id: widget.articleId),
+          );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => Scaffold(
-        endDrawer: constraints.maxWidth <= ScreenSizes.large
-            ? const AhlDrawer()
-            : null,
-        appBar: const AhlAppBar(),
-        body: ListView(
-          controller: scrollController,
-          addAutomaticKeepAlives: true,
-          children: [
-            ArticleContentView(
-              collection: widget.collection,
-              article: widget.article!,
-              controller: scrollController,
+    return BlocBuilder<ArticleBloc, ArticleState<Article>>(
+      buildWhen: (previous, current) =>
+          previous.articles?[widget.articleId] == null,
+      builder: (context, state) {
+        String? type = widget.article?.relations?[0]['type'];
+        article = article ?? state.articles?[widget.articleId];
+
+        if (article == null) {
+          if (state.status == ArticleStatus.failed) {
+            context.goNamed(HomePage.routeName);
+          }
+          return Scaffold(
+            body: Container(
+              alignment: Alignment.center,
+              child: LottieBuilder.asset('animations/loading.json'),
             ),
-            const Gap(25),
-            const NewsLetterPrompt(),
-            const AhlFooter(),
-          ],
-        ),
-      ),
+          );
+        }
+        switch (type) {
+          case 'novena':
+            context.goNamed(NovenaPage.routeName, extra: article);
+            return const SizedBox();
+
+          default:
+            return LayoutBuilder(
+              builder: (context, constraints) => Scaffold(
+                endDrawer: constraints.maxWidth <= ScreenSizes.large
+                    ? const AhlDrawer()
+                    : null,
+                appBar: const AhlAppBar(),
+                body: ListView(
+                  controller: scrollController,
+                  addAutomaticKeepAlives: true,
+                  children: [
+                    ArticleContentView(
+                      collection: widget.collection,
+                      article: article!,
+                      controller: scrollController,
+                    ),
+                    const Gap(25),
+                    const NewsLetterPrompt(),
+                    const AhlFooter(),
+                  ],
+                ),
+              ),
+            );
+        }
+      },
     );
   }
 }
@@ -55,6 +100,7 @@ class ArticleContentView extends StatefulWidget {
     required this.article,
     this.collection = "articles",
     this.controller,
+    this.label,
   }) : articleUtils =
             ArticleStorageUtils(article: article, collection: collection!);
 
@@ -64,6 +110,7 @@ class ArticleContentView extends StatefulWidget {
   final ArticleStorageUtils articleUtils;
   final ScrollController? controller;
   final bool isProject;
+  final String? label;
 
   @override
   State<ArticleContentView> createState() => _ArticleContentViewState();
@@ -97,17 +144,32 @@ class _ArticleContentViewState
     super.initState();
 
     _coverImage = widget.articleUtils.coverImage;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    screenWidth = MediaQuery.of(context).size.width;
 
     minimalisticCorporateConfig = MarkdownConfig(
       configs: [
         ImgConfig(
           builder: (String url, Map<String, String>? attribute) {
+            if (url.contains('://')) {
+              return Align(
+                child: AhlImageViewer(
+                  url: url,
+                  attributes: attribute,
+                ),
+              );
+            }
+
             try {
               log(url);
               final Future future = firebase.storage.child(url).getData();
-              return ConstrainedBox(
+              return Container(
+                alignment: Alignment.center,
                 constraints: BoxConstraints(
-                  minHeight: resolveForBreakPoint(
+                  maxHeight: resolveForBreakPoint(
                     screenWidth,
                     other: 575,
                     small: 300,
@@ -130,10 +192,11 @@ class _ArticleContentViewState
           },
         ),
 
-        /// todo: implements styles
-        ///
         H1Config(
-          style: const H1Config().style.copyWith(fontFamily: "Butler"),
+          style: const H1Config().style.copyWith(
+                fontFamily: "Butler",
+                color: AhlTheme.blueNight,
+              ),
         ),
 
         H2Config(
@@ -143,10 +206,19 @@ class _ArticleContentViewState
             textStyle:
                 const PConfig().textStyle.copyWith(fontFamily: 'Poppins')),
         LinkConfig(
+          style: resolveLabelTextThemeForBreakPoints(
+                  MediaQuery.sizeOf(context).width, context)!
+              .copyWith(
+            color: Theme.of(context).primaryColor,
+            decoration: TextDecoration.underline,
+            decorationColor: Theme.of(context).primaryColor,
+            // height: 5,
+          ),
           onTap: (url) {
             launchUrl(Uri.parse(url));
           },
         ),
+
         // ImgConfig(
         //   builder: (url, attributes) {
         //     return Column(
@@ -169,11 +241,6 @@ class _ArticleContentViewState
         // ),
       ],
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    screenWidth = MediaQuery.of(context).size.width;
 
     return Center(
       child: Container(
@@ -207,23 +274,23 @@ class _ArticleContentViewState
     );
   }
 
-  Widget buildMarkdownBlock(BuildContext context) {
-    // share button
-    Widget shareButton = Builder(
-      builder: (context) => Align(
-        alignment: Alignment.centerLeft,
-        child: OutlinedButton.icon(
-          onPressed: () {
-            var router = GoRouter.of(context);
-            String location = router.routeInformationProvider.value.uri.path;
-            Share.share("https://aujourdhiulavenir.org$location");
-          },
-          label: const Text('Partager'),
-          icon: const Icon(Icons.share_outlined),
-        ),
+  // share button
+  Widget shareButton = Builder(
+    builder: (context) => Align(
+      alignment: Alignment.centerLeft,
+      child: OutlinedButton.icon(
+        onPressed: () {
+          var router = GoRouter.of(context);
+          String location = router.routeInformationProvider.value.uri.path;
+          Share.share("https://aujourdhuilavenir.org$location");
+        },
+        label: const Text('Partager'),
+        icon: const Icon(Icons.share_outlined),
       ),
-    );
+    ),
+  );
 
+  Widget buildMarkdownBlock(BuildContext context) {
     // share button
     Widget supportProjectButton = Builder(
       builder: (context) => ElevatedButton.icon(
@@ -256,7 +323,7 @@ class _ArticleContentViewState
             alignment: Alignment.centerLeft,
             child: Text(
               widget.article.title ?? "",
-              style: resolveDisplayTextThemeForBreakPoints(
+              style: resolveHeadlineTextThemeForBreakPoints(
                 MediaQuery.of(context).size.width,
                 context,
               ),
@@ -266,7 +333,7 @@ class _ArticleContentViewState
             padding: const EdgeInsets.all(Paddings.medium),
             alignment: Alignment.centerLeft,
             child: Text(
-              DateTimeUtils.localizedFromStringDate(
+              widget.label ?? DateTimeUtils.localizedFromStringDate(
                   dateString: widget.article.releaseDate, context: context),
               style: Theme.of(context)
                   .textTheme
@@ -304,7 +371,10 @@ class _ArticleContentViewState
                 other: 575,
                 small: 300,
               ),
+              width: double.maxFinite,
+              // constraints: const BoxConstraints.expand(),
               child: AhlImageViewer.fromFuture(
+                fit: BoxFit.cover,
                 future: Future.value(_coverImage),
               )),
 
@@ -392,15 +462,17 @@ class AhlImageViewer extends StatefulWidget {
     super.key,
     required this.url,
     this.attributes,
+    this.fit = BoxFit.contain,
   }) : future = null;
 
   const AhlImageViewer.fromFuture(
-      {super.key, required this.future, this.attributes})
+      {super.key, required this.future, this.attributes, this.fit})
       : url = null;
 
   final Future? future;
   final String? url;
   final Map<String, String>? attributes;
+  final BoxFit? fit;
 
   @override
   State<AhlImageViewer> createState() => _AhlImageViewerState();
@@ -423,6 +495,27 @@ class _AhlImageViewerState extends State<AhlImageViewer> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.url != null && widget.url!.contains("://")) {
+      return InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            DialogRoute(
+              context: context,
+              builder: (context) => ImageViewer(
+                child: Image.network(
+                  widget.url!,
+                  fit: widget.fit,
+                ),
+              ),
+            ),
+          );
+        },
+        child: Image.network(
+          widget.url!,
+          fit: widget.fit,
+        ),
+      );
+    }
     return FutureBuilder(
       future: imageFuture,
       builder: (context, snapshot) {
@@ -443,6 +536,7 @@ class _AhlImageViewerState extends State<AhlImageViewer> {
                 Uint8List.fromList(
                   snapshot.data!,
                 ),
+                fit: widget.fit,
               ),
             );
           } catch (e) {

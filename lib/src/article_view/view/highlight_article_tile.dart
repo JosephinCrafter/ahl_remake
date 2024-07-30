@@ -109,6 +109,7 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                                 alignment: Alignment.center,
                                 child: (state.highlightArticle != null)
                                     ? CardArticleTile(
+                                      
                                         article: state.highlightArticle!,
                                         collection:
                                             highlightCollection ?? 'articles',

@@ -104,7 +104,7 @@ final class ArticleStorageUtils {
       log('Image got: ${heroHeaderImageRef.name} ');
 
       // write data to cache
-      cache[coverImageDataKey] = await encodeUint8ListToString(data!);
+      cache[coverImageDataKey] = encodeUint8ListToString(data!);
 
       // update coverImage
     } catch (e) {

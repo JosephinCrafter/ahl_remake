@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:ahl/src/article_view/event/event.dart';
+import 'package:ahl/src/article_view/view/article_view.dart';
+import 'package:ahl/src/pages/novena_page/novena_page.dart';
 import 'package:ahl/src/pages/projects/project_page_view.dart';
 import 'package:ahl/src/project_space/view.dart';
 import 'package:flutter/material.dart';
@@ -100,6 +102,54 @@ class _MyAppState extends State<MyApp> {
               ),
             ],
           ),
+          // GoRoute(
+          //   path: ArticleView.routeName,
+          //   builder: (_, __) => const ProjectsPage(),
+          //   routes: [
+          GoRoute(
+            name: ArticleContentPage.routeName,
+            path: "${ArticleContentPage.routeName}/:articleId",
+            // name: ProjectsPage.routeName,
+            builder: (context, state) {
+              // get article id from path
+              String? articleId = state.pathParameters["articleId"];
+
+              // Passing the article name to ProjectPageView instead
+              if (state.extra != null) {
+                return ArticleContentPage(
+                  article: state.extra as Article,
+                );
+              } else/*if (articleId != null && articleId.trim() != "")*/ {
+                return ArticleContentPage.fromId(articleId: articleId);
+              } 
+              // else {
+              //   return const ArticlesPage();
+              // }
+            },
+          ),
+          GoRoute(
+            name: NovenaPage.routeName,
+            path: "${NovenaPage.routeName}/:novenaId",
+            // name: ProjectsPage.routeName,
+            builder: (context, state) {
+              // get article id from path
+              String? articleId = state.pathParameters["novenaId"];
+
+              // Passing the article name to ProjectPageView instead
+              if (state.extra != null) {
+                return NovenaPage(
+                  novena: state.extra as Article,
+                );
+              } else/*if (articleId != null && articleId.trim() != "")*/ {
+                return NovenaPage.fromId(novenaId: articleId);
+              } 
+              // else {
+              //   return const ArticlesPage();
+              // }
+            },
+          ),
+          //   ],
+          // ),
           GoRoute(
             path: PrayersPage.routeName,
             name: PrayersPage.routeName,
@@ -118,9 +168,10 @@ class _MyAppState extends State<MyApp> {
             builder: (_, __) => const WhoWeArePage(),
           ),
           GoRoute(
-              path: DonationPage.routeName,
-              name: DonationPage.routeName,
-              builder: (_, __) => const DonationPage()),
+            path: DonationPage.routeName,
+            name: DonationPage.routeName,
+            builder: (_, __) => const DonationPage(),
+          ),
         ],
       ),
     ],

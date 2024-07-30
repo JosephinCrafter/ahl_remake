@@ -11,7 +11,7 @@ class AhlTheme {
   static const Color blackCharcoal = Color(0xFF282828);
   static const Color blueNight = Color(0xFF36454F);
   static const Color darkNight = Color(0xFF1A202C);
-  static const Color lightGrey =  Color(0xFF8E8E8E);
+  static const Color lightGrey = Color(0xFF8E8E8E);
 
   static ThemeData lightTheme(double constraints) => ThemeData(
         brightness: Brightness.light,
@@ -35,7 +35,7 @@ class AhlTheme {
   static const Color secondaryColor = Color(0xFF673ab7);
   static const Color onSecondaryColor = Color(0xFFFFFFFF);
   static const Color background = Color(0xFFFFFFFF);
-  static const Color onBackground = Color(0xFF000000);
+  static const Color onBackground = blueNight; //Color(0xFF000000);
   static const Color surface = Color(0xFFF2F2F2);
   static const Color onSurface = Color(0xFF212121);
   static const Color error = Color(0xFFF44336);
