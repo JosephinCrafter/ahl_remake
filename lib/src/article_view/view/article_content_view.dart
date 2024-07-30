@@ -203,17 +203,18 @@ class _ArticleContentViewState
           style: const H2Config().style.copyWith(fontFamily: "Butler"),
         ),
         PConfig(
-            textStyle:
-                const PConfig().textStyle.copyWith(fontFamily: 'Poppins')),
+          textStyle: const PConfig().textStyle.copyWith(
+                fontFamily: 'Poppins',
+                height: 2,
+              ),
+        ),
         LinkConfig(
-          style: resolveLabelTextThemeForBreakPoints(
-                  MediaQuery.sizeOf(context).width, context)!
-              .copyWith(
-            color: Theme.of(context).primaryColor,
-            decoration: TextDecoration.underline,
-            decorationColor: Theme.of(context).primaryColor,
-            // height: 5,
-          ),
+          style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                color: Theme.of(context).primaryColor,
+                decoration: TextDecoration.underline,
+                decorationColor: Theme.of(context).primaryColor,
+                // height: 5,
+              ),
           onTap: (url) {
             launchUrl(Uri.parse(url));
           },
@@ -333,8 +334,9 @@ class _ArticleContentViewState
             padding: const EdgeInsets.all(Paddings.medium),
             alignment: Alignment.centerLeft,
             child: Text(
-              widget.label ?? DateTimeUtils.localizedFromStringDate(
-                  dateString: widget.article.releaseDate, context: context),
+              widget.label ??
+                  DateTimeUtils.localizedFromStringDate(
+                      dateString: widget.article.releaseDate, context: context),
               style: Theme.of(context)
                   .textTheme
                   .labelMedium!
