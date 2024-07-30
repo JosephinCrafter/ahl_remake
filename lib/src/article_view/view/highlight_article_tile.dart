@@ -1,7 +1,11 @@
 part of 'article_view.dart';
 
 class HighlightArticleTile extends StatefulWidget {
-  const HighlightArticleTile({super.key});
+  const HighlightArticleTile({
+    super.key,
+    this.labelBuilder,
+  });
+  final String Function({Article? article})? labelBuilder;
 
   @override
   State<HighlightArticleTile> createState() => _HighlightArticleTileState();
@@ -13,12 +17,22 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
 
   final String _highlightArticleStateKey = 'isHighlightArticleReady';
   late Future computation;
+  late String? label;
 
   @override
   void initState() {
     super.initState();
 
     computation = firebase.firebaseApp;
+  }
+
+  String? buildLabel({required Article? article}) {
+    var type = article?.relations?[0]['type'];
+
+    if (type != null && type == 'novena') {
+      return "NEUVAINE";
+    }
+    return null;
   }
 
   @override
@@ -54,7 +68,13 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                   // buildWhen: (previous, current) =>
                   //     current.highlightCollection == null || current.articles == null || current.articles!.isEmpty,
                   builder: (context, state) {
+                    /// generate label
+                    label = (widget.labelBuilder != null)
+                        ? widget.labelBuilder!(article: state.highlightArticle)
+                        : buildLabel(article: state.highlightArticle);
+
                     String? highlightCollection = state.highlightCollection;
+
                     switch (state.status) {
                       /// failed to trigger state
                       case ArticleStatus.failed:
@@ -109,7 +129,7 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                                 alignment: Alignment.center,
                                 child: (state.highlightArticle != null)
                                     ? CardArticleTile(
-                                      
+                                        label: label,
                                         article: state.highlightArticle!,
                                         collection:
                                             highlightCollection ?? 'articles',
@@ -157,7 +177,8 @@ class _HighlightArticleTileState extends State<HighlightArticleTile>
                             .animate(
                               onPlay: (controller) => controller.repeat(),
                             )
-                            .shimmer();
+                            .shimmer()
+                            .then(delay: Durations.long1);
                     }
                   },
                 ),

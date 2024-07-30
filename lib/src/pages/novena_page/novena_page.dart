@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:ahl/src/ahl_barrel.dart';
 import 'package:ahl/src/article_view/bloc/bloc.dart';
 import 'package:ahl/src/article_view/event/event.dart';
@@ -11,6 +9,7 @@ import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../article_view/state/state.dart';
@@ -52,6 +51,10 @@ class _NovenaPageState extends State<NovenaPage> {
   @override
   Widget build(BuildContext context) {
     if (widget.novena != null) {
+      if (widget.novena!.relations![0]['type'] != 'novena') {
+        Future.microtask(() => context.go('/articles/${widget.novena!.id}'));
+        return const SizedBox.shrink();
+      }
       return NovenaContentView(novena: widget.novena!);
     } else {
       return BlocBuilder<ArticleBloc, ArticleState<Article>>(
@@ -210,60 +213,3 @@ class NovenaContentView extends StatelessWidget {
   }
 }
 
-/// Build related Article
-/// This Dart function builds a list of related article tiles in a Flutter app.
-///
-/// Args:
-///   context (BuildContext): The `BuildContext` parameter in the `buildRelatedArticleTiles` method
-/// represents the location of a widget within the widget tree. It provides information about the
-/// current build context, such as the theme, media query data, and localization information. This
-/// context is essential for building widgets correctly and accessing resources like themes
-class RelatedArticles extends StatefulWidget {
-  const RelatedArticles({
-    super.key,
-    required this.collection,
-    required this.article,
-    this.relationKey = 'relatedArticles',
-  });
-
-  final String collection;
-  final Article article;
-  final String relationKey;
-
-  @override
-  State<RelatedArticles> createState() => _RelatedArticlesState();
-}
-
-class _RelatedArticlesState extends State<RelatedArticles> {
-  late List<Widget> cards = [];
-
-  List<Widget> buildRelatedArticleTiles(BuildContext context, Article article) {
-    List relatedArticle = article.relations?[0][widget.relationKey] ?? [];
-    cards = [];
-
-    for (String articleId in relatedArticle) {
-      cards.add(
-        Align(
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: Paddings.medium),
-            constraints: BoxConstraints(
-              maxWidth: ContentSize.maxWidth(MediaQuery.sizeOf(context).width),
-            ),
-            child: CardArticleTile.fromId(
-              articleId: articleId,
-              collection: widget.collection,
-            ),
-          ),
-        ),
-      );
-    }
-    return cards;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      children: buildRelatedArticleTiles(context, widget.article),
-    );
-  }
-}

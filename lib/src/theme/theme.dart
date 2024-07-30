@@ -35,7 +35,7 @@ class AhlTheme {
   static const Color secondaryColor = Color(0xFF673ab7);
   static const Color onSecondaryColor = Color(0xFFFFFFFF);
   static const Color background = Color(0xFFFFFFFF);
-  static const Color onBackground = blueNight; //Color(0xFF000000);
+  static const Color onBackground = blackCharcoal; //Color(0xFF000000);
   static const Color surface = Color(0xFFF2F2F2);
   static const Color onSurface = Color(0xFF212121);
   static const Color error = Color(0xFFF44336);
