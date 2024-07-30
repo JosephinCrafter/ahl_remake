@@ -457,6 +457,7 @@ class _CardArticleTileState extends State<CardArticleTile>
     if (collection.startsWith('/')) {
       collection = collection.substring(1);
     }
+
     context.go(
       '/$collection/$articleId',
       extra: article,
@@ -996,5 +997,63 @@ class articlePreviewViewState extends State<ArticlePreviewTextView> {
               color: Theme.of(context).colorScheme.primaryContainer,
             ),
           );
+  }
+}
+
+/// Build related Article
+/// This Dart function builds a list of related article tiles in a Flutter app.
+///
+/// Args:
+///   context (BuildContext): The `BuildContext` parameter in the `buildRelatedArticleTiles` method
+/// represents the location of a widget within the widget tree. It provides information about the
+/// current build context, such as the theme, media query data, and localization information. This
+/// context is essential for building widgets correctly and accessing resources like themes
+class RelatedArticles extends StatefulWidget {
+  const RelatedArticles({
+    super.key,
+    required this.collection,
+    required this.article,
+    this.relationKey = 'relatedArticles',
+  });
+
+  final String collection;
+  final Article article;
+  final String relationKey;
+
+  @override
+  State<RelatedArticles> createState() => _RelatedArticlesState();
+}
+
+class _RelatedArticlesState extends State<RelatedArticles> {
+  late List<Widget> cards = [];
+
+  List<Widget> buildRelatedArticleTiles(BuildContext context, Article article) {
+    List relatedArticle = article.relations?[0][widget.relationKey] ?? [];
+    cards = [];
+
+    for (String articleId in relatedArticle) {
+      cards.add(
+        Align(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: Paddings.medium),
+            constraints: BoxConstraints(
+              maxWidth: ContentSize.maxWidth(MediaQuery.sizeOf(context).width),
+            ),
+            child: CardArticleTile.fromId(
+              articleId: articleId,
+              collection: widget.collection,
+            ),
+          ),
+        ),
+      );
+    }
+    return cards;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: buildRelatedArticleTiles(context, widget.article),
+    );
   }
 }
