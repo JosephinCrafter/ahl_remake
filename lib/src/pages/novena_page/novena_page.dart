@@ -141,8 +141,8 @@ class NovenaContentView extends StatefulWidget {
   List<Widget> buildNovenaDaysArticleTiles(BuildContext context) {
     List<Widget> cards = [];
 
-    for (String articleId in sortedDaysId) {
-      int day = sortedDaysId.indexOf(articleId) + 1;
+    for (String novenaId in sortedDaysId) {
+      int day = sortedDaysId.indexOf(novenaId) + 1;
       cards.add(
         Container(
           constraints: const BoxConstraints(
@@ -158,9 +158,14 @@ class NovenaContentView extends StatefulWidget {
             child: CardArticleTile.fromId(
               preview: "",
               label: "Neuvaine - Jour $day",
-
+              callback: () {
+                context.goNamed(
+                  NovenaPage.routeName,
+                  pathParameters: {'novenaId': novenaId},
+                );
+              },
               direction: Axis.vertical,
-              articleId: articleId,
+              articleId: novenaId,
               collection: collection,
             ),
           ),
@@ -202,12 +207,13 @@ class _NovenaContentViewState extends State<NovenaContentView> {
 
   @override
   Widget build(BuildContext context) {
-    // controller.animateTo(
-    //     0,
-    //     duration: Durations.extralong1,
-    //     curve: Curves.easeInOut,
-
-    // );
+    Future.microtask(
+      () => controller.animateTo(
+        0,
+        duration: Durations.extralong1,
+        curve: Curves.easeInOut,
+      ),
+    );
 
     Size screenSize = MediaQuery.sizeOf(context);
 
@@ -241,7 +247,6 @@ class _NovenaContentViewState extends State<NovenaContentView> {
               child: Text('Jour ${index + 1}'),
               onTap: () {
                 context.goNamed(
-
                   NovenaPage.routeName,
                   pathParameters: {"novenaId": widget.sortedDaysId[index]},
                 );
