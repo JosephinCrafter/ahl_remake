@@ -57,6 +57,7 @@ class _MyAppState extends State<MyApp> {
         name: HomePage.routeName,
         builder: (_, __) => const HomePage(),
         routes: [
+          /// Project
           GoRoute(
             path: ProjectsPage.routeName,
             name: ProjectsPage.routeName,
@@ -106,6 +107,8 @@ class _MyAppState extends State<MyApp> {
           //   path: ArticleView.routeName,
           //   builder: (_, __) => const ProjectsPage(),
           //   routes: [
+
+          // Articles
           GoRoute(
             name: ArticleContentPage.routeName,
             path: "${ArticleContentPage.routeName}/:articleId",
@@ -119,14 +122,15 @@ class _MyAppState extends State<MyApp> {
                 return ArticleContentPage(
                   article: state.extra as Article,
                 );
-              } else/*if (articleId != null && articleId.trim() != "")*/ {
+              } else /*if (articleId != null && articleId.trim() != "")*/ {
                 return ArticleContentPage.fromId(articleId: articleId);
-              } 
+              }
               // else {
               //   return const ArticlesPage();
               // }
             },
           ),
+
           GoRoute(
             name: NovenaPage.routeName,
             path: "${NovenaPage.routeName}/:novenaId",
@@ -140,9 +144,9 @@ class _MyAppState extends State<MyApp> {
                 return NovenaPage(
                   novena: state.extra as Article,
                 );
-              } else/*if (articleId != null && articleId.trim() != "")*/ {
+              } else /*if (articleId != null && articleId.trim() != "")*/ {
                 return NovenaPage.fromId(novenaId: articleId);
-              } 
+              }
               // else {
               //   return const ArticlesPage();
               // }

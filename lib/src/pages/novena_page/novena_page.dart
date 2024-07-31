@@ -88,20 +88,28 @@ class NovenaContentView extends StatelessWidget {
   final Article novena;
   final String collection;
 
+  /// The current day of the novena
   int get currentDay {
-    var sortedDays = days.keys.toList();
-    sortedDays.sort();
-    List sortedDaysId = [];
-    for (String key in sortedDays) {
-      sortedDaysId.add(days[key]);
-    }
     return sortedDaysId.indexOf(novena.id) + 1;
   }
 
+  /// A list of all days that is sorted.
+  List<String> get sortedDaysId {
+    var sortedDays = days.keys.toList();
+    sortedDays.sort();
+    List<String> sortedDaysId = [];
+    for (String key in sortedDays) {
+      sortedDaysId.add(days[key]);
+    }
+    return sortedDaysId;
+  }
+
+  /// A Map of all the novena document for upcoming and past days.
   Map<String, dynamic> get days {
     return novena.relations![0]['days'] as Map<String, dynamic>;
   }
 
+  /// A list of all the novena document for upcoming and past days.
   List<String> get daysId {
     List<String> daysId = [];
     for (int i = 1; i < days.length; i++) {
@@ -152,10 +160,22 @@ class NovenaContentView extends StatelessWidget {
       bottomBar: Container(
         padding: const EdgeInsets.all(Paddings.small),
         child: PopupMenuButton(
+          child: Row(
+            children: [
+              const Icon(Icons.arrow_drop_down_outlined),
+              Text(label),
+            ],
+          ),
           itemBuilder: (context) => List.generate(
-            10,
+            sortedDaysId.length,
             (index) => PopupMenuItem(
-              child: Text(' $index'),
+              child: Text('Jour ${index + 1}'),
+              onTap: () {
+                context.goNamed(
+                  NovenaPage.routeName,
+                  pathParameters:{"novenaId": sortedDaysId[index]},
+                );
+              },
             ),
           ),
         ),
@@ -212,4 +232,3 @@ class NovenaContentView extends StatelessWidget {
     );
   }
 }
-
