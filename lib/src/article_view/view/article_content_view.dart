@@ -202,7 +202,7 @@ class _ArticleContentViewState
         H1Config(
           style: const H1Config().style.copyWith(
                 fontFamily: "Poppins",
-                color: AhlTheme.blueNight,
+                color: AhlTheme.blackCharcoal,
                 fontSize: 32,
                 height: 1.25,
                 fontWeight: FontWeight.w600,
@@ -212,6 +212,7 @@ class _ArticleContentViewState
         H2Config(
           style: const H2Config().style.copyWith(
                 fontFamily: "Poppins",
+                color: AhlTheme.blackCharcoal,
                 fontSize: 28,
                 height: 1.4,
                 fontWeight: FontWeight.w600,
@@ -220,7 +221,7 @@ class _ArticleContentViewState
         H3Config(
           style: const H2Config().style.copyWith(
                 fontFamily: "Poppins",
-                color: AhlTheme.blueNight,
+                color: AhlTheme.blackCharcoal,
                 fontSize: 24,
                 height: 1.4,
                 fontWeight: FontWeight.w600,
@@ -229,7 +230,7 @@ class _ArticleContentViewState
         H4Config(
           style: const H2Config().style.copyWith(
                 fontFamily: "Poppins",
-                color: AhlTheme.blueNight,
+                color: AhlTheme.blackCharcoal,
                 fontSize: 22,
                 height: 1.25,
                 fontWeight: FontWeight.w600,
@@ -238,7 +239,7 @@ class _ArticleContentViewState
         H5Config(
           style: const H2Config().style.copyWith(
                 fontFamily: "Poppins",
-                color: AhlTheme.blueNight,
+                color: AhlTheme.blackCharcoal,
                 fontSize: 16,
                 height: 1.5,
                 fontWeight: FontWeight.w600,
@@ -247,7 +248,7 @@ class _ArticleContentViewState
         H6Config(
           style: const H2Config().style.copyWith(
                 fontFamily: "Poppins",
-                color: AhlTheme.blueNight,
+                color: AhlTheme.blackCharcoal,
                 fontSize: 14,
                 height: 1.4,
                 fontWeight: FontWeight.w600,
@@ -360,7 +361,7 @@ class _ArticleContentViewState
   // share button
   Widget shareButton = Builder(
     builder: (context) => Container(
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       child: OutlinedButton.icon(
         onPressed: () {
           var router = GoRouter.of(context);
