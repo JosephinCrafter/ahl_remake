@@ -6,8 +6,32 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://aujourdhuilavenir.org/articles/</loc>
-    <lastmod>2024-06-20T18:22:00+02:00</lastmod>
+    <loc>https://aujourdhuilavenir.org/projects/cantine</loc>
+    <lastmod>2024-07-31T18:22:00+02:00</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://aujourdhuilavenir.org/articles/qui_est_laure_sabes</loc>
+    <lastmod>2024-07-31T18:22:00+02:00</lastmod>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://aujourdhuilavenir.org/novena/saint_dominic_day_1</loc>
+    <lastmod>2024-07-31T18:22:00+02:00</lastmod>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://aujourdhuilavenir.org/novena/saint_dominic_de_guzman</loc>
+    <lastmod>2024-07-31T18:22:00+02:00</lastmod>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://aujourdhuilavenir.org/novena/saint_dominic_day_2</loc>
+    <lastmod>2024-07-31T18:22:00+02:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <loc>https://aujourdhuilavenir.org/novena/saint_dominic_day_3</loc>
+  <lastmod>2024-07-31T18:22:00+02:00</lastmod>
+  <priority>0.8</priority>
+</url>
 </urlset>
