@@ -67,6 +67,14 @@ class _NovenaPageState extends State<NovenaPage> {
           Article? novena = state.articles?[widget.novenaId];
 
           if (novena != null) {
+            if (novena.relations![0]['type'] != 'novena') {
+              // Future.microtask(() => context.go('/articles/${widget.novena!.id}'));
+              return ArticleContentPage(
+              key: ValueKey("article_${novena.id}"),
+                article: novena,
+                collection: widget.collection,
+              );
+            }
             return NovenaContentView(
               novena: novena,
               collection: widget.collection,

@@ -40,6 +40,13 @@ class ArticleContentPageState extends State<ArticleContentPage> {
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    article = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<ArticleBloc, ArticleState<Article>>(
       buildWhen: (previous, current) =>
