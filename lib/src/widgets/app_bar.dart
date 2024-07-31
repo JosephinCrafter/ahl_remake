@@ -38,8 +38,9 @@ class AhlAppBar extends StatelessWidget implements PreferredSizeWidget {
   }) {
     // make logo a button to home
     Widget title = InkWell(
-      onTap: () => Navigator.of(context)
-          .pushNamedAndRemoveUntil(HomePage.routeName, (route) => false),
+      onTap: () => context.goNamed(
+        HomePage.routeName,
+      ),
       child: this.title,
     );
 
