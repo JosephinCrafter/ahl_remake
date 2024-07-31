@@ -48,8 +48,8 @@ class ArticleContentPageState extends State<ArticleContentPage> {
           );
     }
     return BlocBuilder<ArticleBloc, ArticleState<Article>>(
-      buildWhen: (previous, current) =>
-          previous.articles?[widget.articleId] == null,
+      // buildWhen: (previous, current) =>
+      //     previous.articles?[widget.articleId] == null,
       builder: (context, state) {
         String? type = widget.article?.relations?[0]['type'];
         article = article ?? state.articles?[widget.articleId];
@@ -124,21 +124,36 @@ class ArticleContentView extends StatefulWidget {
 
 class _ArticleContentViewState
     extends State<ArticleContentView> /*with AutomaticKeepAliveClientMixin*/ {
+  /// Ask content.
   Future<String> contentFetching() async {
+    SessionStorage cache = SessionStorage();
+
+    /// Read cache if it is available
+    String contentKey =
+        '${widget.collection}/${widget.article.id}/${widget.article.contentPath}';
+    if (cache[contentKey] != null) {
+      return cache[contentKey]!;
+    }
+
+    /// Make real request
     final bytes = await firebase.storage
         .child(
-            '${widget.collection}/${widget.article.id}/${widget.article.contentPath}')
+          contentKey,
+        )
         .getData();
-
     String decodedString = utf8.decode(bytes!.toList());
+
+    /// Add result to cache
+    cache[contentKey] = decodedString;
+
     return decodedString;
   }
 
-  late Future content;
+  late Future<String> content;
 
   late double screenWidth;
 
-  late String articleKey = 'article_${widget.article.title}';
+  // late String articleKey = 'article_${widget.article.title}';
   late SessionStorage cache = SessionStorage();
   late Uint8List? _coverImage;
   late MarkdownConfig minimalisticCorporateConfig;
@@ -161,6 +176,18 @@ class _ArticleContentViewState
       configs: [
         ImgConfig(
           builder: (String url, Map<String, String>? attribute) {
+            SessionStorage cache = SessionStorage();
+            if (cache[url] != null) {
+              return Align(
+                child: AhlImageViewer.fromFuture(
+                  future: Future.value(
+                    decodeUint8ListFromString(
+                      cache[url]!,
+                    ),
+                  ),
+                ),
+              );
+            }
             if (url.contains('://')) {
               return Align(
                 child: AhlImageViewer(
@@ -172,7 +199,16 @@ class _ArticleContentViewState
 
             try {
               log(url);
-              final Future future = firebase.storage.child(url).getData();
+              final Future<Uint8List?> future =
+                  firebase.storage.child(url).getData();
+
+              future.then(
+                (value) {
+                  if (value != null) {
+                    cache[url] = encodeUint8ListToString(value);
+                  }
+                },
+              );
               return Container(
                 alignment: Alignment.center,
                 // constraints: BoxConstraints(
@@ -479,65 +515,58 @@ class _ArticleContentViewState
 
           // markdown content
           Container(
-            padding: EdgeInsets.all(
-              resolveForBreakPoint(
-                screenWidth,
-                other: Paddings.big,
-                small: 10,
-                medium: 10,
+              padding: EdgeInsets.all(
+                resolveForBreakPoint(
+                  screenWidth,
+                  other: Paddings.big,
+                  small: 10,
+                  medium: 10,
+                ),
               ),
-            ),
-            child: (cache[articleKey] == null)
-                ? FutureBuilder(
-                    future: content,
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.done:
-                          if (snapshot.hasData) {
-                            cache[articleKey] = snapshot.data!;
-                            return MarkdownBlock(
-                              data: snapshot.data ?? 'Error loading article.',
-                              config: minimalisticCorporateConfig,
-                            );
-                          } else {
-                            return Align(
-                              alignment: Alignment.center,
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    Icons.warning_rounded,
-                                    color: Theme.of(context).colorScheme.error,
-                                  ),
-                                  Text(
-                                      'Error loading article content: ${snapshot.error}')
-                                ],
+              child: FutureBuilder(
+                future: content,
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.done:
+                      if (snapshot.hasData) {
+                        return MarkdownBlock(
+                          data: snapshot.data ?? 'Error loading article.',
+                          config: minimalisticCorporateConfig,
+                        );
+                      } else {
+                        return Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.warning_rounded,
+                                color: Theme.of(context).colorScheme.error,
                               ),
-                            );
-                          }
-
-                        default:
-                          return Container(
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.height - 50,
-                            child: const CircularProgressIndicator(),
-                          );
-
-                        // default:
-                        //   return Align(
-                        //     alignment: Alignment.center,
-                        //     child: Icon(
-                        //       Icons.warning_rounded,
-                        //       color: Theme.of(context).colorScheme.error,
-                        //     ),
-                        //   );
+                              Text(
+                                  'Error loading article content: ${snapshot.error}')
+                            ],
+                          ),
+                        );
                       }
-                    },
-                  )
-                : MarkdownBlock(
-                    data: cache[articleKey] ?? 'Error loading article.',
-                    config: minimalisticCorporateConfig,
-                  ),
-          ),
+
+                    default:
+                      return Container(
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.height - 50,
+                        child: const CircularProgressIndicator(),
+                      );
+
+                    // default:
+                    //   return Align(
+                    //     alignment: Alignment.center,
+                    //     child: Icon(
+                    //       Icons.warning_rounded,
+                    //       color: Theme.of(context).colorScheme.error,
+                    //     ),
+                    //   );
+                  }
+                },
+              )),
           Container(
             padding: const EdgeInsets.symmetric(
                 vertical: 20, horizontal: Paddings.medium),
@@ -598,59 +627,65 @@ class _AhlImageViewerState extends State<AhlImageViewer> {
   @override
   Widget build(BuildContext context) {
     if (widget.url != null && widget.url!.contains("://")) {
-      return InkWell(
-        onTap: () {
-          Navigator.of(context).push(
-            DialogRoute(
-              context: context,
-              builder: (context) => ImageViewer(
-                child: Image.network(
-                  widget.url!,
-                  fit: widget.fit,
+      return SizedBox(
+        height: double.tryParse(widget.attributes?['height'] ?? ""),
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(
+              DialogRoute(
+                context: context,
+                builder: (context) => ImageViewer(
+                  child: Image.network(
+                    widget.url!,
+                    fit: widget.fit,
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-        child: Image.network(
-          widget.url!,
-          fit: widget.fit,
+            );
+          },
+          child: Image.network(
+            widget.url!,
+            fit: widget.fit,
+          ),
         ),
       );
     }
-    return FutureBuilder(
-      future: imageFuture,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          try {
-            return InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  DialogRoute(
-                    context: context,
-                    builder: (context) => ImageViewer(
-                      child: Image.memory(snapshot.data!),
+    return SizedBox(
+      height: double.tryParse(widget.attributes?['height'] ?? ""),
+      child: FutureBuilder(
+        future: imageFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            try {
+              return InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    DialogRoute(
+                      context: context,
+                      builder: (context) => ImageViewer(
+                        child: Image.memory(snapshot.data!),
+                      ),
                     ),
+                  );
+                },
+                child: Image.memory(
+                  Uint8List.fromList(
+                    snapshot.data!,
                   ),
-                );
-              },
-              child: Image.memory(
-                Uint8List.fromList(
-                  snapshot.data!,
+                  fit: widget.fit,
                 ),
-                fit: widget.fit,
-              ),
+              );
+            } catch (e) {
+              return Container();
+            }
+          } else {
+            return Container(
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(),
             );
-          } catch (e) {
-            return Container();
           }
-        } else {
-          return Container(
-            alignment: Alignment.center,
-            child: const CircularProgressIndicator(),
-          );
-        }
-      },
+        },
+      ),
     );
   }
 }

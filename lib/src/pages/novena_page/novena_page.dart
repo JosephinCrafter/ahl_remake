@@ -55,7 +55,8 @@ class _NovenaPageState extends State<NovenaPage> {
       return NovenaContentView(novena: widget.novena!);
     } else {
       context.read<ArticleBloc>().add(
-            GetArticleByIdEvent(id: widget.novenaId, collection: widget.collection),
+            GetArticleByIdEvent(
+                id: widget.novenaId, collection: widget.collection),
           );
       return BlocBuilder<ArticleBloc, ArticleState<Article>>(
         buildWhen: (previous, current) =>
@@ -127,7 +128,7 @@ class NovenaContentView extends StatefulWidget {
   /// A list of all the novena document for upcoming and past days.
   List<String> get daysId {
     List<String> daysId = [];
-    for (int i = 1; i < days.length; i++) {
+    for (int i = 1; i <= days.length; i++) {
       String novenaDayId = days['day_$i'] ?? "";
       if (novenaDayId.isNotEmpty) {
         daysId.add(novenaDayId);
@@ -140,8 +141,8 @@ class NovenaContentView extends StatefulWidget {
   List<Widget> buildNovenaDaysArticleTiles(BuildContext context) {
     List<Widget> cards = [];
 
-    for (String articleId in daysId) {
-      int day = daysId.indexOf(articleId) + 1;
+    for (String articleId in sortedDaysId) {
+      int day = sortedDaysId.indexOf(articleId) + 1;
       cards.add(
         Container(
           constraints: const BoxConstraints(
@@ -157,6 +158,7 @@ class NovenaContentView extends StatefulWidget {
             child: CardArticleTile.fromId(
               preview: "",
               label: "Neuvaine - Jour $day",
+
               direction: Axis.vertical,
               articleId: articleId,
               collection: collection,
@@ -177,9 +179,16 @@ class _NovenaContentViewState extends State<NovenaContentView> {
   @override
   void initState() {
     super.initState();
-    controller = ScrollController();
+    controller = ScrollController(
+      initialScrollOffset: 0,
+      keepScrollOffset: false,
+      // onAttach: (position) => controller.animateTo(
+      //   0,
+      //   duration: Durations.medium3,
+      //   curve: Curves.easeInOut,
+      // ),
+    );
 
-    
     daysController = ScrollController();
   }
 
@@ -193,12 +202,11 @@ class _NovenaContentViewState extends State<NovenaContentView> {
 
   @override
   Widget build(BuildContext context) {
-
     // controller.animateTo(
     //     0,
     //     duration: Durations.extralong1,
     //     curve: Curves.easeInOut,
-      
+
     // );
 
     Size screenSize = MediaQuery.sizeOf(context);
@@ -233,6 +241,7 @@ class _NovenaContentViewState extends State<NovenaContentView> {
               child: Text('Jour ${index + 1}'),
               onTap: () {
                 context.goNamed(
+
                   NovenaPage.routeName,
                   pathParameters: {"novenaId": widget.sortedDaysId[index]},
                 );
