@@ -201,17 +201,62 @@ class _ArticleContentViewState
 
         H1Config(
           style: const H1Config().style.copyWith(
-                fontFamily: "Butler",
+                fontFamily: "Poppins",
                 color: AhlTheme.blueNight,
+                fontSize: 32,
+                height: 1.25,
+                fontWeight: FontWeight.w600,
               ),
         ),
 
         H2Config(
-          style: const H2Config().style.copyWith(fontFamily: "Butler"),
+          style: const H2Config().style.copyWith(
+                fontFamily: "Poppins",
+                fontSize: 28,
+                height: 1.4,
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+        H3Config(
+          style: const H2Config().style.copyWith(
+                fontFamily: "Poppins",
+                color: AhlTheme.blueNight,
+                fontSize: 24,
+                height: 1.4,
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+        H4Config(
+          style: const H2Config().style.copyWith(
+                fontFamily: "Poppins",
+                color: AhlTheme.blueNight,
+                fontSize: 22,
+                height: 1.25,
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+        H5Config(
+          style: const H2Config().style.copyWith(
+                fontFamily: "Poppins",
+                color: AhlTheme.blueNight,
+                fontSize: 16,
+                height: 1.5,
+                fontWeight: FontWeight.w600,
+              ),
+        ),
+        H6Config(
+          style: const H2Config().style.copyWith(
+                fontFamily: "Poppins",
+                color: AhlTheme.blueNight,
+                fontSize: 14,
+                height: 1.4,
+                fontWeight: FontWeight.w600,
+              ),
         ),
         PConfig(
           textStyle: const PConfig().textStyle.copyWith(
                 fontFamily: 'Poppins',
+                color: const Color(0xFF3F403C),
                 height: 2,
               ),
         ),
@@ -283,9 +328,39 @@ class _ArticleContentViewState
   }
 
   // share button
+  Widget shareButtonBig = Builder(
+    builder: (context) => Container(
+      constraints: const BoxConstraints(maxWidth: 400),
+      alignment: Alignment.center,
+      child: OutlinedButton.icon(
+        onPressed: () {
+          var router = GoRouter.of(context);
+          String location = router.routeInformationProvider.value.uri.path;
+          Share.share("https://aujourdhuilavenir.org$location");
+        },
+        icon: const Icon(
+          Icons.share_outlined,
+          size: IconSizes.large,
+        ),
+        label: Container(
+          height: 75,
+          alignment: Alignment.center,
+          child: Text(
+            'Partager',
+            style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                  fontSize: 22,
+                  color: Theme.of(context).primaryColor,
+                ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  // share button
   Widget shareButton = Builder(
-    builder: (context) => Align(
-      alignment: Alignment.centerLeft,
+    builder: (context) => Container(
+      alignment: Alignment.center,
       child: OutlinedButton.icon(
         onPressed: () {
           var router = GoRouter.of(context);
@@ -301,20 +376,34 @@ class _ArticleContentViewState
   Widget buildMarkdownBlock(BuildContext context) {
     // share button
     Widget supportProjectButton = Builder(
-      builder: (context) => ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Theme.of(context).primaryColor,
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        ),
-        onPressed: () => Navigator.of(context).pushNamed(
-          DonationPage.routeName,
-          arguments: widget.article,
-        ),
-        label: Text(AppLocalizations.of(context)!.supportProject),
-        icon: SvgPicture.asset(
-          'images/SVG/dons.svg',
-          width: IconSizes.small,
-          height: IconSizes.small,
+      builder: (context) => Container(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          ),
+          onPressed: () => Navigator.of(context).pushNamed(
+            DonationPage.routeName,
+            arguments: widget.article,
+          ),
+          icon: SvgPicture.asset(
+            'images/SVG/dons.svg',
+            width: IconSizes.large,
+            height: IconSizes.large,
+          ),
+          label: Container(
+            alignment: Alignment.center,
+            height: 75,
+            // width: 250,
+            child: Text(
+              AppLocalizations.of(context)!.supportProject,
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    fontSize: 22,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+            ),
+          ),
         ),
       ),
     );
@@ -451,7 +540,7 @@ class _ArticleContentViewState
           Container(
             padding: const EdgeInsets.symmetric(
                 vertical: 20, horizontal: Paddings.medium),
-            child: shareButton,
+            child: shareButtonBig,
           ),
 
           if (widget.isProject)
@@ -460,6 +549,9 @@ class _ArticleContentViewState
               alignment: Alignment.center,
               child: supportProjectButton,
             ),
+          Gap(
+            resolveSeparatorSize(context),
+          ),
         ],
       ),
     );

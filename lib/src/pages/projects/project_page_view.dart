@@ -158,8 +158,8 @@ class _ProjectPageContentViewState extends State<_ProjectPageContentView>
                 alignment: Alignment.centerLeft,
                 child: Container(
                   // constraints: const BoxConstraints(maxWidth: 1024),
-                  width: screenWidth / 2 - 20,
-                  alignment: Alignment.center,
+                  // width: screenWidth / 2 - 20,
+                  alignment: const Alignment(-0.5, 0),
                   // margin: EdgeInsets.symmetric(
                   //   horizontal: resolveForBreakPoint(
                   //     screenWidth,

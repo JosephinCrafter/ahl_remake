@@ -114,6 +114,9 @@ class Sizes {
 class IconSizes {
   IconSizes._();
 
+  /// 64
+  static const double extraLarge = 64;
+
   /// 24
   static const double medium = 24;
 
