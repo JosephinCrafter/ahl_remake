@@ -80,7 +80,7 @@ class _NovenaPageState extends State<NovenaPage> {
 }
 
 class NovenaContentView extends StatelessWidget {
-  const NovenaContentView({
+  NovenaContentView({
     super.key,
     required this.novena,
     this.collection = "novena",
@@ -135,11 +135,12 @@ class NovenaContentView extends StatelessWidget {
           ),
           alignment: Alignment.center,
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: Paddings.medium),
+            margin: const EdgeInsets.symmetric(horizontal: Paddings.medium + 3),
             constraints: BoxConstraints(
               maxWidth: ContentSize.maxWidth(MediaQuery.sizeOf(context).width),
             ),
             child: CardArticleTile.fromId(
+              preview: "",
               label: "Neuvaine - Jour $day",
               direction: Axis.vertical,
               articleId: articleId,
@@ -151,6 +152,8 @@ class NovenaContentView extends StatelessWidget {
     }
     return cards;
   }
+
+  final ScrollController daysController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -195,6 +198,7 @@ class NovenaContentView extends StatelessWidget {
         ),
       ),
     );
+
     return Scaffold(
       appBar: appBar,
       endDrawer: const AhlDrawer(),
@@ -229,8 +233,43 @@ class NovenaContentView extends StatelessWidget {
               maxWidth: MediaQuery.sizeOf(context).width,
             ),
             child: ListView(
+              controller: daysController,
               scrollDirection: Axis.horizontal,
               children: buildNovenaDaysArticleTiles(context),
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 160),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(BorderSizes.medium),
+              ),
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      double newOffset = daysController.offset - 330;
+                      daysController.animateTo(newOffset,
+                          duration: Durations.medium2, curve: Curves.easeInOut);
+                    },
+                    icon: const Icon(Icons.arrow_back_rounded),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      double newOffset = daysController.offset + 330;
+
+                      daysController.animateTo(newOffset,
+                          duration: Durations.medium2, curve: Curves.easeInOut);
+                    },
+                    icon: const Icon(Icons.arrow_forward_rounded),
+                  ),
+                ],
+              ),
             ),
           ),
 

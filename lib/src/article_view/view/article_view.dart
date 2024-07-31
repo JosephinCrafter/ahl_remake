@@ -42,8 +42,6 @@ import '../../utils/storage_utils.dart';
 part 'article_content_view.dart';
 part 'highlight_article_tile.dart';
 
-// part 'highlightarticle_tile.dart';
-
 // import 'package:markdown_widget/markdown_widget.dart';
 
 String monthTextResolve(BuildContext context, String monthName) {
@@ -68,10 +66,10 @@ class ArticleTile extends StatefulWidget {
   final Article article;
 
   @override
-  State<ArticleTile> createState() => articleTileState();
+  State<ArticleTile> createState() => ArticleTileState();
 }
 
-class articleTileState extends State<ArticleTile> {
+class ArticleTileState extends State<ArticleTile> {
   // article of the tile
   late Article article;
 
@@ -375,15 +373,17 @@ class articleTileState extends State<ArticleTile> {
 
 /// A tile of article
 class CardArticleTile extends StatefulWidget {
-  const CardArticleTile({
-    super.key,
-    required this.article,
-    this.collection = 'articles',
-    this.callback,
-    this.direction,
-    this.maxHeight,
-    this.label,
-  }) : articleId = null;
+  const CardArticleTile(
+      {super.key,
+      required this.article,
+      this.collection = 'articles',
+      this.callback,
+      this.direction,
+      this.maxHeight,
+      this.label,
+      this.title,
+      this.preview})
+      : articleId = null;
 
   const CardArticleTile.fromId({
     super.key,
@@ -393,6 +393,8 @@ class CardArticleTile extends StatefulWidget {
     this.direction,
     this.maxHeight,
     this.label,
+    this.title,
+    this.preview,
   }) : article = null;
 
   final Article? article;
@@ -401,7 +403,15 @@ class CardArticleTile extends StatefulWidget {
   final String? articleId;
   final Axis? direction;
   final double? maxHeight;
+
+  /// A replacement string for the title
   final String? label;
+
+  /// A replacement string for the title
+  final String? title;
+
+  /// A replacement string for the title
+  final String? preview;
 
   @override
   State<CardArticleTile> createState() => _CardArticleTileState();
@@ -425,7 +435,7 @@ class _CardArticleTileState extends State<CardArticleTile>
   @override
   void initState() {
     collection = getCollection(widget.articleId ?? "") ?? widget.collection;
-    elevation = 0.0;
+    elevation = 5.0;
     _maxHeight = (widget.direction == Axis.vertical) ? 400 : 300;
 
     /// Make article transaction
@@ -600,21 +610,20 @@ class _CardArticleTileState extends State<CardArticleTile>
                       ),
 
                       //title
-                      if (article.title != null)
-                        // Flexible(
-                        //   child:
-                        //   Padding(
-                        //     padding: const EdgeInsets.only(
-                        //         bottom: Paddings.small, top: Paddings.small),
-                        //     child:
-                        // FittedBox(
-                        // child:
-                        Text(
-                          article.title!,
-                          style: titleTheme,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      // Flexible(
+                      //   child:
+                      //   Padding(
+                      //     padding: const EdgeInsets.only(
+                      //         bottom: Paddings.small, top: Paddings.small),
+                      //     child:
+                      // FittedBox(
+                      // child:
+                      Text(
+                        widget.title ?? article.title ?? "",
+                        style: titleTheme,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                       // ),
                       // ),
 
@@ -632,11 +641,15 @@ class _CardArticleTileState extends State<CardArticleTile>
                       //   ),
                       // ),
                       Flexible(
-                        child: ArticlePreviewTextView(
-                          article: article,
-                          collection: collection,
-                          callback: goToReadingPage,
-                        ),
+                        child: (widget.preview != null)
+                            ? Text(
+                                widget.preview!,
+                              )
+                            : ArticlePreviewTextView(
+                                article: article,
+                                collection: collection,
+                                callback: goToReadingPage,
+                              ),
                       ),
                     ],
                   ),

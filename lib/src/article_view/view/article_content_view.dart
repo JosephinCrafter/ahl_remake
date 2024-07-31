@@ -168,13 +168,13 @@ class _ArticleContentViewState
               final Future future = firebase.storage.child(url).getData();
               return Container(
                 alignment: Alignment.center,
-                constraints: BoxConstraints(
-                  maxHeight: resolveForBreakPoint(
-                    screenWidth,
-                    other: 575,
-                    small: 300,
-                  ),
-                ),
+                // constraints: BoxConstraints(
+                //   maxHeight: resolveForBreakPoint(
+                //     screenWidth,
+                //     other: 575,
+                //     small: 300,
+                //   ),
+                // ),
                 child: AhlImageViewer.fromFuture(
                   key: ValueKey(url),
                   future: future,
