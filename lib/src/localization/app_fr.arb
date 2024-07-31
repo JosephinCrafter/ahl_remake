@@ -151,7 +151,8 @@
     "description": "Title of the prayer space"
   },
   "todaySaint":"Saint du jour",
-  "office":"Vêpre du soir",
+  "office":"Office du jour",
+  "novena": "Neuvaine",
   "availableSoon": "Bientôt Disponible"
 
 }

@@ -110,18 +110,32 @@ class AhlFooter extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FooterProminentButton(
-                      callback: () => Navigator.of(context)
-                          .pushNamed(PrayersPage.routeName),
-                      text: AppLocalizations.of(context)!.priesSpace,
+                      callback: () => context.goNamed(PrayersPage.routeName),
+                      text: AppLocalizations.of(context)!.prayerSpace,
                     ),
                     FooterLowLevelButton(
-                      callback: () =>
-                          Navigator.of(context).pushNamed(RosaryPage.routeName),
-                      text: AppLocalizations.of(context)!.rosary,
+                      callback: () => context.goNamed(PrayersPage.routeName),
+                      text: AppLocalizations.of(context)!.todaysRosary,
                     ),
                     FooterLowLevelButton(
-                      callback: () {},
+                      callback: () => context.goNamed(PrayersPage.routeName),
+                      text: AppLocalizations.of(context)!.office,
+                    ),
+                    FooterLowLevelButton(
+                      callback: () => context.goNamed(PrayersPage.routeName),
+                      text: AppLocalizations.of(context)!.todaySaint,
+                    ),
+                    FooterLowLevelButton(
+                      callback: () {
+                        context.goNamed(PrayersPage.routeName);
+                      },
                       text: AppLocalizations.of(context)!.priesIntention,
+                    ),
+                    FooterLowLevelButton(
+                      callback: () {
+                        context.go('/novena/saint_dominic_day_1');
+                      },
+                      text: AppLocalizations.of(context)!.novena,
                     ),
                   ],
                 ),
@@ -130,24 +144,20 @@ class AhlFooter extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FooterProminentButton(
-                      callback: () => Navigator.of(context)
-                          .pushNamed(ProjectsPage.routeName),
+                      callback: () => context.go(ProjectsPage.routeName),
                       text: AppLocalizations.of(context)!.projectsSpace,
                     ),
                     FooterLowLevelButton(
-                      callback: () => Navigator.of(context)
-                          .pushNamed(ProjectsPage.routeName),
-                      text: AppLocalizations.of(context)!.inProgress,
+                      callback: () => context.go('/projects/cantine'),
+                      text: 'Cantine',
                     ),
                     FooterLowLevelButton(
-                      callback: () => Navigator.of(context)
-                          .pushNamed(ProjectsPage.routeName),
-                      text: AppLocalizations.of(context)!.realized,
+                      callback: () => context.go('/projects/dispensaire'),
+                      text: 'Dispensaire',
                     ),
                     FooterLowLevelButton(
-                      callback: () => Navigator.of(context)
-                          .pushNamed(ProjectsPage.routeName),
-                      text: AppLocalizations.of(context)!.initiative,
+                      callback: () => context.go('/projects/grande_salle'),
+                      text: 'Grande Salle',
                     ),
                   ],
                 ),
@@ -156,31 +166,28 @@ class AhlFooter extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FooterProminentButton(
-                      callback: () => Navigator.of(context)
-                          .pushNamed(WhoWeArePage.routeName),
+                      callback: () => context.go(WhoWeArePage.routeName),
                       text: AppLocalizations.of(context)!.domSisters,
                     ),
                     FooterLowLevelButton(
-                      callback: () => Navigator.of(context)
-                          .pushNamed(WhoWeArePage.routeName),
+                      callback: () => context.go(WhoWeArePage.routeName),
                       text: AppLocalizations.of(context)!.whoWeAre,
                     ),
-                    FooterLowLevelButton(
-                      callback: () =>
-                          ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            AppLocalizations.of(context)!.devInProgress,
-                          ),
-                        ),
-                      ),
-                      text: AppLocalizations.of(context)!.realized,
-                    ),
-                    FooterLowLevelButton(
-                      callback: () => Navigator.of(context)
-                          .pushNamed(ProjectsPage.routeName),
-                      text: AppLocalizations.of(context)!.initiative,
-                    ),
+                    // FooterLowLevelButton(
+                    //   callback: () =>
+                    //       ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(
+                    //       content: Text(
+                    //         AppLocalizations.of(context)!.devInProgress,
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   text: AppLocalizations.of(context)!.realized,
+                    // ),
+                    // FooterLowLevelButton(
+                    //   callback: () => context.go(ProjectsPage.routeName),
+                    //   text: AppLocalizations.of(context)!.initiative,
+                    // ),
                   ],
                 )
               ],
