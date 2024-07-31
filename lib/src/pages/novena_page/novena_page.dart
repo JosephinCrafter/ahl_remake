@@ -59,8 +59,8 @@ class _NovenaPageState extends State<NovenaPage> {
                 id: widget.novenaId, collection: widget.collection),
           );
       return BlocBuilder<ArticleBloc, ArticleState<Article>>(
-        buildWhen: (previous, current) =>
-            previous.articles?[widget.novenaId] == null,
+        // buildWhen: (previous, current) =>
+        //     previous.articles?[widget.novenaId] == null,
         builder: (context, state) {
           Article? novena = state.articles?[widget.novenaId];
 
