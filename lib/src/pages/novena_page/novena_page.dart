@@ -154,17 +154,31 @@ class NovenaContentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size screenSize = MediaQuery.sizeOf(context);
+
     String label = 'Neuvaine - Jour $currentDay';
+
     PreferredSizeWidget appBar = AhlAppBar(
       preferredSize: const Size.fromHeight(75 + 36),
       bottomBar: Container(
-        padding: const EdgeInsets.all(Paddings.small),
+        // padding: const EdgeInsets.all(Paddings.small),
+        constraints: BoxConstraints(
+          maxWidth: ContentSize.maxWidth(screenSize.width),
+        ),
         child: PopupMenuButton(
-          child: Row(
-            children: [
-              const Icon(Icons.arrow_drop_down_outlined),
-              Text(label),
-            ],
+          child: DefaultTextStyle(
+            style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                Text(label),
+              ],
+            ),
           ),
           itemBuilder: (context) => List.generate(
             sortedDaysId.length,
@@ -173,7 +187,7 @@ class NovenaContentView extends StatelessWidget {
               onTap: () {
                 context.goNamed(
                   NovenaPage.routeName,
-                  pathParameters:{"novenaId": sortedDaysId[index]},
+                  pathParameters: {"novenaId": sortedDaysId[index]},
                 );
               },
             ),

@@ -569,51 +569,69 @@ class _CardArticleTileState extends State<CardArticleTile>
                 child: Container(
                   alignment: Alignment.topLeft,
                   padding: (widget.direction == Axis.horizontal)
-                      ? const EdgeInsets.all(Paddings.big)
-                      : const EdgeInsets.symmetric(
-                          horizontal: Paddings.medium,
-                          vertical: Paddings.big,
+                      ? const EdgeInsets.only(
+                          top: Paddings.big,
+                          left: Paddings.big,
+                          right: Paddings.big,
+                        )
+                      : const EdgeInsets.only(
+                          top: Paddings.medium,
+                          right: Paddings.medium,
+                          left: Paddings.medium,
+
+                          // vertical: Paddings.big,
                         ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
-                        widget.label ??
-                            "${releaseDate.day} ${DateTimeUtils.localMonth(releaseDate.month, context)} ${releaseDate.year}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelMedium!
-                            .copyWith(color: Theme.of(context).primaryColor),
+                      // Flexible(
+                      //   child:
+                      FittedBox(
+                        child: Text(
+                          widget.label ??
+                              "${releaseDate.day} ${DateTimeUtils.localMonth(releaseDate.month, context)} ${releaseDate.year}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelMedium!
+                              .copyWith(color: Theme.of(context).primaryColor),
+                        ),
                       ),
 
                       //title
                       if (article.title != null)
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              bottom: Paddings.small, top: Paddings.small),
-                          child: Text(
-                            article.title!,
-                            style: titleTheme,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        // Flexible(
+                        //   child:
+                        //   Padding(
+                        //     padding: const EdgeInsets.only(
+                        //         bottom: Paddings.small, top: Paddings.small),
+                        //     child:
+                        // FittedBox(
+                        // child:
+                        Text(
+                          article.title!,
+                          style: titleTheme,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
                         ),
+                      // ),
+                      // ),
 
                       // separator
+                      // Flexible(
+                      //   child: Container(
+                      //     margin: const EdgeInsets.symmetric(
+                      //       vertical: Paddings.small,
+                      //     ),
+                      //     color: AhlTheme.yellowRelax,
+                      //     constraints: const BoxConstraints.expand(
+                      //       width: 100,
+                      //       height: 16,
+                      //     ),
+                      //   ),
+                      // ),
                       Flexible(
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                            vertical: Paddings.small,
-                          ),
-                          color: AhlTheme.yellowRelax,
-                          constraints: const BoxConstraints.expand(
-                            width: 100,
-                            height: 16,
-                          ),
-                        ),
-                      ),
-                      Expanded(
                         child: ArticlePreviewTextView(
                           article: article,
                           collection: collection,
@@ -909,11 +927,11 @@ class ArticlePreviewTextView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return articlePreviewViewState();
+    return ArticlePreviewViewState();
   }
 }
 
-class articlePreviewViewState extends State<ArticlePreviewTextView> {
+class ArticlePreviewViewState extends State<ArticlePreviewTextView> {
   // late ArticleStorageUtils articleStorageUtils;
 
   @override
@@ -935,6 +953,8 @@ class articlePreviewViewState extends State<ArticlePreviewTextView> {
                 return Container(
                   alignment: Alignment.topLeft,
                   child: RichText(
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 5,
                     softWrap: true,
                     // overflow: TextOverflow.ellipsis,
                     text: TextSpan(
