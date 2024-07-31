@@ -40,12 +40,6 @@ class _NovenaPageState extends State<NovenaPage> {
   @override
   void initState() {
     super.initState();
-
-    if (widget.novena == null) {
-      context.read<ArticleBloc>().add(
-            GetArticleByIdEvent(id: widget.novenaId, collection: "novena"),
-          );
-    }
   }
 
   @override
@@ -60,6 +54,9 @@ class _NovenaPageState extends State<NovenaPage> {
       }
       return NovenaContentView(novena: widget.novena!);
     } else {
+      context.read<ArticleBloc>().add(
+            GetArticleByIdEvent(id: widget.novenaId, collection: widget.collection),
+          );
       return BlocBuilder<ArticleBloc, ArticleState<Article>>(
         buildWhen: (previous, current) =>
             previous.articles?[widget.novenaId] == null,
@@ -70,7 +67,7 @@ class _NovenaPageState extends State<NovenaPage> {
             if (novena.relations![0]['type'] != 'novena') {
               // Future.microtask(() => context.go('/articles/${widget.novena!.id}'));
               return ArticleContentPage(
-              key: ValueKey("article_${novena.id}"),
+                key: ValueKey("article_${novena.id}"),
                 article: novena,
                 collection: widget.collection,
               );
@@ -81,7 +78,9 @@ class _NovenaPageState extends State<NovenaPage> {
             );
           } else {
             return Scaffold(
-              body: LottieBuilder.asset('animations/loading.json'),
+              body: Center(
+                child: LottieBuilder.asset('animations/loading.json'),
+              ),
             );
           }
         },
@@ -90,14 +89,19 @@ class _NovenaPageState extends State<NovenaPage> {
   }
 }
 
-class NovenaContentView extends StatelessWidget {
-  NovenaContentView({
+class NovenaContentView extends StatefulWidget {
+  const NovenaContentView({
     super.key,
     required this.novena,
     this.collection = "novena",
   });
   final Article novena;
   final String collection;
+
+  @override
+  State<NovenaContentView> createState() {
+    return _NovenaContentViewState();
+  }
 
   /// The current day of the novena
   int get currentDay {
@@ -163,14 +167,43 @@ class NovenaContentView extends StatelessWidget {
     }
     return cards;
   }
+}
 
-  final ScrollController daysController = ScrollController();
+class _NovenaContentViewState extends State<NovenaContentView> {
+  late ScrollController controller;
+
+  late ScrollController daysController;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = ScrollController();
+
+    
+    daysController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    daysController.dispose();
+    controller.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+
+    // controller.animateTo(
+    //     0,
+    //     duration: Durations.extralong1,
+    //     curve: Curves.easeInOut,
+      
+    // );
+
     Size screenSize = MediaQuery.sizeOf(context);
 
-    String label = 'Neuvaine - Jour $currentDay';
+    String label = 'Neuvaine - Jour ${widget.currentDay}';
 
     PreferredSizeWidget appBar = AhlAppBar(
       preferredSize: const Size.fromHeight(75 + 36),
@@ -195,13 +228,13 @@ class NovenaContentView extends StatelessWidget {
             ),
           ),
           itemBuilder: (context) => List.generate(
-            sortedDaysId.length,
+            widget.sortedDaysId.length,
             (index) => PopupMenuItem(
               child: Text('Jour ${index + 1}'),
               onTap: () {
                 context.goNamed(
                   NovenaPage.routeName,
-                  pathParameters: {"novenaId": sortedDaysId[index]},
+                  pathParameters: {"novenaId": widget.sortedDaysId[index]},
                 );
               },
             ),
@@ -214,18 +247,19 @@ class NovenaContentView extends StatelessWidget {
       appBar: appBar,
       endDrawer: const AhlDrawer(),
       body: ListView(
+        controller: controller,
         children: [
           ArticleContentView(
             label: label,
-            article: novena,
-            collection: collection,
+            article: widget.novena,
+            collection: widget.collection,
           ),
           Gap(
             resolveSeparatorSize(context),
           ),
           RelatedArticles(
-            article: novena,
-            collection: collection,
+            article: widget.novena,
+            collection: widget.collection,
           ),
           Gap(
             resolveSeparatorSize(context),
@@ -246,7 +280,7 @@ class NovenaContentView extends StatelessWidget {
             child: ListView(
               controller: daysController,
               scrollDirection: Axis.horizontal,
-              children: buildNovenaDaysArticleTiles(context),
+              children: widget.buildNovenaDaysArticleTiles(context),
             ),
           ),
           Container(

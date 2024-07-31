@@ -30,13 +30,6 @@ class ArticleContentPageState extends State<ArticleContentPage> {
     super.initState();
 
     scrollController = ScrollController(keepScrollOffset: true);
-
-    article = widget.article;
-    if (article == null) {
-      context.read<ArticleBloc>().add(
-            GetArticleByIdEvent(id: widget.articleId),
-          );
-    }
   }
 
   @override
@@ -48,6 +41,12 @@ class ArticleContentPageState extends State<ArticleContentPage> {
 
   @override
   Widget build(BuildContext context) {
+    article = widget.article;
+    if (article == null) {
+      context.read<ArticleBloc>().add(
+            GetArticleByIdEvent(id: widget.articleId),
+          );
+    }
     return BlocBuilder<ArticleBloc, ArticleState<Article>>(
       buildWhen: (previous, current) =>
           previous.articles?[widget.articleId] == null,
@@ -146,15 +145,16 @@ class _ArticleContentViewState
 
   @override
   void initState() {
-    content = contentFetching();
-    widget.articleUtils.getCoverImage();
     super.initState();
-
-    _coverImage = widget.articleUtils.coverImage;
   }
 
   @override
   Widget build(BuildContext context) {
+    content = contentFetching();
+    widget.articleUtils.getCoverImage();
+
+    _coverImage = widget.articleUtils.coverImage;
+
     screenWidth = MediaQuery.of(context).size.width;
 
     minimalisticCorporateConfig = MarkdownConfig(
