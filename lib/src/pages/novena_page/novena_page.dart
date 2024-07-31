@@ -52,8 +52,11 @@ class _NovenaPageState extends State<NovenaPage> {
   Widget build(BuildContext context) {
     if (widget.novena != null) {
       if (widget.novena!.relations![0]['type'] != 'novena') {
-        Future.microtask(() => context.go('/articles/${widget.novena!.id}'));
-        return const SizedBox.shrink();
+        // Future.microtask(() => context.go('/articles/${widget.novena!.id}'));
+        return ArticleContentPage(
+          article: widget.novena,
+          collection: widget.collection,
+        );
       }
       return NovenaContentView(novena: widget.novena!);
     } else {
