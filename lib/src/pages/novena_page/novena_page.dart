@@ -262,6 +262,11 @@ class _NovenaContentViewState extends State<NovenaContentView> {
                   NovenaPage.routeName,
                   pathParameters: {"novenaId": widget.sortedDaysId[index]},
                 );
+                controller.animateTo(
+                  0,
+                  duration: Durations.medium4,
+                  curve: Curves.easeInOut,
+                );
               },
             ),
           ),
