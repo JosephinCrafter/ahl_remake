@@ -692,7 +692,7 @@ class _CardArticleTileState extends State<CardArticleTile>
   }
 
   @override
-  bool get wantKeepAlive => articleStorageUtils?.coverImage != null;
+  bool get wantKeepAlive => true; // articleStorageUtils?.coverImage != null;
 
   @override
   void updateKeepAlive() {
@@ -1057,7 +1057,8 @@ class RelatedArticles extends StatefulWidget {
   State<RelatedArticles> createState() => _RelatedArticlesState();
 }
 
-class _RelatedArticlesState extends State<RelatedArticles> {
+class _RelatedArticlesState extends State<RelatedArticles>
+    with AutomaticKeepAliveClientMixin {
   late List<Widget> cards = [];
 
   List<Widget> buildRelatedArticleTiles(BuildContext context, Article article) {
@@ -1084,7 +1085,11 @@ class _RelatedArticlesState extends State<RelatedArticles> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Wrap(
       children: buildRelatedArticleTiles(context, widget.article),
     );

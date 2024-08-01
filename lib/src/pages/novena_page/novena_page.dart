@@ -272,6 +272,8 @@ class _NovenaContentViewState extends State<NovenaContentView> {
       endDrawer: const AhlDrawer(),
       body: ListView(
         controller: controller,
+        addAutomaticKeepAlives: true,
+        cacheExtent: 6000,
         children: [
           ArticleContentView(
             label: label,
@@ -302,6 +304,7 @@ class _NovenaContentViewState extends State<NovenaContentView> {
               maxWidth: MediaQuery.sizeOf(context).width,
             ),
             child: ListView(
+              addAutomaticKeepAlives: true,
               controller: daysController,
               scrollDirection: Axis.horizontal,
               children: widget.buildNovenaDaysArticleTiles(context),

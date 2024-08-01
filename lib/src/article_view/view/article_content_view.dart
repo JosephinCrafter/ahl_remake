@@ -182,8 +182,8 @@ class ArticleContentView extends StatefulWidget {
   State<ArticleContentView> createState() => _ArticleContentViewState();
 }
 
-class _ArticleContentViewState
-    extends State<ArticleContentView> /*with AutomaticKeepAliveClientMixin*/ {
+class _ArticleContentViewState extends State<ArticleContentView>
+    with AutomaticKeepAliveClientMixin {
   /// Ask content.
   Future<String> contentFetching() async {
     SessionStorage cache = SessionStorage();
@@ -219,12 +219,16 @@ class _ArticleContentViewState
   late MarkdownConfig minimalisticCorporateConfig;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     content = contentFetching();
     widget.articleUtils.getCoverImage();
 
@@ -699,6 +703,9 @@ class _AhlImageViewerState extends State<AhlImageViewer> {
                 context: context,
                 builder: (context) => ImageViewer(
                   child: Image.network(
+                    cacheHeight: 500,
+                    cacheWidth: 500,
+                    gaplessPlayback: false,
                     widget.url!,
                     fit: widget.fit,
                   ),

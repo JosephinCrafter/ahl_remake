@@ -7,9 +7,14 @@ class NewsLetterPrompt extends StatefulWidget {
   State<NewsLetterPrompt> createState() => _NewsLetterPromptState();
 }
 
-class _NewsLetterPromptState extends State<NewsLetterPrompt> {
+class _NewsLetterPromptState extends State<NewsLetterPrompt>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FutureBuilder(
       future: firebaseApp, // listen to firebaseApp initialization
       builder: (context, snapshot) {
