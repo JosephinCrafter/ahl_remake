@@ -251,50 +251,53 @@ class _ArticleContentViewState extends State<ArticleContentView>
                   ),
                 ),
               );
-            }
-            if (url.contains('://')) {
-              return Align(
-                child: AhlImageViewer(
-                  url: url,
-                  attributes: attribute,
-                ),
-              );
-            }
+            } else {
+              if (url.contains('://')) {
+                return Align(
+                  child: AhlImageViewer(
+                    url: url,
+                    attributes: attribute,
+                  ),
+                );
+              }
 
-            try {
-              log(url);
-              final Future<Uint8List?> future =
-                  firebase.storage.child(url).getData();
+              try {
+                log(url);
+                final Future<Uint8List?> future =
+                    firebase.storage.child(url).getData();
 
-              future.then(
-                (value) {
-                  if (value != null) {
-                    cache[url] = encodeUint8ListToString(value);
-                  }
-                },
-              );
-              return Container(
-                alignment: Alignment.center,
-                // constraints: BoxConstraints(
-                //   maxHeight: resolveForBreakPoint(
-                //     screenWidth,
-                //     other: 575,
-                //     small: 300,
-                //   ),
-                // ),
-                child: AhlImageViewer.fromFuture(
-                  key: ValueKey(url),
-                  future: future,
-                  attributes: attribute,
-                ),
-              );
-              // return Container();
-            } catch (e) {
-              log("[ArticleContentViewState] Error getting image: $e");
-              return Container(
-                alignment: Alignment.center,
-                child: const Icon(Icons.warning),
-              );
+                future.then(
+                  (value) {
+                    if (value != null) {
+                      if (cache[url] == null) {
+                        cache[url] = encodeUint8ListToString(value);
+                      }
+                    }
+                  },
+                );
+                return Container(
+                  alignment: Alignment.center,
+                  // constraints: BoxConstraints(
+                  //   maxHeight: resolveForBreakPoint(
+                  //     screenWidth,
+                  //     other: 575,
+                  //     small: 300,
+                  //   ),
+                  // ),
+                  child: AhlImageViewer.fromFuture(
+                    key: ValueKey(url),
+                    future: future,
+                    attributes: attribute,
+                  ),
+                );
+                // return Container();
+              } catch (e) {
+                log("[ArticleContentViewState] Error getting image: $e");
+                return Container(
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.warning),
+                );
+              }
             }
           },
         ),

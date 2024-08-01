@@ -141,8 +141,11 @@ class _ProjectPageContentViewState extends State<_ProjectPageContentView>
 
   @override
   Widget build(BuildContext context) {
+    
     var screenWidth = MediaQuery.sizeOf(context).width;
+    
     var title = widget.project?.title;
+
     // var value = needDisplayTitleInAppBar ? 1.0 : 0.0;
     return Scaffold(
       key: ValueKey(widget.project),
@@ -357,21 +360,15 @@ class ProjectDescriptionContentView extends StatelessWidget {
     // List<Widget> suggestion = context.read<ProjectBloc>().state.articles?.map<Widget>((element)=>).toList();
     return ListView(
       controller: scrollController,
+      addAutomaticKeepAlives: true,
       children: [
-        Container(
-          color: Theme.of(context).colorScheme.surfaceContainerLow,
-          child: Column(
-            children: [
-              ArticleContentView(
-                isProject: true,
-                article: currentArticle,
-                collection: "/projects",
-              ),
-              Gap(
-                resolveSeparatorSize(context),
-              ),
-            ],
-          ),
+        ArticleContentView(
+          isProject: true,
+          article: currentArticle,
+          collection: "projects",
+        ),
+        Gap(
+          resolveSeparatorSize(context),
         ),
         const NewsLetterPrompt(),
         Gap(resolveSeparatorSize(context)),

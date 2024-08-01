@@ -148,7 +148,10 @@ class NovenaContentView extends StatefulWidget {
     return daysId;
   }
 
-  List<Widget> buildNovenaDaysArticleTiles(BuildContext context) {
+  List<Widget> buildNovenaDaysArticleTiles(
+    BuildContext context, {
+    void Function(String? novenaId)? callback,
+  }) {
     List<Widget> cards = [];
 
     for (String novenaId in sortedDaysId) {
@@ -169,10 +172,9 @@ class NovenaContentView extends StatefulWidget {
               preview: "",
               label: "Neuvaine - Jour $day",
               callback: () {
-                context.goNamed(
-                  NovenaPage.routeName,
-                  pathParameters: {'novenaId': novenaId},
-                );
+                if (callback != null) {
+                  callback(novenaId);
+                }
               },
               direction: Axis.vertical,
               articleId: novenaId,
@@ -307,7 +309,17 @@ class _NovenaContentViewState extends State<NovenaContentView> {
               addAutomaticKeepAlives: true,
               controller: daysController,
               scrollDirection: Axis.horizontal,
-              children: widget.buildNovenaDaysArticleTiles(context),
+              children: widget.buildNovenaDaysArticleTiles(
+                context,
+                callback: (novenaId) {
+                  context.goNamed(
+                    NovenaPage.routeName,
+                    pathParameters: {'novenaId': novenaId!},
+                  );
+                  controller.animateTo(0,
+                      duration: Durations.medium4, curve: Curves.easeInOut);
+                },
+              ),
             ),
           ),
           Container(
