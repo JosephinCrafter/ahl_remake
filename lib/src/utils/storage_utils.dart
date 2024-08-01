@@ -80,6 +80,9 @@ final class ArticleStorageUtils {
   }
 
   Future<Uint8List?> getCoverImage() async {
+    if (coverImage != null) {
+      return coverImage;
+    }
     Uint8List? data;
     String? dataString = cache[coverImageDataKey];
     //cache check

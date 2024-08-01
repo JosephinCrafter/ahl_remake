@@ -8,13 +8,13 @@ class ArticleContentPage extends StatefulWidget {
   const ArticleContentPage({
     super.key,
     required this.article,
-    this.collection = "/articles",
+    this.collection = "articles",
   }) : articleId = null;
 
   /// Build article page from article id.
   const ArticleContentPage.fromId({
     super.key,
-    this.collection = "/articles",
+    this.collection = "articles",
     required this.articleId,
   }) : article = null;
 
@@ -215,7 +215,7 @@ class _ArticleContentViewState extends State<ArticleContentView>
 
   // late String articleKey = 'article_${widget.article.title}';
   late SessionStorage cache = SessionStorage();
-  late Uint8List? _coverImage;
+  late Future<Uint8List?> _coverImage;
   late MarkdownConfig minimalisticCorporateConfig;
 
   @override
@@ -232,7 +232,7 @@ class _ArticleContentViewState extends State<ArticleContentView>
     content = contentFetching();
     widget.articleUtils.getCoverImage();
 
-    _coverImage = widget.articleUtils.coverImage;
+    _coverImage = widget.articleUtils.getCoverImage();
 
     screenWidth = MediaQuery.of(context).size.width;
 
@@ -579,7 +579,7 @@ class _ArticleContentViewState extends State<ArticleContentView>
             // constraints: const BoxConstraints.expand(),
             child: AhlImageViewer.fromFuture(
               fit: BoxFit.cover,
-              future: Future<Uint8List?>.value(_coverImage),
+              future: _coverImage,
             ),
           ),
 
