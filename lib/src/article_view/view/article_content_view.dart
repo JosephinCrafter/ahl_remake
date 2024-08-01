@@ -2,34 +2,58 @@ part of 'article_view.dart';
 
 /// Article Page
 class ArticleContentPage extends StatefulWidget {
+  /// Build [ArticleContentPage] from a article object.
+  ///
+  /// [article] is required to be not null.
   const ArticleContentPage({
     super.key,
     required this.article,
     this.collection = "/articles",
   }) : articleId = null;
 
+  /// Build article page from article id.
   const ArticleContentPage.fromId({
     super.key,
     this.collection = "/articles",
     required this.articleId,
   }) : article = null;
 
+  /// The article base route name
   static const String routeName = 'articles';
+
+  /// The current article to be displayed.
   final Article? article;
+
+  /// The collection where to look for article files
   final String? collection;
+
+  /// Article id.
+  ///
+  /// It's a path where to search for the article data on the firestore.
   final String? articleId;
+
   @override
   State<ArticleContentPage> createState() => ArticleContentPageState();
 }
 
 class ArticleContentPageState extends State<ArticleContentPage> {
+  /// The page scrollController;
   late ScrollController scrollController;
+
+  /// The current article to be displayed.
+  ///
+  /// If [widget.article] is not null, then it is that article.
+  /// If not, then [article] if fetched from  [ArticleBloc].
   late Article? article;
+
   @override
   void initState() {
     super.initState();
 
-    scrollController = ScrollController(keepScrollOffset: true);
+    scrollController = ScrollController(
+      keepScrollOffset: true,
+      initialScrollOffset: 0,
+    );
   }
 
   @override
@@ -41,11 +65,47 @@ class ArticleContentPageState extends State<ArticleContentPage> {
 
   @override
   Widget build(BuildContext context) {
+    /// get article from [widget]
     article = widget.article;
+
+    /// If [article] is null, then retriever it from [ArticleBloc].
     if (article == null) {
       context.read<ArticleBloc>().add(
             GetArticleByIdEvent(id: widget.articleId),
           );
+    } else {
+      /// when article is not null
+      String? type = widget.article!.relations?[0]['type'];
+
+      switch (type) {
+        case 'novena':
+          context.goNamed(NovenaPage.routeName, extra: article);
+          return const SizedBox();
+
+        default:
+          return LayoutBuilder(
+            builder: (context, constraints) => Scaffold(
+              endDrawer: constraints.maxWidth <= ScreenSizes.large
+                  ? const AhlDrawer()
+                  : null,
+              appBar: const AhlAppBar(),
+              body: ListView(
+                controller: scrollController,
+                addAutomaticKeepAlives: true,
+                children: [
+                  ArticleContentView(
+                    collection: widget.collection,
+                    article: article!,
+                    controller: scrollController,
+                  ),
+                  const Gap(25),
+                  const NewsLetterPrompt(),
+                  const AhlFooter(),
+                ],
+              ),
+            ),
+          );
+      }
     }
     return BlocBuilder<ArticleBloc, ArticleState<Article>>(
       // buildWhen: (previous, current) =>
@@ -451,18 +511,7 @@ class _ArticleContentViewState
           // padding: const EdgeInsets.all(Paddings.medium),
           Column(
         children: [
-          // title
-          Container(
-            padding: const EdgeInsets.all(Paddings.medium),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              widget.article.title ?? "",
-              style: resolveHeadlineTextThemeForBreakPoints(
-                MediaQuery.of(context).size.width,
-                context,
-              ),
-            ),
-          ),
+          // label
           Container(
             padding: const EdgeInsets.all(Paddings.medium),
             alignment: Alignment.centerLeft,
@@ -476,14 +525,27 @@ class _ArticleContentViewState
                   .copyWith(color: Theme.of(context).primaryColor),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: Paddings.medium),
-            child: AhlDivider(
-              leading: 0,
-              trailing: 50,
-              thickness: 16,
+
+          // title
+          Container(
+            padding: const EdgeInsets.all(Paddings.medium),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              widget.article.title ?? "",
+              style: resolveHeadlineTextThemeForBreakPoints(
+                MediaQuery.of(context).size.width,
+                context,
+              ),
             ),
           ),
+          // const Padding(
+          //   padding: EdgeInsets.symmetric(vertical: Paddings.medium),
+          //   child: AhlDivider(
+          //     leading: 0,
+          //     trailing: 50,
+          //     thickness: 16,
+          //   ),
+          // ),
 
           Container(
             padding: const EdgeInsets.all(Paddings.medium),
@@ -500,18 +562,19 @@ class _ArticleContentViewState
             ),
             child: shareButton,
           ),
-          Container(
-              height: resolveForBreakPoint(
-                screenWidth,
-                other: 575,
-                small: 300,
-              ),
-              width: double.maxFinite,
-              // constraints: const BoxConstraints.expand(),
-              child: AhlImageViewer.fromFuture(
-                fit: BoxFit.cover,
-                future: Future.value(_coverImage),
-              )),
+          SizedBox(
+            height: resolveForBreakPoint(
+              screenWidth,
+              other: 575,
+              small: 300,
+            ),
+            width: double.maxFinite,
+            // constraints: const BoxConstraints.expand(),
+            child: AhlImageViewer.fromFuture(
+              fit: BoxFit.cover,
+              future: Future<Uint8List?>.value(_coverImage),
+            ),
+          ),
 
           // markdown content
           Container(
@@ -654,35 +717,48 @@ class _AhlImageViewerState extends State<AhlImageViewer> {
       height: double.tryParse(widget.attributes?['height'] ?? ""),
       child: FutureBuilder(
         future: imageFuture,
+        key: ValueKey(widget.url),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            try {
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    DialogRoute(
-                      context: context,
-                      builder: (context) => ImageViewer(
-                        child: Image.memory(snapshot.data!),
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              if (snapshot.hasData) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      DialogRoute(
+                        context: context,
+                        builder: (context) => ImageViewer(
+                          child: Image.memory(snapshot.data!),
+                        ),
                       ),
+                    );
+                  },
+                  child: Image.memory(
+                    Uint8List.fromList(
+                      snapshot.data!,
                     ),
-                  );
-                },
-                child: Image.memory(
-                  Uint8List.fromList(
-                    snapshot.data!,
+                    fit: widget.fit,
                   ),
-                  fit: widget.fit,
-                ),
+                );
+              } else {
+                return Container(
+                  height: 400,
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: [
+                      const Icon(Icons.error),
+                      Text("Error getting Image: ${snapshot.error}"),
+                      Text('Data: ${snapshot.data}, future: $imageFuture'),
+                    ],
+                  ),
+                );
+              }
+            default:
+              return Container(
+                height: 400,
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(),
               );
-            } catch (e) {
-              return Container();
-            }
-          } else {
-            return Container(
-              alignment: Alignment.center,
-              child: const CircularProgressIndicator(),
-            );
           }
         },
       ),
