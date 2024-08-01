@@ -80,7 +80,7 @@ class _NovenaPageState extends State<NovenaPage> {
               collection: widget.collection,
             );
           } else {
-            if (state.status != ArticleStatus.initial && novena == null) {
+            if (state.status == ArticleStatus.failed && novena == null) {
               return FutureBuilder(
                 future: Future(
                   () => context.goNamed(HomePage.routeName),

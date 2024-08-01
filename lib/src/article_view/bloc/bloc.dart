@@ -94,6 +94,13 @@ class ArticleBloc extends Bloc<ArticleEvent, ArticleState<fire_art.Article>> {
   }
 
   void _onGetArticleById(GetArticleByIdEvent event, Emitter emit) async {
+    emit(
+      state.copyWith(
+        status: ArticleStatus.initial,
+        error: null,
+      ),
+    );
+
     Object? error;
     fire_art.Article? result;
     try {
