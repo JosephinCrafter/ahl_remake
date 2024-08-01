@@ -740,7 +740,8 @@ class _AhlImageViewerState extends State<AhlImageViewer> {
                     fit: widget.fit,
                   ),
                 );
-              } else {
+              }
+              if (snapshot.hasError) {
                 return Container(
                   height: 400,
                   alignment: Alignment.center,
@@ -748,11 +749,16 @@ class _AhlImageViewerState extends State<AhlImageViewer> {
                     children: [
                       const Icon(Icons.error),
                       Text("Error getting Image: ${snapshot.error}"),
-                      Text('Data: ${snapshot.data}, future: $imageFuture'),
+                      Text('Data: $snapshot'),
                     ],
                   ),
                 );
               }
+              return Container(
+                height: 400,
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(),
+              );
             default:
               return Container(
                 height: 400,

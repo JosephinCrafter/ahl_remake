@@ -3,8 +3,10 @@ import 'package:ahl/src/article_view/bloc/bloc.dart';
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/view/article_view.dart';
 import 'package:ahl/src/newsletter/newsletter.dart';
+import 'package:ahl/src/pages/homepage/homepage.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/widgets/widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -78,6 +80,14 @@ class _NovenaPageState extends State<NovenaPage> {
               collection: widget.collection,
             );
           } else {
+            if (state.status != ArticleStatus.initial && novena == null) {
+              return FutureBuilder(
+                future: Future(
+                  () => context.goNamed(HomePage.routeName),
+                ),
+                builder: (_, __) => const SizedBox.shrink(),
+              );
+            }
             return Scaffold(
               body: Center(
                 child: LottieBuilder.asset('animations/loading.json'),
@@ -207,13 +217,13 @@ class _NovenaContentViewState extends State<NovenaContentView> {
 
   @override
   Widget build(BuildContext context) {
-    Future.microtask(
-      () => controller.animateTo(
-        0,
-        duration: Durations.extralong1,
-        curve: Curves.easeInOut,
-      ),
-    );
+    // Future.microtask(
+    //   () => controller.animateTo(
+    //     0,
+    //     duration: Durations.extralong1,
+    //     curve: Curves.easeInOut,
+    //   ),
+    // );
 
     Size screenSize = MediaQuery.sizeOf(context);
 
