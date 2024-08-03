@@ -34,4 +34,5 @@ class AhlAssets {
   static String requestMotif = "${releasePath}images/motif_prayer.webp";
   static String projectSpaceCover =
       '${releasePath}images/project_space_banner.webp';
+  static String dons = '${releasePath}images/SVG/dons.svg';
 }

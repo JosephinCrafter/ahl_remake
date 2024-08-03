@@ -261,6 +261,10 @@ class _NovenaContentViewState extends State<NovenaContentView> {
                 context.goNamed(
                   NovenaPage.routeName,
                   pathParameters: {"novenaId": widget.sortedDaysId[index]},
+                  extra: context
+                      .read<ArticleBloc>()
+                      .state
+                      .articles?[widget.sortedDaysId[index]],
                 );
                 controller.animateTo(
                   0,

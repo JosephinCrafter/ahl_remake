@@ -463,17 +463,14 @@ class _ArticleContentViewState extends State<ArticleContentView>
 
   // share button
   Widget shareButton = Builder(
-    builder: (context) => Container(
-      alignment: Alignment.centerLeft,
-      child: OutlinedButton.icon(
-        onPressed: () {
-          var router = GoRouter.of(context);
-          String location = router.routeInformationProvider.value.uri.path;
-          Share.share("https://aujourdhuilavenir.org$location");
-        },
-        label: const Text('Partager'),
-        icon: const Icon(Icons.share_outlined),
-      ),
+    builder: (context) => OutlinedButton.icon(
+      onPressed: () {
+        var router = GoRouter.of(context);
+        String location = router.routeInformationProvider.value.uri.path;
+        Share.share("https://aujourdhuilavenir.org$location");
+      },
+      label: const Text('Partager'),
+      icon: const Icon(Icons.share_outlined),
     ),
   );
 
@@ -492,7 +489,7 @@ class _ArticleContentViewState extends State<ArticleContentView>
             arguments: widget.article,
           ),
           icon: SvgPicture.asset(
-            'images/SVG/dons.svg',
+            AhlAssets.dons,
             width: IconSizes.large,
             height: IconSizes.large,
           ),
@@ -563,11 +560,57 @@ class _ArticleContentViewState extends State<ArticleContentView>
           ),
           // share button
           Container(
+            alignment: Alignment.centerLeft,
             padding: const EdgeInsets.symmetric(
               vertical: 20,
               horizontal: Paddings.medium,
             ),
-            child: shareButton,
+            child: Wrap(
+              alignment: WrapAlignment.start,
+              runAlignment: WrapAlignment.start,
+              crossAxisAlignment: WrapCrossAlignment.start,
+              children: [
+                shareButton,
+                if (widget.article.relations?[0]['audio'] != null)
+                  OutlinedButton.icon(
+                    // shape: const StadiumBorder(),
+                    // backgroundColor: Colors.transparent,
+                    label: Text('Ecouter Podcast'),
+                    icon: Icon(Icons.music_note_rounded),
+                    onPressed: () {
+                      PersistentBottomSheetController? controller;
+                      controller =
+                          Scaffold.maybeOf(context)?.showBottomSheet((context) {
+                        return Container(
+                          constraints: const BoxConstraints.tightFor(
+                            height: 162,
+                          ),
+                          child: Stack(
+                            children: [
+                              FirebaseAudioPlayer(
+                                article: widget.article,
+                                collection: widget.collection,
+                              ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: IconButton(
+                                  icon: const Icon(Icons.close_rounded),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryFixed,
+                                  onPressed: () {
+                                    controller?.close();
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      });
+                    },
+                  ),
+              ],
+            ),
           ),
           SizedBox(
             height: resolveForBreakPoint(
