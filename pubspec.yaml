@@ -15,8 +15,8 @@ dependencies:
   firebase_article:
      git: https://github.com/Josephincrafter/firebase_article.git
   audio_player:
-    path: ../audio_player/
-    # git: https://github.com/Josephincrafter/audio_player.git
+    # path: ../audio_player/
+    git: https://github.com/Josephincrafter/audio_player.git
   cloud_firestore: ^5.1.0
   # cloud_functions: ^4.6.0
   # firebase_analytics: ^10.8.0
