@@ -68,9 +68,11 @@ packages:
   audio_player:
     dependency: "direct main"
     description:
-      path: "../audio_player"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: a594752547b65d57bf56218a55fa60f26a20fd83
+      url: "https://github.com/Josephincrafter/audio_player.git"
+    source: git
     version: "0.0.1"
   audio_service:
     dependency: "direct main"
