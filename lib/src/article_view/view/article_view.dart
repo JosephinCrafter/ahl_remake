@@ -35,7 +35,7 @@ import 'package:ahl/src/firebase_constants.dart' as firebase;
 import 'package:ahl/src/theme/theme.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import '../../utils/date_time_utils.dart';
-import 'package:ahl/src/ahl_barrel.dart';
+import 'package:ahl/ahl_barrel.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 
 import '../../utils/storage_utils.dart';

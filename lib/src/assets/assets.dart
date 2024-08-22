@@ -1,4 +1,4 @@
-part of '../ahl_barrel.dart';
+part of '../../ahl_barrel.dart';
 
 /// This source file collect all assets in the project and provide handier
 /// way to interact with them.

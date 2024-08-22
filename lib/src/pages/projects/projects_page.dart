@@ -22,7 +22,7 @@ import 'package:gap/gap.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:ahl/src/ahl_barrel.dart';
+import 'package:ahl/ahl_barrel.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';

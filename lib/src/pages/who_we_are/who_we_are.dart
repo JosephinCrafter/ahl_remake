@@ -1,7 +1,7 @@
 import 'dart:developer' as developer;
 import 'dart:math';
 
-import 'package:ahl/src/ahl_barrel.dart';
+import 'package:ahl/ahl_barrel.dart';
 import 'package:ahl/src/who_we_are/view.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';

@@ -14,7 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 
-import '../ahl_barrel.dart';
+import '../../ahl_barrel.dart';
 import '../widgets/widgets.dart';
 
 part 'view.dart';

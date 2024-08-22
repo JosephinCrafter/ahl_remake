@@ -7,7 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:ahl/src/newsletter/newsletter.dart';
 import 'package:ahl/src/prayers_space/view.dart';
 import 'package:ahl/src/widgets/widgets.dart';
-import '../../ahl_barrel.dart';
+import '../../../ahl_barrel.dart';
 import '../../utils/breakpoint_resolver.dart';
 import '../projects/projects_page.dart';
 

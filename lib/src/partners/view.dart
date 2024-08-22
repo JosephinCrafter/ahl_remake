@@ -8,7 +8,7 @@ import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import "package:gap/gap.dart";
 
-import "package:ahl/src/ahl_barrel.dart";
+import "package:ahl/ahl_barrel.dart";
 import "package:ahl/src/firebase_constants.dart";
 import "package:ahl/src/theme/theme.dart";
 import "package:ahl/src/utils/breakpoint_resolver.dart";

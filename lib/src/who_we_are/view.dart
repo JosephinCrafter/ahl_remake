@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:ahl/src/ahl_barrel.dart';
+import '../../ahl_barrel.dart';
 import 'package:ahl/src/firebase_constants.dart';
 import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';

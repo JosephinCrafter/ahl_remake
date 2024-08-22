@@ -1,4 +1,4 @@
-import 'package:ahl/src/ahl_barrel.dart';
+import 'package:ahl/ahl_barrel.dart';
 import 'package:ahl/src/article_view/bloc/bloc.dart';
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/view/article_view.dart';

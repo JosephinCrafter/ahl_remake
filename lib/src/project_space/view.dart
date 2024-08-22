@@ -18,7 +18,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:session_storage/session_storage.dart';
 
-import '../ahl_barrel.dart';
+import '../../ahl_barrel.dart';
 import '../article_view/state/state.dart';
 import '../theme/theme.dart';
 import '../widgets/widgets.dart';

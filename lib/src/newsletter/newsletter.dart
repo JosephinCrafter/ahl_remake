@@ -8,7 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:ahl/src/firebase_constants.dart';
-import 'package:ahl/src/ahl_barrel.dart';
+import 'package:ahl/ahl_barrel.dart';
 import '../theme/theme.dart' as theme;
 import '../validation/email_validation.dart';
 

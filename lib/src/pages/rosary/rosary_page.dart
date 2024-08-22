@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ahl/src/newsletter/newsletter.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 
-import '../../ahl_barrel.dart';
+import '../../../ahl_barrel.dart';
 
 class RosaryPage extends StatefulWidget {
   const RosaryPage({super.key});

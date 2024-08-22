@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gap/gap.dart';
 
-import '../ahl_barrel.dart';
+import '../../ahl_barrel.dart';
 import '../widgets/widgets.dart';
 import '../prayers_intention/prayer_request.dart';
 // import 'package:ahl/src/prayers_intention/prayers_intention.dart';

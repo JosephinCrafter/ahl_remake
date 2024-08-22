@@ -9,7 +9,7 @@ import '../../prayers/prayers_page.dart';
 import '../..//who_we_are/who_we_are.dart';
 import '../../../theme/theme.dart';
 import '../../../utils/breakpoint_resolver.dart';
-import '../../../ahl_barrel.dart';
+import '../../../../ahl_barrel.dart';
 
 class HeroHeaderView extends StatelessWidget {
   const HeroHeaderView({super.key});

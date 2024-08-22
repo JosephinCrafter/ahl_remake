@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:ahl/src/ahl_barrel.dart';
+import 'package:ahl/ahl_barrel.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
 

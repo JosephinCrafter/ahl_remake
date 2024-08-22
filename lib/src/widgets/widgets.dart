@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../ahl_barrel.dart';
+import '../../ahl_barrel.dart';
 import '../localization/locale_utils.dart';
 import '../pages/homepage/donation/donation_page.dart';
 import '../pages/homepage/homepage.dart';

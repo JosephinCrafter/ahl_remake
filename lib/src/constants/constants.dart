@@ -1,4 +1,4 @@
-part of '../ahl_barrel.dart';
+part of '../../ahl_barrel.dart';
 
 /// Maximum number of suggestions in Article Based architecture.
 const int maxSuggestionArticle = 10;

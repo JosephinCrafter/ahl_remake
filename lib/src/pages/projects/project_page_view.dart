@@ -1,4 +1,4 @@
-import 'package:ahl/src/ahl_barrel.dart';
+import 'package:ahl/ahl_barrel.dart';
 
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/theme/theme.dart';
@@ -22,7 +22,7 @@ import '../../pages/homepage/donation/donation_page.dart';
 import '../../pages/projects/projects_page.dart';
 import '../../project_space/bloc.dart';
 import '../../widgets/widgets.dart';
-import '../../ahl_barrel.dart';
+import '../../../ahl_barrel.dart';
 
 class ProjectPageView extends StatelessWidget {
   const ProjectPageView({
