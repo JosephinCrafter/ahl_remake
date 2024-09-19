@@ -3,11 +3,9 @@
     "Ajourd'hui",
     "Aujourd'hui",
     "cantine",
-    "dotlottie",
-    "extralong",
-    "l'avenir",
-    "microtask",
-    "Mois",
-    "RJLCGV"
-  ]
+    "l'avenir"
+  ],
+  "dart.flutterSdkPath": "~/flutter",
+  "IDX.aI.enableInlineCompletion": true,
+  "IDX.aI.enableCodebaseIndexing": true
 }
