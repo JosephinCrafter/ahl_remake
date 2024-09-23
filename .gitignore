@@ -57,3 +57,6 @@ web/firebase-firestore.js
 web/firebase-storage.js
 pubspec.lock
 .vscode/settings.json
+.idx/dev.nix
+pubspec.lock
+.gitignore
