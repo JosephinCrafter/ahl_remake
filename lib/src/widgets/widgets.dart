@@ -2,10 +2,8 @@ import 'dart:developer';
 import 'dart:js_interop';
 
 import 'package:ahl/src/pages/prayers/prayers_page.dart';
-import 'package:ahl/src/pages/rosary/rosary_page.dart';
 import 'package:audio_player/audio_player.dart';
 import 'package:firebase_article/firebase_article.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_animate/flutter_animate.dart';

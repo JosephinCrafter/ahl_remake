@@ -57,6 +57,8 @@ dependencies:
   go_router: ^14.2.1
   just_audio: ^0.9.39
   audio_service: ^0.18.15
+  audio_player: 
+    git: https://github.com/JosephinCrafter/audio_player.git
 
 dev_dependencies:
   flutter_test:
