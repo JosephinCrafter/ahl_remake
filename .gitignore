@@ -35,6 +35,7 @@ functions/venv/Scripts/
 .pub/
 /build/
 .vscode/
+pubspec.lock
 
 # Symbolication related
 app.*.symbols
@@ -46,17 +47,14 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-pubspec.lock
 assets/images/prayers_hero_header.png
 
 # FVM Version Cache
 .fvm/
-pubspec.lock
 web/firebase-app.js
 web/firebase-firestore.js
 web/firebase-storage.js
-pubspec.lock
 .vscode/settings.json
 .idx/dev.nix
-pubspec.lock
 .gitignore
+.firebase/hosting.YnVpbGRcd2Vi.cache
