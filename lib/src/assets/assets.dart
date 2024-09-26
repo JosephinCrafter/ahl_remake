@@ -35,4 +35,6 @@ class AhlAssets {
   static String projectSpaceCover =
       '${releasePath}images/project_space_banner.webp';
   static String dons = '${releasePath}images/SVG/dons.svg';
+  static String doneAnimation = '${releasePath}animations/done.lottie';
+
 }

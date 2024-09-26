@@ -50,7 +50,7 @@ class _PrayersIntentionRequestViewState
         child: Container(
           alignment: Alignment.center,
           child: DotLottieLoader.fromAsset(
-            "animations/done.lottie",
+            AhlAssets.doneAnimation,
             frameBuilder: (BuildContext ctx, DotLottie? dotlottie) {
               if (dotlottie != null) {
                 return Lottie.memory(
