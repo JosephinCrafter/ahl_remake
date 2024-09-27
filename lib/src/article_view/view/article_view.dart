@@ -641,6 +641,7 @@ class _CardArticleTileState extends State<CardArticleTile>
                       //     ),
                       //   ),
                       // ),
+                      const Gap(20),
                       Flexible(
                         child: (widget.preview != null)
                             ? Text(
@@ -965,7 +966,7 @@ class ArticlePreviewViewState extends State<ArticlePreviewTextView> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return Container(
-                  alignment: Alignment.topLeft,
+                  alignment: Alignment.topCenter,
                   child: RichText(
                     overflow: TextOverflow.ellipsis,
                     maxLines: 5,

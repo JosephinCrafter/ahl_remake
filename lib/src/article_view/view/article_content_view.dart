@@ -568,47 +568,15 @@ class _ArticleContentViewState extends State<ArticleContentView>
             child: Wrap(
               alignment: WrapAlignment.start,
               runAlignment: WrapAlignment.start,
+              spacing: 20,
+              runSpacing: 20,
               crossAxisAlignment: WrapCrossAlignment.start,
               children: [
+                ListenPodcastButton(
+                  article: widget.article,
+                  collection: widget.collection,
+                ),
                 shareButton,
-                if (widget.article.relations?[0]['audio'] != null)
-                  OutlinedButton.icon(
-                    // shape: const StadiumBorder(),
-                    // backgroundColor: Colors.transparent,
-                    label: Text('Ecouter Podcast'),
-                    icon: Icon(Icons.music_note_rounded),
-                    onPressed: () {
-                      PersistentBottomSheetController? controller;
-                      controller =
-                          Scaffold.maybeOf(context)?.showBottomSheet((context) {
-                        return Container(
-                          constraints: const BoxConstraints.tightFor(
-                            height: 162,
-                          ),
-                          child: Stack(
-                            children: [
-                              FirebaseAudioPlayer(
-                                article: widget.article,
-                                collection: widget.collection,
-                              ),
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: IconButton(
-                                  icon: const Icon(Icons.close_rounded),
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryFixed,
-                                  onPressed: () {
-                                    controller?.close();
-                                  },
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      });
-                    },
-                  ),
               ],
             ),
           ),
@@ -698,6 +666,83 @@ class _ArticleContentViewState extends State<ArticleContentView>
         ],
       ),
     );
+  }
+}
+
+class ListenPodcastButton extends StatelessWidget {
+  const ListenPodcastButton({
+    super.key,
+    required this.article,
+    this.collection,
+    this.iconSize = 24,
+  });
+
+  final Article article;
+  final String? collection;
+  final double iconSize;
+
+  @override
+  Widget build(BuildContext context) {
+    if (article.relations?[0]['audio'] != null) {
+      return ElevatedButton.icon(
+        // shape: const StadiumBorder(),
+        // backgroundColor: Colors.transparent,
+        style: ElevatedButton.styleFrom(
+          // padding: const EdgeInsets.symmetric(
+          //   vertical: 10,
+          //   horizontal: 16,
+          // ),
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        ),
+        label: Text(
+          AppLocalizations.of(context)!.listenPodcast,
+        ),
+        icon: const Icon(Icons.play_arrow),
+        onPressed: () {
+          PersistentBottomSheetController? controller;
+          controller = Scaffold.maybeOf(context)?.showBottomSheet((context) {
+            return Container(
+              constraints: const BoxConstraints.tightFor(
+                height: 125,
+              ),
+              child: Stack(
+                children: [
+                  FirebaseAudioPlayer(
+                    article: article,
+                    collection: collection,
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.minimize, size: iconSize),
+                          color: Theme.of(context).colorScheme.onPrimaryFixed,
+                          onPressed: () {
+                            controller?.close();
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.close_rounded, size: iconSize),
+                          color: Theme.of(context).colorScheme.onPrimaryFixed,
+                          onPressed: () {
+                            controller?.close();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+        },
+      );
+    } else {
+      return const SizedBox.shrink();
+    }
   }
 }
 

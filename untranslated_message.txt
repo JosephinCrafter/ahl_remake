@@ -65,6 +65,7 @@
     "todaySaint",
     "office",
     "novena",
-    "availableSoon"
+    "availableSoon",
+    "listenPodcast"
   ]
 }

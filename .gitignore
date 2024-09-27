@@ -54,7 +54,6 @@ assets/images/prayers_hero_header.png
 web/firebase-app.js
 web/firebase-firestore.js
 web/firebase-storage.js
-.vscode/settings.json
 .idx/dev.nix
 .gitignore
 .firebase/hosting.YnVpbGRcd2Vi.cache

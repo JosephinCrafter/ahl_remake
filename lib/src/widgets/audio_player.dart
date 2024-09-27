@@ -48,7 +48,7 @@ class _FirebaseAudioPlayerState extends State<FirebaseAudioPlayer> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return AudioPlayerView(
-              color: Theme.of(context).colorScheme.secondary,
+              color: AhlTheme.darkNight,//Theme.of(context).colorScheme.secondary,
               buttonColor: Theme.of(context).colorScheme.secondary,
               inactiveColor: Theme.of(context).colorScheme.secondaryContainer,
               secondaryActiveColor:
