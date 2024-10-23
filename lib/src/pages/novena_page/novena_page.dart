@@ -6,7 +6,6 @@ import 'package:ahl/src/newsletter/newsletter.dart';
 import 'package:ahl/src/pages/homepage/homepage.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:ahl/src/widgets/widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

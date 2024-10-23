@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:ahl/src/utils/firebase_utils.dart';
-import 'package:audio_player/audio_player.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -13,7 +12,6 @@ import 'package:firebase_article/firebase_article.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:web/web.dart' as web;
 
 import 'package:gap/gap.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -27,7 +25,6 @@ import 'package:ahl/src/pages/homepage/donation/donation_page.dart';
 import 'package:ahl/src/pages/homepage/homepage.dart';
 import 'package:ahl/src/pages/novena_page/novena_page.dart';
 import 'package:ahl/src/newsletter/newsletter.dart';
-import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/article_view/bloc/bloc.dart';
 import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/state/state.dart';

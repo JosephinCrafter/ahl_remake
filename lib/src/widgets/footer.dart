@@ -7,25 +7,25 @@ class AhlFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var footerButtons = ActionsLists.actionLocalized(context).entries.map(
-          (e) => Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton(
-              onPressed: () {
-                if (e.value != null) {
-                  Navigator.pushNamed(context, e.value!);
-                }
-              },
-              child: Text(
-                e.key,
-                style: TextStyle(
-                  fontFamily: 'Aileron',
-                  color: actionColor,
-                ),
-              ),
-            ),
-          ),
-        );
+    // var footerButtons = ActionsLists.actionLocalized(context).entries.map(
+    //       (e) => Align(
+    //         alignment: Alignment.centerLeft,
+    //         child: TextButton(
+    //           onPressed: () {
+    //             if (e.value != null) {
+    //               Navigator.pushNamed(context, e.value!);
+    //             }
+    //           },
+    //           child: Text(
+    //             e.key,
+    //             style: TextStyle(
+    //               fontFamily: 'Aileron',
+    //               color: actionColor,
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //     );
 
     return Container(
       alignment: Alignment.center,

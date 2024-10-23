@@ -152,7 +152,7 @@ class DefaultHeroHeader extends StatefulWidget {
 class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.sizeOf(context).width;
+    // var screenWidth = MediaQuery.sizeOf(context).width;
     return Container(
       key: const Key("HeroHeader_Container"),
       constraints: BoxConstraints(

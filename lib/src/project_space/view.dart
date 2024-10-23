@@ -2,10 +2,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:ahl/src/article_view/event/event.dart';
-import 'package:ahl/src/article_view/view/article_view.dart';
-import 'package:ahl/src/firebase_constants.dart';
 import 'package:ahl/src/pages/homepage/donation/donation_page.dart';
-import 'package:ahl/src/pages/projects/project_page_view.dart';
 import 'package:ahl/src/pages/projects/projects_page.dart';
 import 'package:ahl/src/project_space/bloc.dart';
 import 'package:ahl/src/utils/storage_utils.dart';
@@ -292,7 +289,7 @@ class _ProjectsCarouselState extends State<ProjectsCarousel> {
   late PageController _pageController;
   late ScrollController _listController;
   late int _currentIndex;
-  final int _opacity = 0x25;
+  // final int _opacity = 0x25;
 
   bool _isHovered = false;
 
@@ -490,7 +487,7 @@ class _AhlCardState extends State<AhlCard> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    double borderThickness = _isHovered ? 5 : 3;
+    // double borderThickness = _isHovered ? 5 : 3;
     BorderRadius borderRadius = BorderRadius.circular(BorderSizes.big);
     return LayoutBuilder(
       builder: (context, constraints) => Container(

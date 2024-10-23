@@ -22,7 +22,6 @@ import '../../pages/homepage/donation/donation_page.dart';
 import '../../pages/projects/projects_page.dart';
 import '../../project_space/bloc.dart';
 import '../../widgets/widgets.dart';
-import '../../../ahl_barrel.dart';
 
 class ProjectPageView extends StatelessWidget {
   const ProjectPageView({
@@ -98,7 +97,6 @@ class ProjectPageView extends StatelessWidget {
 
 class _ProjectPageContentView extends StatefulWidget {
   const _ProjectPageContentView({
-    super.key,
     required this.project,
     this.collection = "projects",
   });
@@ -142,7 +140,7 @@ class _ProjectPageContentViewState extends State<_ProjectPageContentView>
   @override
   Widget build(BuildContext context) {
     
-    var screenWidth = MediaQuery.sizeOf(context).width;
+    // var screenWidth = MediaQuery.sizeOf(context).width;
     
     var title = widget.project?.title;
 

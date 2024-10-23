@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:responsive_builder/responsive_builder.dart';
 
 class WhoWeArePage extends StatefulWidget {
   const WhoWeArePage({super.key});

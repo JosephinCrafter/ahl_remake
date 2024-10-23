@@ -5,7 +5,6 @@ import 'package:ahl/src/article_view/event/event.dart';
 import 'package:ahl/src/article_view/state/state.dart';
 import 'package:ahl/src/firebase_constants.dart';
 import 'package:ahl/src/pages/prayers/prayers_page.dart';
-import 'package:ahl/src/pages/projects/project_page_view.dart';
 import 'package:ahl/src/pages/who_we_are/who_we_are.dart';
 import 'package:ahl/src/partners/view.dart';
 import 'package:ahl/src/project_space/bloc.dart';
@@ -28,7 +27,6 @@ import 'package:ahl/src/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:session_storage/session_storage.dart';
 
-import '../../article_view/view/article_view.dart';
 
 class ProjectsPage extends StatefulWidget {
   const ProjectsPage({super.key});
