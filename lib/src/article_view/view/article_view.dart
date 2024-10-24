@@ -804,8 +804,12 @@ class ArticleCoverImageState extends State<ArticleCoverImage> {
                 //   case ConnectionState.done:
                 try {
                   if (snapshot.hasData) {
+                    try{
                     cache[coverImageCacheKey] =
                         encodeUint8ListToString(snapshot.data!);
+                    } catch (e){
+                      // error adding image to cache
+                    }
                     return ClipPath(
                       clipper: (direction == Axis.vertical)
                           ? MobileArticleClipper()
