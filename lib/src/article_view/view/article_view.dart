@@ -592,7 +592,7 @@ class _CardArticleTileState extends State<CardArticleTile>
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       // Flexible(
                       //   child:
@@ -616,11 +616,17 @@ class _CardArticleTileState extends State<CardArticleTile>
                       //     child:
                       // FittedBox(
                       // child:
-                      Text(
-                        widget.title ?? article.title ?? "",
-                        style: titleTheme,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
+                      Flexible(
+                        flex: 1,
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text(
+                            widget.title ?? article.title ?? "",
+                            style: titleTheme,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ),
                       // ),
                       // ),
@@ -640,6 +646,7 @@ class _CardArticleTileState extends State<CardArticleTile>
                       // ),
                       const Gap(20),
                       Flexible(
+                        flex: 2,
                         child: (widget.preview != null)
                             ? Text(
                                 widget.preview!,
@@ -804,10 +811,10 @@ class ArticleCoverImageState extends State<ArticleCoverImage> {
                 //   case ConnectionState.done:
                 try {
                   if (snapshot.hasData) {
-                    try{
-                    cache[coverImageCacheKey] =
-                        encodeUint8ListToString(snapshot.data!);
-                    } catch (e){
+                    try {
+                      cache[coverImageCacheKey] =
+                          encodeUint8ListToString(snapshot.data!);
+                    } catch (e) {
                       // error adding image to cache
                     }
                     return ClipPath(

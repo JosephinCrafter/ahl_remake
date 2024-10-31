@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../prayers/prayers_page.dart';
 import '../..//who_we_are/who_we_are.dart';
-import '../../../theme/theme.dart';
 import '../../../utils/breakpoint_resolver.dart';
 import '../../../../ahl_barrel.dart';
 
@@ -44,10 +43,12 @@ class _MobileHeroHeaderState extends State<MobileHeroHeader> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        AnimatedContainer(
-          duration: Durations.short1,
-          curve: Curves.easeOut,
-          color: AhlTheme.yellowLight,
+        // Hero header Image
+        // AnimatedContainer(
+          Container(
+          // duration: Durations.short1,
+          // curve: Curves.easeOut,
+          color: Theme.of(context).colorScheme.surfaceContainer,
           constraints: const BoxConstraints(
             minHeight: Sizes.mobileHeroHeaderImageHeight,
           ),
@@ -56,7 +57,8 @@ class _MobileHeroHeaderState extends State<MobileHeroHeader> {
           ),
         ),
         Container(
-          color: AhlTheme.yellowLight, //.withAlpha(0xB6),
+          color: Theme.of(context).colorScheme.surfaceContainer,
+          // color: AhlTheme.yellowLight, //.withAlpha(0xB6),
           // margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.72),
           padding: const EdgeInsets.symmetric(
             horizontal: Paddings.big,
@@ -170,7 +172,7 @@ class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     constraints: const BoxConstraints(maxHeight: 470),
-                    color: AhlTheme.yellowLight.withAlpha(0xB2),
+                    color: Theme.of(context).colorScheme.surfaceContainer.withAlpha(0xB2),
                     padding: const EdgeInsets.symmetric(
                             horizontal: Margins.extraLarge)
                         .add(
@@ -200,8 +202,8 @@ class HeroImageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AhlTheme.yellowLight,
-      child: Container(
+      // color: AhlTheme.yellowLight,
+      // child: Container(
         decoration: BoxDecoration(
           borderRadius: isWithBorder
               ? const BorderRadius.only(
@@ -214,7 +216,7 @@ class HeroImageView extends StatelessWidget {
             image: AssetImage(AhlAssets.heroBk),
           ),
         ),
-      ),
+      // ),
     );
   }
 }

@@ -48,7 +48,7 @@ class _WelcomingContent extends StatelessWidget {
                 margin: const EdgeInsets.only(top: Sizes.nddLogoSize / 2),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AhlTheme.greenOlive.withOpacity(0.2),
+                  color: AhlTheme.affiche,
                   borderRadius: BorderRadius.circular(BorderSizes.medium),
                 ),
                 child: Column(

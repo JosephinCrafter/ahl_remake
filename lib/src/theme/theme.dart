@@ -12,6 +12,7 @@ class AhlTheme {
   static const Color blueNight = Color(0xFF36454F);
   static const Color darkNight = Color(0xFF1A202C);
   static const Color lightGrey = Color(0xFF8E8E8E);
+  static const Color affiche = Color(0xFFFFECC0);
 
   static ThemeData lightTheme(double constraints) => ThemeData(
         brightness: Brightness.light,
@@ -19,7 +20,7 @@ class AhlTheme {
           seedColor: greenOlive,
           secondary: yellowRelax,
           // secondaryContainer: yellowLight,
-          background: yellowLight,
+          // s: yellowLight,
         ),
         inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(),

@@ -189,7 +189,7 @@ class _HomePageState extends State<HomePage> {
                           // maxHeight: 6000,
                           ),
                       // fix transparent background error.
-                      color: AhlTheme.yellowLight,
+                      color: Theme.of(context).colorScheme.surfaceContainer,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         key: const Key("main_homepage_column"),
