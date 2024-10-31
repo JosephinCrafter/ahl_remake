@@ -58,14 +58,14 @@
   "unknownError": "Erreur inconnue, Verifier votre connexion internet",
   "priesIntention": "Intentions de prières",
   "proverb": "\"Priez les uns les autres, afin que vous soyez guéris\"\nSt Jacques 5:16",
-  "priersInvitation": "Vos intetions seront porté dans nos prières quotidiens dans notre Communauté Sainte Catherine de Sienne à Saharoaloha, Madagascar.",
+  "priersInvitation": "Vos intentions seront portées dans nos prières quotidiennes dans notre Communauté Sainte Catherine de Sienne à Saharoaloha, Madagascar.",
   "nameAndFirstName": "Nom et Prénom",
   "priers": "Prières",
   "sendPray": "Soumettre mon intention",
   "optional": "Facultatif",
   "yourPrayer": "Votre intention de prière",
   "prayerRequestInvitation": "Unissons nous dans la prière. Confiez vos intentions à notre communauté.",
-  "priesSpace": "Espace de Prière",
+  "priesSpace": "Espace Prière",
   "@priesSpace": {
     "description": "Titre pour espace de prières"
   },
