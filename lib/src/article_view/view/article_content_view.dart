@@ -46,44 +46,57 @@ class ArticleContentPageState extends State<ArticleContentPage> {
   /// If not, then [article] if fetched from  [ArticleBloc].
   late Article? article;
 
-  Future<String> getImageUrl( Article article)async{
-    ArticleStorageUtils articleUtils = ArticleStorageUtils(article: article, collection: widget.collection ?? "articles");
+  Future<String> getImageUrl(Article article) async {
+    ArticleStorageUtils articleUtils = ArticleStorageUtils(
+        article: article, collection: widget.collection ?? "articles");
     return await articleUtils.getCoverImageUrl() ?? "";
   }
 
-  Future<void> articleSeoSetup() async{
-    if(kIsWeb){
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp)async {
-        if(context.mounted){
-        HeadTagUtil.setHead(
-          title: article!.title!,
-          description: article!.relations![0]['preview'] as String,
-          keywords: ['Madagascar', 'Notre Dame de la Delivrande', 'Sœur Dominicaines Missionnaires de Notre Dame de la Délivrande',],
-          imageUrl: await getImageUrl(article!),
-          url: "https://aujourdhuilavenir.org/${widget.collection ?? "articles"}/${article!.id}",
-        );
-        CreateHtml.makeWidgetTree(context);}
+  void articleSeoSetup(BuildContext context) {
+    if (kIsWeb) {
+      log('start seo setup');
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        if (context.mounted) {
+          HeadTagUtil.setHead(
+            title: article!.title!,
+            description: article!.relations![0]['preview'] as String,
+            keywords: [
+              'Madagascar',
+              'Notre Dame de la Delivrande',
+              'Sœur Dominicaines Missionnaires de Notre Dame de la Délivrande',
+            ],
+            // imageUrl: getImageUrl(article!),
+            url:
+                "https://aujourdhuilavenir.org/${widget.collection ?? "articles"}/${article!.id}",
+          );
+          CreateHtml.makeWidgetTree(context);
+        }
       });
       // Define MetaSEO object
-          MetaSEO meta = MetaSEO();
+      MetaSEO meta = MetaSEO();
 
-          // set document title to article title
-          web.document.title = article!.title!;
+      // set document title to article title
+      web.document.title = article!.title!;
 
-          // Set decription to article preview
-          meta.description(description: article!.relations![0]['preview'] as String);
-          
-          // add meta seo data for web app as you want
-          meta.ogTitle(ogTitle: article!.title!);
-          meta.keywords(keywords: 'Madagascar, Notre Dame de la Delivrande, Sœur Dominicaines Missionnaires de Notre Dame de la Délivrande,');
-          meta.ogImage(ogImage: await getImageUrl(article!));
-    }else{
+      // Set decription to article preview
+      meta.description(
+          description: article!.relations![0]['preview'] as String);
+
+      // add meta seo data for web app as you want
+      meta.ogTitle(ogTitle: article!.title!);
+      meta.keywords(
+          keywords:
+              'Madagascar, Notre Dame de la Delivrande, Sœur Dominicaines Missionnaires de Notre Dame de la Délivrande,');
+      // meta.ogImage(ogImage: await getImageUrl(article!));
+    } else {
       log('SEO setup is not supported on mobile');
     }
   }
 
   @override
   void initState() {
+    /// get article from [widget]
+    article = widget.article;
 
     super.initState();
 
@@ -91,9 +104,10 @@ class ArticleContentPageState extends State<ArticleContentPage> {
       keepScrollOffset: true,
       initialScrollOffset: 0,
     );
-
-    // Make Open Graph setup
-    articleSeoSetup();
+    if (article != null) {
+      // Make Open Graph setup
+      articleSeoSetup(context);
+    }
   }
 
   @override
@@ -105,9 +119,6 @@ class ArticleContentPageState extends State<ArticleContentPage> {
 
   @override
   Widget build(BuildContext context) {
-    /// get article from [widget]
-    article = widget.article;
-
     /// If [article] is null, then retriever it from [ArticleBloc].
     if (article == null) {
       context.read<ArticleBloc>().add(
@@ -224,17 +235,16 @@ class ArticleContentView extends StatefulWidget {
 
 class _ArticleContentViewState extends State<ArticleContentView>
     with AutomaticKeepAliveClientMixin {
+  @override
+  void initState() {
+    /// SEO setup
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      CreateHtml.makeWidgetTree(context);
+    });
 
-      @override
-      void initState(){
+    super.initState();
+  }
 
-        /// SEO setup
-        WidgetsBinding.instance.addPostFrameCallback((timeStamp){
-          CreateHtml.makeWidgetTree(context);
-        });
-
-        super.initState();
-      }
   /// Ask content.
   Future<String> contentFetching() async {
     SessionStorage cache = SessionStorage();
@@ -272,7 +282,6 @@ class _ArticleContentViewState extends State<ArticleContentView>
   @override
   bool get wantKeepAlive => true;
 
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -290,7 +299,7 @@ class _ArticleContentViewState extends State<ArticleContentView>
             SessionStorage cache = SessionStorage();
             if (cache[url] != null) {
               return Align(
-        key: SeoKey(TagType.img),
+                key: SeoKey(TagType.img),
                 child: AhlImageViewer.fromFuture(
                   future: Future.value(
                     decodeUint8ListFromString(
@@ -302,7 +311,7 @@ class _ArticleContentViewState extends State<ArticleContentView>
             } else {
               if (url.contains('://')) {
                 return Align(
-                    key: SeoKey(TagType.img),
+                  key: SeoKey(TagType.img),
                   child: AhlImageViewer(
                     url: url,
                     attributes: attribute,
@@ -353,14 +362,12 @@ class _ArticleContentViewState extends State<ArticleContentView>
         ),
 
         H1Config(
-
           style: const H1Config().style.copyWith(
                 fontFamily: "Poppins",
                 color: AhlTheme.blackCharcoal,
                 fontSize: 32,
                 height: 1.25,
                 fontWeight: FontWeight.w600,
-                
               ),
         ),
 
@@ -413,7 +420,6 @@ class _ArticleContentViewState extends State<ArticleContentView>
           textStyle: const PConfig().textStyle.copyWith(
                 fontFamily: 'Poppins',
                 color: const Color(0xFF3F403C),
-                
               ),
         ),
         LinkConfig(
@@ -588,7 +594,7 @@ class _ArticleContentViewState extends State<ArticleContentView>
             alignment: Alignment.centerLeft,
             child: Text(
               widget.article.title ?? "",
-              key:SeoKey(TagType.h1, text: widget.article.title ?? ""),
+              key: SeoKey(TagType.h1, text: widget.article.title ?? ""),
               style: resolveHeadlineTextThemeForBreakPoints(
                 MediaQuery.of(context).size.width,
                 context,
@@ -607,10 +613,11 @@ class _ArticleContentViewState extends State<ArticleContentView>
           Container(
             padding: const EdgeInsets.all(Paddings.medium),
             alignment: Alignment.centerLeft,
-            child: Text(
-              widget.article.relations?[0]['preview'],
-              key: SeoKey(TagType.p, text: widget.article.relations?[0]['preview'],)
-            ),
+            child: Text(widget.article.relations?[0]['preview'],
+                key: SeoKey(
+                  TagType.p,
+                  text: widget.article.relations?[0]['preview'],
+                )),
           ),
           // share button
           Container(
@@ -665,7 +672,8 @@ class _ArticleContentViewState extends State<ArticleContentView>
                     case ConnectionState.done:
                       if (snapshot.hasData) {
                         return MarkdownBlock(
-                          key: SeoKey(TagType.p, text: snapshot.data ?? "Empty article"),
+                          key: SeoKey(TagType.p,
+                              text: snapshot.data ?? "Empty article"),
                           data: snapshot.data ?? 'Error loading article.',
                           config: minimalisticCorporateConfig,
                         );
