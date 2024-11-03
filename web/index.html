@@ -67,6 +67,16 @@
   </head>
 
   <body>
+    <script>
+			import("./scripts/botd-1.1.0.js")
+				.then((botd) => botd.load())
+				.then((botd) => botd.detect())
+				.then(function (result) {
+					if (result.bot) {
+						window.flutterWebRenderer = "html";
+					}
+				});
+		</script>
     <!-- Google Tag Manager (noscript) -->
     <noscript
       ><iframe

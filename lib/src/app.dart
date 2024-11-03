@@ -127,6 +127,7 @@ class _MyAppState extends State<MyApp> {
             },
           ),
 
+          // Novena
           GoRoute(
             name: NovenaPage.routeName,
             path: "${NovenaPage.routeName}/:novenaId",
@@ -150,6 +151,8 @@ class _MyAppState extends State<MyApp> {
           ),
           //   ],
           // ),
+
+          // Prayers
           GoRoute(
             path: PrayersPage.routeName,
             name: PrayersPage.routeName,
@@ -162,11 +165,15 @@ class _MyAppState extends State<MyApp> {
               ),
             ],
           ),
+
+          // Who we are
           GoRoute(
             path: WhoWeArePage.routeName,
             name: WhoWeArePage.routeName,
             builder: (_, __) => const WhoWeArePage(),
           ),
+
+          //Donnation Page
           GoRoute(
             path: DonationPage.routeName,
             name: DonationPage.routeName,
