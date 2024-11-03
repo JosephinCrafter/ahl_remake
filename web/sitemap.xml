@@ -2,12 +2,17 @@
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://ajourdhuilavenir.org</loc>
-    <lastmod>2024-06-21T16:09:00+02:00</lastmod>
+    <lastmod>2024-11-03T14:38:00+02:00</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://aujourdhuilavenir.org/projects/cantine</loc>
     <lastmod>2024-07-31T18:22:00+02:00</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://aujourdhuilavenir.org/articles/construction_cantine</loc>
+    <lastmod>2024-11-03T14:38:00+02:00</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
