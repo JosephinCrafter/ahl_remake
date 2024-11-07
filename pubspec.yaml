@@ -4,7 +4,7 @@ description: A website for the community of dominican sisters at Madagascar.
 # Prevent accidental publishing to pub.dev.
 publish_to: "none"
 
-version: 1.0.1+1
+version: 1.0.2+pre-1-seo
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -59,6 +59,10 @@ dependencies:
   audio_service: ^0.18.15
   audio_player: 
     git: https://github.com/JosephinCrafter/audio_player.git
+  seo_renderer: ^0.6.0
+  meta_seo: ^3.0.9
+  logger: ^2.4.0
+  flutter_seo: ^1.1.1
 
 dev_dependencies:
   flutter_test:

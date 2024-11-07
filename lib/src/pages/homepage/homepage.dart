@@ -1,7 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
+import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_seo/flutter_seo.dart';
 import 'package:gap/gap.dart';
+import 'package:meta_seo/meta_seo.dart';
+import 'package:web/web.dart' as web;
 
 import '../../widgets/widgets.dart';
 import '../../article_view/view/article_view.dart';
@@ -12,7 +18,6 @@ import '../../partners/view.dart';
 import '../../prayers_space/view.dart';
 import '../../utils/breakpoint_resolver.dart';
 import '../../../ahl_barrel.dart';
-
 
 import '../../project_space/view.dart';
 import '../../who_we_are/view.dart';
@@ -77,8 +82,57 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void seoSetup() {
+    String title =
+        "Aujourd'hui l'avenir | Mission des Sœurs Dominicaines Missionnaires De Notre Dame de la Delivrande à Madagascar";
+    String description = """
+Aimer et Servir avec les sœurs Dominicaines Missionnaires de Notre Dame de la Délivrande à Saharoaloha Antsirabe. Solidarité et Prière pour Madagascar. Découvrer nos missions auprès des enfants, rejoignez nos prières quotidiennes et partagez la vie de notre communauté.
+""";
+    if (kIsWeb) {
+      log('start seo setup');
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        if (context.mounted) {
+          HeadTagUtil.setHead(
+            title: title,
+            description: description,
+            keywords: [
+              'Madagascar',
+              'Notre Dame de la Delivrande',
+              'Sœur Dominicaines Missionnaires de Notre Dame de la Délivrande',
+            ],
+            // imageUrl: getImageUrl(article!),
+            url: "https://aujourdhuilavenir.org/",
+          );
+          CreateHtml.makeWidgetTree(context);
+        }
+      });
+      // Define MetaSEO object
+      MetaSEO meta = MetaSEO();
+
+      // set document title to article title
+      web.document.title = title;
+
+      // Set decription to article preview
+      meta.description(
+        description: description,
+      );
+
+      // add meta seo data for web app as you want
+      meta.ogTitle(ogTitle: title);
+      meta.keywords(
+          keywords:
+              "Aimer et servir, Madagascar, Notre Dame de la Delivrande, Sœur Dominicaines Missionnaires de Notre Dame de la Délivrande,");
+      // meta.ogImage(ogImage: await getImageUrl(article!));
+    } else {
+      log('SEO setup is not supported on mobile');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // seo setup
+    seoSetup();
+
     /// Optimize hero header image.
     precacheImage(AssetImage(AhlAssets.heroBk), context);
 
@@ -89,7 +143,13 @@ class _HomePageState extends State<HomePage> {
           endDrawer: constraints.maxWidth <= ScreenSizes.large
               ? const AhlDrawer()
               : null,
-          appBar: const AhlAppBar(),
+          appBar: AhlAppBar(
+            key: SeoKey(
+              TagType.div,
+              text: "Aujourd'hui l'avenir",
+              alt: "Web site title",
+            ),
+          ),
           // AppBar(
           //   title: const AhlLogo(),
           //   actions: [
@@ -139,7 +199,16 @@ class _HomePageState extends State<HomePage> {
                             large: 925,
                           ),
                         ),
-                        child: Image.asset(AhlAssets.heroBk),
+                        child: Image.asset(
+                          AhlAssets.heroBk,
+                          key: SeoKey(
+                            TagType.img,
+                            src: "./${AhlAssets.heroBk}",
+                            text: "Aimer et servir. Mission pour Madagascar",
+                            alt:
+                                "Hero background image: the 3 missions of Dominican sister of Delivrande: Praying, Serving and Helping",
+                          ),
+                        ),
                       ).animate().fadeIn(
                             curve: Curves.easeIn,
                             duration: Durations.long4,

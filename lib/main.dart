@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
+import 'package:meta_seo/meta_seo.dart';
 
 import 'src/app.dart';
 import 'src/firebase_constants.dart';
@@ -12,6 +14,11 @@ import 'src/theme/theme.dart';
 // test on github auto deploy
 
 void main() async {
+  /// Meta Seo Setup
+  if(kIsWeb){
+    MetaSEO().config();
+  }
+
   // ensure flutter is initialized
   // WidgetsFlutterBinding.ensureInitialized();
 
