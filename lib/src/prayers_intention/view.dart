@@ -1,5 +1,7 @@
 part of 'prayer_request.dart';
 
+const Color prayerIntentionTextColor = Colors.white;
+
 /// The route view to collect, setup date and confirm prayers
 /// request.
 ///
@@ -59,7 +61,9 @@ class _PrayersIntentionRequestViewState
                   onLoaded: (p0) => lottieController.forward(),
                 );
               } else {
-                return Container();
+                return Container(
+                
+                );
               }
             },
           ),
@@ -215,64 +219,66 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
           direction: direction,
           children: [
             Flexible(
-              flex: 2,
+              // flex: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Flexible(
+                  //   flex: 2,
+                  //   child: prayerDecorationImage,
+                  // ),
                   Flexible(
-                    flex: 2,
-                    child: prayerDecorationImage,
-                  ),
-                  Flexible(
+
                     // flex: 1,
                     child: title,
                   ),
-                  Flexible(
-                    // flex: 1,
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      height: 350,
-                      child: Text(
-                        "${context.read<PrayerRequestBloc>().state.request?.prayer}",
-                        style: resolveBodyTextThemeForBreakPoints(
-                            MediaQuery.of(context).size.width, context),
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    // flex: 1,
-                    child: DefaultTextStyle(
-                      style: Theme.of(context).textTheme.labelLarge!,
-                      child: (context.read<PrayerRequestBloc>().state.request !=
-                              null)
-                          ? (context
-                                      .read<PrayerRequestBloc>()
-                                      .state
-                                      .request!
-                                      .name !=
-                                  null)
-                              ? Text(
-                                  AppLocalizations.of(context)!.priersOf(
-                                    context
-                                        .read<PrayerRequestBloc>()
-                                        .state
-                                        .request!
-                                        .name!,
-                                    context
-                                        .read<PrayerRequestBloc>()
-                                        .state
-                                        .request!
-                                        .email,
-                                  ),
-                                )
-                              : Text(context
-                                  .read<PrayerRequestBloc>()
-                                  .state
-                                  .request!
-                                  .email)
-                          : Container(),
-                    ),
-                  ),
+                  // Flexible(
+                  //   // flex: 1,
+                  //   child: Container(
+                  //     alignment: Alignment.centerLeft,
+                  //     height: 350,
+                  //     child: Text(
+                  //       "${context.read<PrayerRequestBloc>().state.request?.prayer}",
+                  //       style: resolveBodyTextThemeForBreakPoints(
+                  //           MediaQuery.of(context).size.width, context)?.copyWith(color: Theme.of(context).colorScheme.onPrimary,),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Flexible(
+                  // flex: 1,
+                  //   child: DefaultTextStyle(
+                  //     style: Theme.of(context).textTheme.labelLarge!,
+                  //     child: (context.read<PrayerRequestBloc>().state.request !=
+                  //             null)
+                  //         ? (context
+                  //                     .read<PrayerRequestBloc>()
+                  //                     .state
+                  //                     .request!
+                  //                     .name !=
+                  //                 null)
+                  //             ? Text(
+                  //                 AppLocalizations.of(context)!.priersOf(
+                  //                   context
+                  //                       .read<PrayerRequestBloc>()
+                  //                       .state
+                  //                       .request!
+                  //                       .name!,
+                  //                   context
+                  //                       .read<PrayerRequestBloc>()
+                  //                       .state
+                  //                       .request!
+                  //                       .email,
+                  //                 ),
+                  //                 style: ,
+                  //               )
+                  //             : Text(context
+                  //                 .read<PrayerRequestBloc>()
+                  //                 .state
+                  //                 .request!
+                  //                 .email)
+                  //         : Container(),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -314,7 +320,19 @@ class _PrayerDateCollectionViewState extends State<PrayerDateCollectionView> {
                             child: FittedBox(
                               fit: BoxFit.contain,
                               child: SegmentedButton<PrayerType>(
-                                style: const ButtonStyle(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      WidgetStateProperty.resolveWith(
+                                    (states) {
+                                      if (states
+                                          .contains(WidgetState.selected)) {
+                                        return Theme.of(context)
+                                            .colorScheme
+                                            .secondaryContainer;
+                                      }
+                                      return null; // Use default button color
+                                    },
+                                  ),
                                   visualDensity: VisualDensity.comfortable,
                                 ),
                                 onSelectionChanged: _onSelectionChange,
@@ -479,7 +497,7 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
         direction: direction,
         children: [
           Flexible(
-            flex: 2,
+            flex: 3,
             fit: FlexFit.tight,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -489,27 +507,39 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                   flex: 2,
                   child: prayerDecorationImage,
                 ),
+                const Gap(Margins.large),
                 Flexible(
                   // flex: 1,
                   child: title,
                 ),
+                const Gap(Margins.large),
                 Container(
                   alignment: Alignment.centerLeft,
                   // padding: const EdgeInsets.only(
                   // top: Paddings.big, bottom: Paddings.listSeparator),
-                  child: Text(AppLocalizations.of(context)!.proverb,
-                      style: Theme.of(context).textTheme.labelMedium),
+                  child: Text(
+                    AppLocalizations.of(context)!.proverb,
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          color: prayerIntentionTextColor,
+                          fontStyle: FontStyle.italic,
+                        ),
+                  ),
                 ),
+                const Gap(Margins.large),
                 Flexible(
                   // flex: 1,
                   child: Align(
                     alignment: Alignment.topLeft,
                     child: Text(
                       AppLocalizations.of(context)!.priersInvitation,
-                      style: Theme.of(context).textTheme.bodyMedium,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: prayerIntentionTextColor),
                     ),
                   ),
                 ),
+                const Gap(Margins.large),
               ],
             ),
           ),
@@ -526,7 +556,7 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                     padding: const EdgeInsets.all(Paddings.medium),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(BorderSizes.small),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -612,8 +642,8 @@ class _PrayerCollectViewState extends State<PrayerCollectView> {
                   // padding: const EdgeInsets.only(bottom: Paddings.listSeparator),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                      backgroundColor: Theme.of(context).colorScheme.secondary,
+                      foregroundColor: Theme.of(context).colorScheme.onSurface,
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -790,10 +820,9 @@ class _ReviewPrayerState extends State<ReviewPrayerView> {
 final Widget title = Builder(
   builder: (context) => Text(
     AppLocalizations.of(context)!.priesIntention,
-    style: resolveHeadlineTextThemeForBreakPoints(
-      MediaQuery.of(context).size.width,
-      context,
-    ),
+    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+          color: prayerIntentionTextColor,
+        ),
   ),
 );
 

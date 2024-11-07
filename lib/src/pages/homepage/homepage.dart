@@ -1,16 +1,18 @@
-import 'package:ahl/ahl_barrel.dart';
-import 'package:ahl/src/article_view/view/article_view.dart';
-import 'package:ahl/src/pages/homepage/hero_header/hero_header.dart';
-import 'package:ahl/src/pages/homepage/welcoming/welcoming.dart';
-import 'package:ahl/src/newsletter/newsletter.dart';
-import 'package:ahl/src/partners/view.dart';
-import 'package:ahl/src/prayers_space/view.dart';
-import 'package:ahl/src/theme/theme.dart';
-import 'package:ahl/src/utils/breakpoint_resolver.dart';
-import 'package:ahl/src/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+
 import 'package:gap/gap.dart';
+
+import '../../widgets/widgets.dart';
+import '../../article_view/view/article_view.dart';
+import '../../pages/homepage/hero_header/hero_header.dart';
+import '../../pages/homepage/welcoming/welcoming.dart';
+import '../../newsletter/newsletter.dart';
+import '../../partners/view.dart';
+import '../../prayers_space/view.dart';
+import '../../utils/breakpoint_resolver.dart';
+import '../../../ahl_barrel.dart';
+
 
 import '../../project_space/view.dart';
 import '../../who_we_are/view.dart';

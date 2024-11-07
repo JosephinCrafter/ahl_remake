@@ -22,24 +22,26 @@ class FormsLayoutBase extends StatelessWidget {
         //   1124,
         // ),
       ),
-
       decoration: BoxDecoration(
         image: DecorationImage(
-          opacity: 1,
-          scale: 10,
-          repeat: ImageRepeat.repeat,
+          fit: BoxFit.cover,
+          opacity: 0.1,
+          // scale: 10,
+          // repeat: ImageRepeat.repeat,
           image: AssetImage(
             AhlAssets.requestMotif,
           ),
         ),
-        color: Theme.of(context).colorScheme.secondaryContainer,
+        color: theme.AhlTheme
+            .blueNight, //Theme.of(context).colorScheme.secondaryContainer,
       ),
       padding: EdgeInsets.symmetric(
-        vertical: Paddings.medium,
-        horizontal: (MediaQuery.of(context).size.width > ScreenSizes.extraLarge)
-            ? Paddings.big
-            : Paddings.medium,
-      ),
+          vertical: Paddings.medium,
+          horizontal: // (MediaQuery.of(context).size.width > ScreenSizes.extraLarge)
+              //?
+              Paddings.big
+          // : Paddings.big,
+          ),
       alignment: Alignment.center,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: Paddings.huge),

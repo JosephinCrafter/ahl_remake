@@ -31,10 +31,9 @@ class AhlAssets {
       "${releasePath}images/rosary_hero_header.webp";
   static String praying = "${releasePath}images/praying.webp";
   static String prayingAlt = "${releasePath}images/praying_alt.webp";
-  static String requestMotif = "${releasePath}images/motif_prayer.webp";
+  static String requestMotif = "${releasePath}images/motif_prayer.jpg";
   static String projectSpaceCover =
       '${releasePath}images/project_space_banner.webp';
   static String dons = '${releasePath}images/SVG/dons.svg';
   static String doneAnimation = '${releasePath}animations/done.lottie';
-
 }

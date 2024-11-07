@@ -25,7 +25,7 @@ class Margins {
   static const double huge = 200;
 
   /// 50
-  static const double extraLarge = 50;
+  static const double extraLarge = 48;
 
   /// 37
   static const double large = 32;

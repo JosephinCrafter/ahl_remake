@@ -426,14 +426,14 @@ class _CardArticleTileState extends State<CardArticleTile>
   /// firestore collection of the article.
   late String collection;
 
-  late double elevation;
+  final double elevation = 0;
 
   late double _maxHeight;
 
   @override
   void initState() {
     collection = getCollection(widget.articleId ?? "") ?? widget.collection;
-    elevation = 5.0;
+    // elevation = 5.0;
     _maxHeight = (widget.direction == Axis.vertical) ? 400 : 300;
 
     /// Make article transaction
@@ -476,15 +476,15 @@ class _CardArticleTileState extends State<CardArticleTile>
   ///
   /// It is mainly used in the ui update.
   void _onHover(bool isHovered) {
-    if (isHovered) {
-      setState(() {
-        elevation = 25;
-      });
-    } else {
-      setState(() {
-        elevation = 5;
-      });
-    }
+    // if (isHovered) {
+    //   setState(() {
+    //     elevation = 25;
+    //   });
+    // } else {
+    //   setState(() {
+    //     elevation = 5;
+    //   });
+    // }
   }
 
   @override
@@ -533,11 +533,11 @@ class _CardArticleTileState extends State<CardArticleTile>
 
   Widget buildTile(BuildContext context, Article article) {
     super.build(context);
-    TextStyle? titleTheme = Theme.of(context).textTheme.headlineSmall;
-    // resolveHeadlineTextThemeForBreakPoints(
-    //   MediaQuery.of(context).size.width,
-    //   context,
-    // );
+    TextStyle? titleTheme = // Theme.of(context).textTheme.headlineSmall;
+        resolveHeadlineTextThemeForBreakPoints(
+      MediaQuery.of(context).size.width,
+      context,
+    );
 
     DateTime releaseDate =
         DateTimeUtils.parseReleaseDate(article.releaseDate ?? "");
