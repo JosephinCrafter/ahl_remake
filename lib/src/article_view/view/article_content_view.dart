@@ -104,7 +104,6 @@ class ArticleContentPageState extends State<ArticleContentPage> {
       keepScrollOffset: true,
       initialScrollOffset: 0,
     );
-    
   }
 
   @override
@@ -116,13 +115,12 @@ class ArticleContentPageState extends State<ArticleContentPage> {
 
   @override
   Widget build(BuildContext context) {
-
     // setup seo
     if (article != null) {
       // Make Open Graph setup
       articleSeoSetup(context);
     }
-    
+
     /// If [article] is null, then retriever it from [ArticleBloc].
     if (article == null) {
       context.read<ArticleBloc>().add(
@@ -242,9 +240,7 @@ class _ArticleContentViewState extends State<ArticleContentView>
   @override
   void initState() {
     /// SEO setup
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      CreateHtml.makeWidgetTree(context);
-    });
+    setupSeo(context);
 
     super.initState();
   }
@@ -289,6 +285,7 @@ class _ArticleContentViewState extends State<ArticleContentView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    setupSeo(context);
     content = contentFetching();
     widget.articleUtils.getCoverImage();
 
@@ -303,7 +300,11 @@ class _ArticleContentViewState extends State<ArticleContentView>
             SessionStorage cache = SessionStorage();
             if (cache[url] != null) {
               return Align(
-                key: SeoKey(TagType.img),
+                key: SeoKey(
+                  TagType.img,
+                  src: url,
+                  attributes: attribute,
+                ),
                 child: AhlImageViewer.fromFuture(
                   future: Future.value(
                     decodeUint8ListFromString(
@@ -315,7 +316,11 @@ class _ArticleContentViewState extends State<ArticleContentView>
             } else {
               if (url.contains('://')) {
                 return Align(
-                  key: SeoKey(TagType.img),
+                  key: SeoKey(
+                    TagType.img,
+                    src: url,
+                    attributes: attribute,
+                  ),
                   child: AhlImageViewer(
                     url: url,
                     attributes: attribute,
@@ -347,7 +352,11 @@ class _ArticleContentViewState extends State<ArticleContentView>
                   //   ),
                   // ),
                   child: AhlImageViewer.fromFuture(
-                    key: SeoKey(TagType.img, alt: url),
+                    key: SeoKey(
+                      TagType.img,
+                      src: url,
+                      attributes: attribute,
+                    ),
                     // key: ValueKey(url),
                     future: future,
                     attributes: attribute,
@@ -537,6 +546,9 @@ class _ArticleContentViewState extends State<ArticleContentView>
   );
 
   Widget buildMarkdownBlock(BuildContext context) {
+    //seo
+    setupSeo(context);
+
     // share button
     Widget supportProjectButton = Builder(
       builder: (context) => Container(
@@ -582,6 +594,8 @@ class _ArticleContentViewState extends State<ArticleContentView>
             padding: const EdgeInsets.all(Paddings.medium),
             alignment: Alignment.centerLeft,
             child: Text(
+              key: SeoKey(TagType.p,
+                  text: widget.label ?? "", alt: "Article date"),
               widget.label ??
                   DateTimeUtils.localizedFromStringDate(
                       dateString: widget.article.releaseDate, context: context),
@@ -638,6 +652,8 @@ class _ArticleContentViewState extends State<ArticleContentView>
               crossAxisAlignment: WrapCrossAlignment.start,
               children: [
                 ListenPodcastButton(
+                  key: SeoKey(TagType.a,
+                      text: "Listen Podcast", alt: "Play Podcast Button"),
                   article: widget.article,
                   collection: widget.collection,
                 ),
@@ -851,6 +867,9 @@ class _AhlImageViewerState extends State<AhlImageViewer> {
 
   @override
   Widget build(BuildContext context) {
+    //seo
+    setupSeo(context);
+
     if (widget.url != null && widget.url!.contains("://")) {
       return SizedBox(
         height: double.tryParse(widget.attributes?['height'] ?? ""),
@@ -872,6 +891,7 @@ class _AhlImageViewerState extends State<AhlImageViewer> {
             );
           },
           child: Image.network(
+            key: SeoKey(TagType.img, src: widget.url ?? ""),
             widget.url!,
             fit: widget.fit,
           ),

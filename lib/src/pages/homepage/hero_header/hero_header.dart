@@ -1,6 +1,8 @@
+import 'package:ahl/src/utils/seo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_seo/flutter_seo.dart';
 
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +17,9 @@ class HeroHeaderView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // seo
+    setupSeo(context);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth <= ScreenSizes.large) {
@@ -41,11 +46,13 @@ class MobileHeroHeader extends StatefulWidget {
 class _MobileHeroHeaderState extends State<MobileHeroHeader> {
   @override
   Widget build(BuildContext context) {
+    //seo
+    setupSeo(context);
     return Column(
       children: [
         // Hero header Image
         // AnimatedContainer(
-          Container(
+        Container(
           // duration: Durations.short1,
           // curve: Curves.easeOut,
           color: Theme.of(context).colorScheme.surfaceContainer,
@@ -53,6 +60,13 @@ class _MobileHeroHeaderState extends State<MobileHeroHeader> {
             minHeight: Sizes.mobileHeroHeaderImageHeight,
           ),
           child: Image.asset(
+            key: SeoKey(
+              TagType.img,
+              text: "HeroHeader image",
+              alt:
+                  "A image with 3 part, a Dominican Sister praying on the left, Notre Dame de la Delivrande chapel in the midle, and smiling Saharoaloha' children on the right",
+              src: AhlAssets.heroBk,
+            ),
             AhlAssets.heroBk,
           ),
         ),
@@ -98,7 +112,11 @@ class _HeroActionsState extends State<HeroActions> {
 
   @override
   Widget build(BuildContext context) {
+    //seo
+    setupSeo(context);
+
     return Container(
+      key: SeoKey(TagType.div),
       padding: const EdgeInsets.only(top: 30),
       child: Wrap(
         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -107,6 +125,9 @@ class _HeroActionsState extends State<HeroActions> {
         runSpacing: 20,
         children: [
           OutlinedButton(
+            key: SeoKey(TagType.a,
+                alt: "Link to about us page",
+                src: "aujourdhuilavenir.org/aboutus"),
             onPressed: widget.secondaryCallback ?? secondaryAction,
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -120,6 +141,10 @@ class _HeroActionsState extends State<HeroActions> {
             ),
           ),
           ElevatedButton(
+            key: SeoKey(TagType.a,
+                alt: "Link to prayer space",
+                text: AppLocalizations.of(context)!.priesSpace,
+                src: "aujourdhuilavenir.org/prierSpace"),
             onPressed: widget.primaryCallback ?? primaryAction,
             style: ElevatedButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -164,29 +189,30 @@ class _DefaultHeroHeaderState extends State<DefaultHeroHeader> {
         ),
       ),
       alignment: Alignment.center,
-      child: 
-           Stack(
-              children: [
-                // const HeroImageView(),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    constraints: const BoxConstraints(maxHeight: 470),
-                    color: Theme.of(context).colorScheme.surfaceContainer.withAlpha(0xB2),
-                    padding: const EdgeInsets.symmetric(
-                            horizontal: Margins.extraLarge)
-                        .add(
-                      const EdgeInsets.only(top: 45),
-                    ),
-                    alignment: Alignment.bottomCenter,
-                    child: const HeroTextView(
-                      alignment: Alignment.topCenter,
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ,
+      child: Stack(
+        children: [
+          // const HeroImageView(),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              constraints: const BoxConstraints(maxHeight: 470),
+              color: Theme.of(context)
+                  .colorScheme
+                  .surfaceContainer
+                  .withAlpha(0xB2),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: Margins.extraLarge)
+                      .add(
+                const EdgeInsets.only(top: 45),
+              ),
+              alignment: Alignment.bottomCenter,
+              child: const HeroTextView(
+                alignment: Alignment.topCenter,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -204,18 +230,18 @@ class HeroImageView extends StatelessWidget {
     return Container(
       // color: AhlTheme.yellowLight,
       // child: Container(
-        decoration: BoxDecoration(
-          borderRadius: isWithBorder
-              ? const BorderRadius.only(
-                  bottomLeft: Radius.circular(BorderSizes.big),
-                  bottomRight: Radius.circular(BorderSizes.big),
-                )
-              : null,
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(AhlAssets.heroBk),
-          ),
+      decoration: BoxDecoration(
+        borderRadius: isWithBorder
+            ? const BorderRadius.only(
+                bottomLeft: Radius.circular(BorderSizes.big),
+                bottomRight: Radius.circular(BorderSizes.big),
+              )
+            : null,
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage(AhlAssets.heroBk),
         ),
+      ),
       // ),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:ahl/ahl_barrel.dart';
 import 'package:ahl/src/utils/breakpoint_resolver.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -27,8 +28,14 @@ class _WelcomingContent extends StatelessWidget {
   const _WelcomingContent();
   @override
   Widget build(BuildContext context) {
+    // Build html tree
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      CreateHtml.makeWidgetTree(context);
+    });
 
     String welcomingBody = AppLocalizations.of(context)!.welcomingBody;
+    String welcomingTitle = AppLocalizations.of(context)!.welcomingTitle;
+
     double avatarWidth = 174;
     double avatarHeight = 155;
     // GlobalKey containerKey = GlobalKey(debugLabel: 'welcoming_container');
@@ -65,13 +72,13 @@ class _WelcomingContent extends StatelessWidget {
                       ),
                       key: SeoKey(
                         TagType.h2,
-                        text: "Bienvenue!",
+                        text: welcomingTitle,
                         alt: "Welcoming",
                       ),
                     ),
                     SelectableText(
                       '\n$welcomingBody',
-                      key:SeoKey(TagType.p, text: welcomingBody ),
+                      key: SeoKey(TagType.p, text: welcomingBody),
                       style: resolveBodyTextThemeForBreakPoints(
                         MediaQuery.of(context).size.width,
                         context,
@@ -160,9 +167,17 @@ class LogoNDD extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // seo: Html element creation
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      CreateHtml.makeWidgetTree(context);
+    });
+
     return SizedBox.square(
       dimension: Sizes.nddLogoSize,
       child: Image.asset(
+        key: SeoKey(TagType.img,
+            alt:
+                "Logo des Soeurs Dominicaines Missionnaires de Notre Dame de la Delivrande",src: AhlAssets.logoNdd,),
         filterQuality: FilterQuality.high,
         isAntiAlias: true,
         AhlAssets.logoNdd,
@@ -176,9 +191,17 @@ class Signature extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //seo: create html tag
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
+      CreateHtml.makeWidgetTree(context);
+    });
+
+    String title = '${AppLocalizations.of(context)!.sister} Michèle Marie, o.p';
+
     return RichText(
+        key:SeoKey(TagType.p),
       text: TextSpan(
-        text: '${AppLocalizations.of(context)!.sister} Michèle Marie, o.p',
+        text: title,
         style: AhlTheme.name,
         children: [
           TextSpan(

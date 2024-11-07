@@ -4,7 +4,7 @@ description: A website for the community of dominican sisters at Madagascar.
 # Prevent accidental publishing to pub.dev.
 publish_to: "none"
 
-version: 1.0.2+pre-1-seo
+version: 1.0.2+pre-2-seo
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

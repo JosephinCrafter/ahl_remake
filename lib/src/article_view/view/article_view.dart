@@ -39,6 +39,7 @@ import '../../utils/date_time_utils.dart';
 import 'package:ahl/ahl_barrel.dart';
 import 'package:ahl/src/widgets/widgets.dart';
 
+import '../../utils/seo.dart';
 import '../../utils/storage_utils.dart';
 
 part 'article_content_view.dart';
