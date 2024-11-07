@@ -5,6 +5,7 @@ import 'package:ahl/src/utils/breakpoint_resolver.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_seo/flutter_seo.dart';
 
 import '../../../theme/theme.dart';
 
@@ -26,6 +27,8 @@ class _WelcomingContent extends StatelessWidget {
   const _WelcomingContent();
   @override
   Widget build(BuildContext context) {
+
+    String welcomingBody = AppLocalizations.of(context)!.welcomingBody;
     double avatarWidth = 174;
     double avatarHeight = 155;
     // GlobalKey containerKey = GlobalKey(debugLabel: 'welcoming_container');
@@ -60,9 +63,15 @@ class _WelcomingContent extends StatelessWidget {
                         MediaQuery.of(context).size.width,
                         context,
                       ),
+                      key: SeoKey(
+                        TagType.h2,
+                        text: "Bienvenue!",
+                        alt: "Welcoming",
+                      ),
                     ),
-                    Text(
-                      '\n${AppLocalizations.of(context)!.welcomingBody}',
+                    SelectableText(
+                      '\n$welcomingBody',
+                      key:SeoKey(TagType.p, text: welcomingBody ),
                       style: resolveBodyTextThemeForBreakPoints(
                         MediaQuery.of(context).size.width,
                         context,

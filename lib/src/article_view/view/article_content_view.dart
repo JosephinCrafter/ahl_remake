@@ -104,10 +104,7 @@ class ArticleContentPageState extends State<ArticleContentPage> {
       keepScrollOffset: true,
       initialScrollOffset: 0,
     );
-    if (article != null) {
-      // Make Open Graph setup
-      articleSeoSetup(context);
-    }
+    
   }
 
   @override
@@ -119,6 +116,13 @@ class ArticleContentPageState extends State<ArticleContentPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    // setup seo
+    if (article != null) {
+      // Make Open Graph setup
+      articleSeoSetup(context);
+    }
+    
     /// If [article] is null, then retriever it from [ArticleBloc].
     if (article == null) {
       context.read<ArticleBloc>().add(
